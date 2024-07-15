@@ -1,5 +1,6 @@
 import Header from "@/app/(logged)/_components/header";
 import "./style.css";
+import Footer from "@/app/(logged)/_components/footer";
 
 export default function RootLayout(
     {children}: Readonly<{
@@ -10,8 +11,6 @@ export default function RootLayout(
         <section className={"flex flex-col h-full mb-10 px-20 py-14 w-full bg-gray-100 rounded-lg overflow-hidden"}>
             {children}
         </section>
-        <div className={"bg-gray-700 h-20 -mx-20 px-40 flex justify-center items-center text-xs text-white gap-10"}>
-            <p>&#169; 2024 IGNITE Serious Play. All rights reserved.</p>
-        </div>
+        <Footer/>
     </main>);
 }
