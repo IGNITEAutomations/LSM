@@ -8,6 +8,7 @@ class CUserClient {
     private _avatar?: string;
     private _role?: UserRoles;
     private _email?: string;
+    private _token?: string;
 
     get displayName(): string {
         return this._displayName!
@@ -25,6 +26,10 @@ class CUserClient {
         return this._email!
     }
 
+    get token(): string {
+        return this._token!
+    }
+
     constructor() {
         this.init()
     }
@@ -37,6 +42,7 @@ class CUserClient {
                 this._avatar = cookie.avatar;
                 this._role = cookie.role;
                 this._email = cookie.email;
+                this._token = cookie.token
 
             } catch (error) {
                 console.error("Error initializing user: " + error)
