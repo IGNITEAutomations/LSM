@@ -9,7 +9,7 @@ type ClassType = {
 }
 
 class CClasses {
-    public async getClasses() {
+    public async getAll() {
         const data = await ModelClass.getClasses()
         if (data)
             return data.map((item): ClassType => {

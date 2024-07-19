@@ -9,7 +9,7 @@ class AuthClient {
     private auth: Auth;
 
     constructor() {
-        console.log("Init Auth Client")
+        console.log("Init auth Client")
         const firebaseApp: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
         this.auth = getAuth(firebaseApp);
     }
@@ -63,7 +63,7 @@ class AuthClient {
             if (!credentials) return {success: false, error: "Failed to log in."};
 
             const idToken = await this.getUserID(credentials);
-            return await this.handleAuthApi("/api/auth/sign_in", idToken);
+            return await this.handleAuthApi("/api/auth/login", idToken);
         } catch (error) {
             console.error("Sign-in error:", error);
             return {success: false, error: `Sign-in error: ${error}`};

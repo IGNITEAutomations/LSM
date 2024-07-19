@@ -3,7 +3,7 @@ import {columns} from "@/app/(logged)/(teacher)/desktop/columns";
 import Classes from "@/lib/DB/Classes/classes";
 
 export default async function Desktop() {
-    const data = await Classes.getClasses()
+    const data = await Classes.getAll()
 
     return (
         <section className={"flex flex-col max-h-s gap-5 flex-1"}>

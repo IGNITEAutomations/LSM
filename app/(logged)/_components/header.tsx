@@ -1,3 +1,5 @@
+"use client"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +12,9 @@ import UserClient from "@/lib/User/user_client";
 
 export default function Header() {
     UserClient.initTest()
+    async function logout() {
+        await fetch("/api/auth/logout")
+    }
     return (
         <header className={"flex flex-row justify-between items-center px-10 py-5 sticky top-0"}>
             <Image src={"/img/ignite_logo.png"} alt={"ignite logo"} width={80} height={80}/>
@@ -23,7 +28,7 @@ export default function Header() {
                         </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent side={"bottom"} align={"end"} className={"w-max"}>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={logout}>
                             <LogOut className={"h-4"}/>
                             <p className={"text-xs"}>Log out</p>
                         </DropdownMenuItem>
