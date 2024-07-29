@@ -3,8 +3,22 @@
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import FirebaseClient from "@/lib/Firebase/Client/AuthClient";
+import {useRouter} from 'next/navigation'
+import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 
 export default function Login() {
+    const router = useRouter()
+    function signIn() {
+        FirebaseClient.signIn().then((response) => {
+            if (response.success)
+                router.push("/desktop")
+            else
+                setNotification(response.error, NotificationColor.ERROR)
+        }).catch(() => {
+            setNotification("An error has occurred during the session. Contact the administrator", NotificationColor.ERROR)
+        })
+    }
+
     return (
         <main className={"w-screen h-screen bg-gray-100 flex justify-center items-center"}>
             <section className={"w-1/3 bg-white flex flex-col border border-gray-200 rounded-lg py-20 px-10 gap-8"}>
@@ -17,7 +31,7 @@ export default function Login() {
                         </div>
                         <Button
                             className={"bg-gradient-to-r from-blue-600 to-blue-700 text-xs font-light"}
-                            onClick={() => FirebaseClient.signIn()}
+                            onClick={signIn}
                         >
                             Continue
                         </Button>

@@ -1,5 +1,5 @@
 import {UserRoles} from "@/lib/User/utils/users_roles";
-import {cookies} from "next/headers";
+import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 
 const USER_CLIENT_COOKIE_NAME: string= "user"
 class CUserClient {
@@ -30,26 +30,39 @@ class CUserClient {
         return this._token!
     }
 
-    constructor() {
-        this.init()
-    }
-    private init() {
-        if (cookies().has(USER_CLIENT_COOKIE_NAME)) {
-            try {
-                const cookie = JSON.parse(cookies().get(USER_CLIENT_COOKIE_NAME)!.value)
-
-                this._displayName = cookie.displayName
-                this._avatar = cookie.avatar;
-                this._role = cookie.role;
-                this._email = cookie.email;
-                this._token = cookie.token
-
-            } catch (error) {
-                console.error("Error initializing user: " + error)
-            }
-        } else {
-            console.log("User cookie not found")
+    public getUser() {
+        return {
+            displayName: this._displayName,
+            avatar: this._avatar,
+            role: this._role,
+            email: this._email,
+            token: this._token
         }
+    }
+
+    public async init() {
+        if (this._displayName) return
+        try {
+            const response = await fetch("/api/profile")
+            const parsedResponse = await response.json()
+            if (parsedResponse.success) {
+                const user = parsedResponse.data
+
+                this._displayName = user.displayName
+                this._avatar = user.avatar
+                this._role = user.role
+                this._email = user.email
+                this._token = user.token
+            } else {
+                setNotification("Error: Failed to load user credentials", NotificationColor.ERROR)
+                console.error(parsedResponse.error)
+            }
+        } catch (error) {
+            console.error(error)
+            setNotification("Error: internal error", NotificationColor.ERROR)
+        }
+
+
     }
 
     public initTest(role: UserRoles | undefined = UserRoles.Teacher) {

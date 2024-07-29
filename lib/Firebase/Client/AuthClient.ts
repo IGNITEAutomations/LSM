@@ -9,7 +9,6 @@ class AuthClient {
     private auth: Auth;
 
     constructor() {
-        console.log("Init auth Client")
         const firebaseApp: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
         this.auth = getAuth(firebaseApp);
     }
@@ -40,12 +39,13 @@ class AuthClient {
             });
 
             const resBody: APIResponse<string> = await response.json();
-            if (!resBody.success) throw new Error(resBody.error || "Log in response error.");
+            if (!resBody.success)
+                throw new Error(resBody.error || "Log in response error.");
 
             return resBody;
         } catch (error) {
             console.error("Error handling auth API:", error);
-            return {success: false, error: `Internal error: ${error}`};
+            return {success: false, error: error as string};
         }
     }
 
@@ -58,12 +58,22 @@ class AuthClient {
 
     public async signIn(): Promise<APIResponse<string>> {
         try {
-            console.log(this)
             const credentials: UserCredential | null = await this.getCredentials();
-            if (!credentials) return {success: false, error: "Failed to log in."};
+            if (!credentials)
+                return {success: false, error: "Failed to log in."};
 
             const idToken = await this.getUserID(credentials);
             return await this.handleAuthApi("/api/auth/login", idToken);
+        } catch (error) {
+            console.error("Sign-in error:", error);
+            return {success: false, error: `Sign-in error: ${error}`};
+        }
+    }
+
+    public async signOut(): Promise<APIResponse<string>> {
+        try {
+            const response = await fetch("/api/auth/logout")
+            return response.json()
         } catch (error) {
             console.error("Sign-in error:", error);
             return {success: false, error: `Sign-in error: ${error}`};

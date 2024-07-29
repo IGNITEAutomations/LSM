@@ -5,9 +5,9 @@ import User from "@/lib/DB/User/user";
 export async function POST(request: NextRequest) {
     try {
         const {idToken} = await request.json() as { idToken: string };
-        const user = await FirebaseServer.getCurrentUser(idToken)
+        const user = await  FirebaseServer.getUser(idToken)
 
-        if (user && !await User.login(user.email!)) {
+        if (user && !await User.login(user.email!, user.uid!)) {
             console.log("User not found")
             return NextResponse.json({success: false, error: "User not found"})
         }
