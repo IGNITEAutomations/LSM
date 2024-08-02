@@ -12,8 +12,10 @@ export default function Login() {
         FirebaseClient.signIn().then((response) => {
             if (response.success)
                 router.push("/desktop")
-            else
+            else{
+                FirebaseClient.signOut().then()
                 setNotification(response.error, NotificationColor.ERROR)
+            }
         }).catch(() => {
             setNotification("An error has occurred during the session. Contact the administrator", NotificationColor.ERROR)
         })

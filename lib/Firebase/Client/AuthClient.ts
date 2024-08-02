@@ -15,6 +15,9 @@ class AuthClient {
 
     private async getCredentials(): Promise<UserCredential | null> {
         const provider: GoogleAuthProvider = new GoogleAuthProvider();
+        provider.setCustomParameters({
+            prompt: 'select_account'
+        })
         try {
             return await signInWithPopup(this.auth, provider);
         } catch (error) {
@@ -44,7 +47,7 @@ class AuthClient {
 
             return resBody;
         } catch (error) {
-            console.error("Error handling auth API:", error);
+            console.error("Error handling user API:", error);
             return {success: false, error: error as string};
         }
     }
@@ -63,7 +66,7 @@ class AuthClient {
                 return {success: false, error: "Failed to log in."};
 
             const idToken = await this.getUserID(credentials);
-            return await this.handleAuthApi("/api/auth/login", idToken);
+            return await this.handleAuthApi("/api/user/login", idToken);
         } catch (error) {
             console.error("Sign-in error:", error);
             return {success: false, error: `Sign-in error: ${error}`};

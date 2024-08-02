@@ -3,25 +3,14 @@
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
 import Image from "next/image";
 import {ChevronDown, LogOut} from "lucide-react";
-import UserClient from "@/lib/User/user_client";
 import FirebaseClient from "@/lib/Firebase/Client/AuthClient";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useUser} from "@/hooks/UserProvider";
 
 export default function Header() {
     const router = useRouter()
-    const [user, setUser] = useState<any>({displayName: "", avatar: ""})
-
-    useEffect(() => {
-        UserClient.init().then(() => {
-            console.log("getting info")
-            console.log("info: ")
-            console.log(UserClient.getUser())
-            console.log(UserClient)
-             setUser(UserClient.getUser())
-        })
-    }, []);
+    const user = useUser()
 
     function logout() {
        FirebaseClient.signOut().then((response) => {

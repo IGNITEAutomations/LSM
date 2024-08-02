@@ -1,9 +1,13 @@
-import {DataTable} from "@/app/(logged)/(teacher)/desktop/data-table";
-import {columns} from "@/app/(logged)/(teacher)/desktop/columns";
+
+
+import {DataTable} from "@/app/(logged)/(teacher)/desktop/components/data-table";
+import {columns} from "@/app/(logged)/(teacher)/desktop/components/columns";
 import Classes from "@/lib/DB/Classes/classes";
+import {useClasses} from "@/hooks/ClassesProvider";
 
 export default async function Desktop() {
     const data = await Classes.getAll()
+    const classes = useClasses()
 
     return (
         <section className={"flex flex-col max-h-s gap-5 flex-1"}>

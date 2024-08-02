@@ -20,7 +20,7 @@ class AuthServer {
 
     private async getSession(): Promise<string | undefined> {
         try {
-            return ""// cookies().get("__session")?.value;
+            return  cookies().get("__session")?.value;
         } catch (error) {
             console.error("Failed to retrieve session:", error);
             return undefined;
@@ -83,6 +83,9 @@ class AuthServer {
     }
 
     public async signOut(): Promise<undefined> {
+        if (!cookies().has("__session"))
+            return undefined
+
         try {
              const session = await this.getSession();
              cookies().delete("__session");

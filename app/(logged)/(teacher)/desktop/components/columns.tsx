@@ -17,3 +17,5 @@ export const columns: ColumnDef<School>[] = [
     { accessorKey: "day", header: "Day" },
     { accessorKey: "num_students", header: "#Students" }
 ]
+
+

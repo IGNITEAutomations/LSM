@@ -19,10 +19,6 @@ export default function DefaultPage() {
 
     const [elementsByPage, setElementsByPage] = useState<number>(5)
 
-    useEffect(() => {
-        console.log(elementsByPage)
-    }, [elementsByPage]);
-
     type Class = {
         school: string, group: string, day: string, classId: number
     }

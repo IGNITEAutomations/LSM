@@ -3,7 +3,6 @@ import prismadb from "@/prisma/prismadb";
 class CModelUser {
 
     public async findByUserId(userId: string) {
-        console.log(userId)
         try {
             return prismadb.teacher.findUnique({
                 where: {

@@ -7,7 +7,7 @@ export async function GET() {
     try {
         const firebaseUser = await FirebaseServer.getCurrentUser()
         if (!firebaseUser)
-            throw new Error("error getting user credentials")
+            throw new Error("getting user credentials")
 
         const userData = await User.user(firebaseUser.uid)
         if (!userData)
@@ -20,7 +20,6 @@ export async function GET() {
             email: firebaseUser.email!,
             token: ""
         }
-
         return NextResponse.json({success: true, data: JSON.stringify(user)})
     } catch (error) {
         console.error("Error getting user: " + error)

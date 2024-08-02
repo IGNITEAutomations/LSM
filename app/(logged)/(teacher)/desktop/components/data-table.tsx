@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/table"
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
+import AddClassBtn from "@/app/(logged)/(teacher)/desktop/components/AddClassBtn";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -40,7 +41,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="flex flex-1 w-full max-h-[70vh] bg-white rounded-md">
       <div className={"absolute left-0 -mx-20 px-10 h-5 w-full flex justify-end"}>
-        <Button className={"flex flex-row items-center absolute -top-14 w-fit px-4 h-7 font-light  text-sm rounded-xl bg-yellow-1000 hover:bg-yellow-1001"}><Plus className={"w-4 h-4 stroke-1.5"}/> Add class</Button>
+        <AddClassBtn/>
       </div>
       <Table>
         <TableHeader className={"bg-white"}>
