@@ -41,6 +41,7 @@ class AuthClient {
                 method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({idToken})
             });
 
+            console.log(response)
             const resBody: APIResponse<string> = await response.json();
             if (!resBody.success)
                 throw new Error(resBody.error || "Log in response error.");
@@ -66,7 +67,7 @@ class AuthClient {
                 return {success: false, error: "Failed to log in."};
 
             const idToken = await this.getUserID(credentials);
-            return await this.handleAuthApi("/api/user/login", idToken);
+            return await this.handleAuthApi("/api/auth/login", idToken);
         } catch (error) {
             console.error("Sign-in error:", error);
             return {success: false, error: `Sign-in error: ${error}`};

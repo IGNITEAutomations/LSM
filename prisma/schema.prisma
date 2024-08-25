@@ -14,39 +14,72 @@ datasource db {
 }
 
 model Student {
-  id        Int     @id @default(autoincrement())
-  name      String
-  surname   String
-  email     String
-  password  String
-  activated Boolean
-  class     Class   @relation(fields: [classId], references: [id])
-  classId   Int
+  id         Int          @id @default(autoincrement())
+  name       String
+  surname    String
+  email      String
+  password   String
+  activated  Boolean
+  class      Class        @relation(fields: [classId], references: [id])
+  classId    Int
+  Challenges Challenges[]
+  Skills     Skills[]
 }
 
 model Class {
-  id       Int       @id @default(autoincrement())
-  name     String
-  students Student[]
-  school   School    @relation(fields: [schoolId], references: [id])
-  day      String
-  schoolId Int
+  id         Int       @id @default(autoincrement())
+  name       String
+  students   Student[]
+  day        String
+  school     School    @relation(fields: [schoolId], references: [id])
+  schoolId   Int
+  teacher    Teacher   @relation(fields: [teacherUid], references: [uid])
+  teacherUid String
 }
 
 model School {
-  id      Int       @id @default(autoincrement())
-  name    String    @unique
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
   classes Class[]
-  teacher Teacher[]
 }
 
 model Teacher {
-  id          Int      @id @default(autoincrement())
-  uid         String?  @unique
-  token       String?  @unique
+  uid         String? @unique
+  token       String? @unique
   displayName String
   name        String
-  email       String   @unique
+  email       String  @unique
   role        Int
-  schools     School[]
+  classes     Class[]
+}
+
+model ChallengesHeaders {
+  id         String       @unique
+  name       String
+  Challenges Challenges[]
+}
+
+model Challenges {
+  student     Student           @relation(fields: [studentId], references: [id])
+  studentId   Int
+  challenge   ChallengesHeaders @relation(fields: [challengeId], references: [id])
+  challengeId String
+
+  @@unique([studentId, challengeId])
+}
+
+model SkillsHeaders {
+  id     String   @unique
+  name   String
+  type   String
+  Skills Skills[]
+}
+
+model Skills {
+  student   Student       @relation(fields: [studentId], references: [id])
+  studentId Int
+  skill     SkillsHeaders @relation(fields: [skillId], references: [id])
+  skillId   String
+
+  @@unique([studentId, skillId])
 }

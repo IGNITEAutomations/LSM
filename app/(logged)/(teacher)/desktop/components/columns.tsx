@@ -1,21 +1,22 @@
 "use client"
 
 import {ColumnDef} from "@tanstack/react-table"
+import {Group} from "@/hooks/ClassesProvider";
 
-export type School = {
+/*export type School = {
     id: number
     name: string
     group: string
     day: string
     num_students: number
-}
+}*/
 
-export const columns: ColumnDef<School>[] = [
-    { accessorKey: "id", header: "Classes Id" },
-    { accessorKey: "name", header: "School" },
+export const columns: ColumnDef<Group>[] = [
+    { accessorKey: "id", header: "Class Id" },
+    { accessorKey: "school", header: "School" },
     { accessorKey: "group", header: "Group" },
     { accessorKey: "day", header: "Day" },
-    { accessorKey: "num_students", header: "#Students" }
+    { accessorKey: "numStudents", header: "#Students" }
 ]
 
 

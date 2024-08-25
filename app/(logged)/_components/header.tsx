@@ -7,6 +7,8 @@ import FirebaseClient from "@/lib/Firebase/Client/AuthClient";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 import {useRouter} from "next/navigation";
 import {useUser} from "@/hooks/UserProvider";
+import capitalizeFirstLetter from "@/utils/capitalize";
+import Link from "next/link";
 
 export default function Header() {
     const router = useRouter()
@@ -23,9 +25,9 @@ export default function Header() {
 
     return (
         <header className={"flex flex-row justify-between items-center px-10 py-5 sticky top-0"}>
-            <Image src={"/img/ignite_logo.png"} alt={"ignite logo"} width={80} height={80}/>
+            <Link href={"/"}><Image src={"/img/ignite_logo.png"} alt={"ignite logo"} width={80} height={80}/></Link>
             <div className={"flex flex-row gap-4 items-center"}>
-                <p className={"text-sm text-gray-700 font-semibold"}>{user.displayName}</p>
+                <p className={"text-sm text-gray-700 font-semibold"}>{capitalizeFirstLetter(user.displayName)}</p>
                 <DropdownMenu>
                     <DropdownMenuTrigger  className={"flex flex-row items-center gap-3 focus:outline-none"}>
                         <div className={"flex flex-row"}>

@@ -1,12 +1,10 @@
-
+"use client"
 
 import {DataTable} from "@/app/(logged)/(teacher)/desktop/components/data-table";
 import {columns} from "@/app/(logged)/(teacher)/desktop/components/columns";
-import Classes from "@/lib/DB/Classes/classes";
 import {useClasses} from "@/hooks/ClassesProvider";
 
-export default async function Desktop() {
-    const data = await Classes.getAll()
+export default function Desktop() {
     const classes = useClasses()
 
     return (
@@ -16,7 +14,7 @@ export default async function Desktop() {
                 <h2>Manage your classes and view the last anotations.</h2>
             </div>
             <div>
-                <DataTable columns={columns} data={data}/>
+                <DataTable columns={columns} data={classes.groups}/>
             </div>
         </section>
 

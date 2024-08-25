@@ -15,9 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {Button} from "@/components/ui/button";
-import {Plus} from "lucide-react";
 import AddClassBtn from "@/app/(logged)/(teacher)/desktop/components/AddClassBtn";
+import { useRouter } from 'next/navigation'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -34,9 +33,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   })
 
-  function onClick(classId: string) {
-    alert(classId)
-  }
+  const router = useRouter()
 
   return (
     <div className="flex flex-1 w-full max-h-[70vh] bg-white rounded-md">
@@ -69,7 +66,7 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 className={"border-none cursor-pointer " + (i%2 ? "bg-white" : "bg-[#F2F8FF]")}
-                onClick={() => onClick(row.getValue("id"))}
+                onClick={() => router.push('/challenges?id=' + row.getValue("id"))}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

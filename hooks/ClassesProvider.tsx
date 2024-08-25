@@ -1,15 +1,14 @@
 "use client";
 
 import React, {FC, ReactNode, useContext, useEffect, useState} from "react";
-import UserClient from "@/lib/User/user_client";
-import {UserRoles} from "@/lib/User/utils/users_roles";
 import {Days} from "@/utils/Days";
 
-type Group = {
+export type Group = {
     id: string,
     school: string,
     group: string,
     day: Days,
+    numStudents: number,
     action: boolean
 }
 
@@ -30,12 +29,23 @@ export const ClassesProvider: FC<UserProviderProps> = ({children}) => {
 
     //TODO use lib ReactQuery https://tanstack.com/
     const restartGroups = async () => {
-
+        const response = await fetch("/api/groups")
+        const data = await response.json()
+        console.log(data.data)
+        setGroups(data.data)
     };
 
     useEffect(() => {
         restartGroups();
     }, []);
+
+    function generateGroups() {
+        setGroups([
+            {id: "1234", school: "Fedac Horta", group: "Robotica ESO", day: Days.Monday, numStudents: 12, action: false},
+            {id: "1235", school: "Fedac Amilcar", group: "Coding PRIM", day: Days.Thursday, numStudents: 8, action: false},
+            {id: "1435", school: "Fedac Sant Andreu", group: "3D&Craft INF", day: Days.Friday, numStudents: 10, action: false},
+        ])
+    }
 
     function addGroup(group: Group) {
         setGroups(groups.concat(group))
@@ -45,7 +55,14 @@ export const ClassesProvider: FC<UserProviderProps> = ({children}) => {
         setGroups(groups.filter(group => group.id != id))
     }
 
-    return (<UserContext.Provider value={{groups: groups, addGroup: (group) => addGroup(group), removeGroup: (id) => removeGroup(id)}}>
+    return (
+        <UserContext.Provider
+            value={{
+                groups: groups,
+                addGroup: (group) => addGroup(group),
+                removeGroup: (id) => removeGroup(id)
+            }}
+        >
         {children}
     </UserContext.Provider>);
 };
