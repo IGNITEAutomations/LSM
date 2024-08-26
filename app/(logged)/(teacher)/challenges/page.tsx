@@ -1,14 +1,12 @@
 "use client"
 
-import {useSearchParams} from "next/navigation";
 import Navigation from "@/app/(logged)/_components/nav";
 import ChallengesTable from "@/app/(logged)/(teacher)/challenges/table";
-import {useEffect, useState} from "react";
+import {Suspense, useEffect, useState} from "react";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 
-export default function ChallengesPage() {
-    const searchParams = useSearchParams()
-    const classId = searchParams.get('id')
+export default function ChallengesPage({searchParams}: { searchParams: { id: string }}) {
+    const classId = searchParams.id
     const [challenges, setChallenges] = useState([])
     const [matrix, setMatrix] = useState<any[][]>([[]])
 
@@ -30,7 +28,6 @@ export default function ChallengesPage() {
     ]
 
     function createChallengesMatrix() {
-        console.log(challenges)
         const challengeIds = challengesHeaders.map(challenge => challenge.id);
         return challenges?.map((user: any) => {
           const row = [user.name];
@@ -45,9 +42,11 @@ export default function ChallengesPage() {
 
     return (
         <main className={"flex flex-col max-h-[650px]"}>
-            <Navigation/>
+            <Suspense>
+                <Navigation classId={classId}/>
+            </Suspense>
             <h1>Challenges</h1>
-            <h2>{"Class ID " + classId}</h2>
+            <h2>{"Class ID " }</h2>
             <section className={"mt-8 flex-1 overflow-y-auto"}>
                 <ChallengesTable matrix={matrix} header={challengesHeaders.map(challenge => challenge.name)}/>
             </section>
