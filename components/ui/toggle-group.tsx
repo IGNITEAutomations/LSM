@@ -12,7 +12,6 @@ type ToggleGroupProps = {
 }
 
 export default function ToggleGroup({options, def}: ToggleGroupProps) {
-    console.log("Def: " + def)
     return (
         <section className={"flex justify-center"}>
             <div className={"bg-gray-50 rounded-3xl flex flex-row gap-1"}>

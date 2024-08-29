@@ -40,16 +40,17 @@ class CUserClient {
                 this._role = user.role
                 this._email = user.email
                 this._token = user.token
+
+                return true
             } else {
-                setNotification("Error: Failed to load user credentials", NotificationColor.ERROR)
+                //setNotification("Error: Failed to load user credentials", NotificationColor.ERROR)
                 console.error(parsedResponse.error)
             }
         } catch (error) {
             console.error(error)
             setNotification("Error: internal error", NotificationColor.ERROR)
         }
-
-
+        return false
     }
 
     public initTest(role: UserRoles | undefined = UserRoles.Teacher) {

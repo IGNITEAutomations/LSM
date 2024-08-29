@@ -20,9 +20,11 @@ export async function GET() {
             email: firebaseUser.email!,
             token: ""
         }
+
         return NextResponse.json({success: true, data: JSON.stringify(user)})
     } catch (error) {
         console.error("Error getting user: " + error)
+        await FirebaseServer.signOut()
         return NextResponse.json({success: false, error: "An error occurred while logging in"})
     }
 }

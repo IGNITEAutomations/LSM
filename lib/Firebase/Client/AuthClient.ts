@@ -41,7 +41,6 @@ class AuthClient {
                 method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({idToken})
             });
 
-            console.log(response)
             const resBody: APIResponse<string> = await response.json();
             if (!resBody.success)
                 throw new Error(resBody.error || "Log in response error.");

@@ -2,53 +2,40 @@
 
 import Navigation from "@/app/(logged)/_components/nav";
 import ChallengesTable from "@/app/(logged)/(teacher)/challenges/table";
-import {Suspense, useEffect, useState} from "react";
-import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
+import {Suspense, useEffect} from "react";
+import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
+import {useClasses} from "@/hooks/ClassesProvider";
+import {useChallenges} from "@/hooks/ChallengesProvider";
 
 export default function ChallengesPage({searchParams}: { searchParams: { id: string }}) {
     const classId = searchParams.id
-    const [challenges, setChallenges] = useState([])
-    const [matrix, setMatrix] = useState<any[][]>([[]])
+    const challenges = useChallenges()
+    const classes = useClasses()
 
-    useEffect(() => {
-        fetch("/api/challenges/get?id=" + classId).then(response => {
-            response.json().then(challenges => {setChallenges(challenges.data)})
-        }).catch(error => setNotification(error, NotificationColor.ERROR))
-    }, []);
+    const handleChange = (row: number, col: number, value:boolean) => {
+        challenges.setChallengeValue(row, col, value)
 
-    useEffect(() => {
-        setMatrix(createChallengesMatrix())
-    }, [challenges]);
-
-    const challengesHeaders = [
-        {name: "Challenge 1", id: 1234},
-        {name: "Challenge 2", id: 1235},
-        {name: "Challenge 3", id: 1236},
-        {name: "Challenge 4", id: 1237},
-    ]
-
-    function createChallengesMatrix() {
-        const challengeIds = challengesHeaders.map(challenge => challenge.id);
-        return challenges?.map((user: any) => {
-          const row = [user.name];
-
-          challengeIds.forEach(id => {
-            row.push(user.challenges.includes(id.toString()));
-          });
-
-          return row;
-        });
+        const queueItem: QueueItem = {
+            type: QueueTypes.CHALLENGES,
+            classId: classId,
+            studentId: challenges.challengesMatrix[row].student.id as number,
+            evaluationId: challenges.challengesMatrix[row].challenges[col].id,
+            value: value
+        }
+        queue.add(queueItem)
     }
 
+    console.log(challenges.challengesMatrix)
+    console.log(challenges.challengesHeader)
     return (
         <main className={"flex flex-col max-h-[650px]"}>
             <Suspense>
                 <Navigation classId={classId}/>
             </Suspense>
             <h1>Challenges</h1>
-            <h2>{"Class ID " }</h2>
+            <h2>{classes.getClassName(classId)}</h2>
             <section className={"mt-8 flex-1 overflow-y-auto"}>
-                <ChallengesTable matrix={matrix} header={challengesHeaders.map(challenge => challenge.name)}/>
+                 <ChallengesTable matrix={challenges.challengesMatrix} headers={challenges.challengesHeader} onChange={handleChange}/>
             </section>
         </main>
     )

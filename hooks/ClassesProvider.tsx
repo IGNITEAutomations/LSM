@@ -1,76 +1,82 @@
 "use client";
 
-import React, {FC, ReactNode, useContext, useEffect, useState} from "react";
-import {Days} from "@/utils/Days";
+import React, { FC, ReactNode, useContext, useEffect, useState, useCallback } from "react";
+import { Days } from "@/utils/Days";
+import { NotificationColor, setNotification } from "@/lib/Notification/ClientNotification";
 
 export type Group = {
-    id: string,
-    school: string,
-    group: string,
-    day: Days,
-    numStudents: number,
-    action: boolean
-}
+    id: string;
+    school: string;
+    group: string;
+    day: Days;
+    numStudents: number;
+    action: boolean;
+};
 
 type Groups = {
-    groups: Group[]
-    addGroup: (group: Group) => void,
-    removeGroup: (id: string) => void
-}
+    groups: Group[];
+    addGroup: (group: Group) => void;
+    removeGroup: (id: string) => void;
+    getClassName: (id: string) => string;
+};
 
-const UserContext = React.createContext<Groups | undefined>(undefined);
+const ClassesContext = React.createContext<Groups | undefined>(undefined);
 
-type UserProviderProps = {
+type ClassesProviderProps = {
     children: ReactNode;
 };
 
-export const ClassesProvider: FC<UserProviderProps> = ({children}) => {
+export const ClassesProvider: FC<ClassesProviderProps> = ({ children }) => {
     const [groups, setGroups] = useState<Group[]>([]);
 
-    //TODO use lib ReactQuery https://tanstack.com/
-    const restartGroups = async () => {
-        const response = await fetch("/api/groups")
-        const data = await response.json()
-        console.log(data.data)
-        setGroups(data.data)
-    };
-
-    useEffect(() => {
-        restartGroups();
+    const addGroup = useCallback((group: Group) => {
+        setGroups(prevGroups => [...prevGroups, group]);
     }, []);
 
-    function generateGroups() {
-        setGroups([
-            {id: "1234", school: "Fedac Horta", group: "Robotica ESO", day: Days.Monday, numStudents: 12, action: false},
-            {id: "1235", school: "Fedac Amilcar", group: "Coding PRIM", day: Days.Thursday, numStudents: 8, action: false},
-            {id: "1435", school: "Fedac Sant Andreu", group: "3D&Craft INF", day: Days.Friday, numStudents: 10, action: false},
-        ])
-    }
+    const removeGroup = useCallback((id: string) => {
+        setGroups(prevGroups => prevGroups.filter(group => group.id !== id));
+    }, []);
 
-    function addGroup(group: Group) {
-        setGroups(groups.concat(group))
-    }
+    const getClassName = useCallback((id: string) => {
+        const group = groups.find(group => group.id === id);
+        return group ? `${group.school} - ${group.group}` : "";
+    }, [groups]);
 
-    function removeGroup(id: string) {
-        setGroups(groups.filter(group => group.id != id))
-    }
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const response = await fetch("/api/groups");
+                const data = await response.json();
+                if (data.success) {
+                    setGroups(data.data);
+                } else {
+                    setNotification("Internal error: Failed to load classes", NotificationColor.ERROR);
+                }
+            } catch (error) {
+                setNotification("Internal error: Failed to load classes", NotificationColor.ERROR);
+            }
+        };
+        fetchGroups();
+    }, []);
+
+    const contextValue = {
+        groups,
+        addGroup,
+        removeGroup,
+        getClassName
+    };
 
     return (
-        <UserContext.Provider
-            value={{
-                groups: groups,
-                addGroup: (group) => addGroup(group),
-                removeGroup: (id) => removeGroup(id)
-            }}
-        >
-        {children}
-    </UserContext.Provider>);
+        <ClassesContext.Provider value={contextValue}>
+            {children}
+        </ClassesContext.Provider>
+    );
 };
 
 export const useClasses = (): Groups => {
-    const context = useContext(UserContext);
+    const context = useContext(ClassesContext);
     if (!context) {
-        throw new Error("useClasses must be used within a UserProvider");
+        throw new Error("useClasses must be used within a ClassesProvider");
     }
     return context;
 };

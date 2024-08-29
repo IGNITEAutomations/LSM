@@ -3,6 +3,7 @@
 import React, {FC, ReactNode, useContext, useEffect, useState} from "react";
 import UserClient from "@/lib/User/user_client";
 import {UserRoles} from "@/lib/User/utils/users_roles";
+import {useRouter} from "next/navigation";
 
 type User = {
     displayName: string;
@@ -20,14 +21,19 @@ type UserProviderProps = {
 
 export const UserProvider: FC<UserProviderProps> = ({children}) => {
     const [user, setUser] = useState<User>({displayName: "", avatar: "", role: UserRoles.Teacher, email: "", token: ""});
+     const router = useRouter()
 
     //TODO use lib ReactQuery https://tanstack.com/
     const restartUser = async () => {
         try {
-            await UserClient.init()
+            const ok = await UserClient.init()
+            if (!ok)
+                throw new Error("The session could not be started")
+
             setUser(UserClient.getUser())
         } catch (error) {
             console.error("Failed to fetch user getHistory:", error);
+            router.push("/login")
         }
     };
 
