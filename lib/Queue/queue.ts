@@ -1,19 +1,27 @@
 import {setNotification} from "@/lib/Notification/ClientNotification";
 
 const ELAPSE_TIME = 10000
-export const enum QueueTypes {
+export enum QueueTypes {
     CHALLENGES,
     SKILLS,
     MENTIONS
 }
 
-export type QueueItem = {
-    type: QueueTypes;
-    classId: string;
+export type QueueDataItem = {
     studentId: number;
     evaluationId: string;
     value: string | boolean;
+};
+
+export type QueueItem = {
+    type: QueueTypes;
+    data: QueueDataItem;
 }
+
+export type QueueRequest = {
+    type: QueueTypes;
+    data: QueueDataItem[];
+};
 
 export const enum QueueStatus {
     Saved,
@@ -82,9 +90,9 @@ class CQueue {
 
     private async execute(items: QueueItem[]): Promise<void> {
         try {
-            const response = await fetch("/api/challenges/post", {
+            const response = await fetch("/api/event/post", {
                 method: "POST",
-                body: JSON.stringify(items),
+                body: JSON.stringify({type: items[0].type, data: items.map(item => item.data)} as QueueRequest),
                 headers: {
                     "Content-Type": "application/json"
                 }

@@ -50,7 +50,7 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
         if (classId) {
             init(classId);
         }
-    }, [classId, init]); // Added `init` to the dependency array to adhere to React's rules of hooks
+    }, [classId, init]);
 
     const setChallengeValue = useCallback((row: number, col: number, value: boolean) => {
         setChallengesData(prevState => {

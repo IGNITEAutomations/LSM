@@ -3,14 +3,14 @@
 import React, {FC, ReactNode, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 import {useSearchParams} from "next/navigation";
-import {Option, Skill, Student} from "@/utils/types/types";
+import {Option, Skill, SkillsTypes, Student} from "@/utils/types/types";
 
 type SkillsDataRow = {
   student: Student;
   skills: Skill[];
 };
 
-type SkillMatrix = {
+export type SkillMatrix = {
   matrix: SkillsDataRow[];
   options: Option[];
 };
@@ -25,7 +25,7 @@ type SkillsProviderProps = {
     children: ReactNode;
 };
 
-export function createSkillGenericContext(apiUrl: string) {
+export function createSkillGenericContext(type: SkillsTypes) {
     const SkillsContext = React.createContext<SkillsContextType | undefined>(undefined);
 
     const SkillsProvider: FC<SkillsProviderProps> = ({children}) => {
@@ -36,13 +36,15 @@ export function createSkillGenericContext(apiUrl: string) {
 
         const init = useCallback(async (classId: string) => {
             try {
-                const response = await fetch(`${apiUrl}?id=${classId}`);
+                const response = await fetch(`/api/skills/get?id=${classId}&type=${type.toString()}`);
                 if (!response.ok) throw new Error("Failed to fetch challenges data");
 
                 const data = await response.json();
                 if (!data.success) throw new Error("Error getting data: " + data.error);
 
                 setSkillsData(data.data);
+                console.log("Type: " + type)
+                console.log(data.data)
             } catch (error) {
                 setNotification((error as Error).message, NotificationColor.ERROR);
             }

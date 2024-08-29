@@ -1,4 +1,3 @@
-import {DataElement} from "@/hooks/LastClassProvider";
 import {ChallengeDataRow} from "@/hooks/ChallengesProvider";
 
 type ChallengesTableProps = {

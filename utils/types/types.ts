@@ -15,5 +15,12 @@ export type Skill = {
 
 export type Option = {
   id: string,
-  name: string
+  label: string
+}
+
+export enum SkillsTypes {
+  SoftSkill = 0,
+  SteamSkill = 1,
+  Mention = 2,
+  BestOf = 3
 }

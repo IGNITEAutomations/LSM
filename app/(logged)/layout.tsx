@@ -2,7 +2,6 @@ import Header from "@/app/(logged)/_components/header";
 import "./style.css";
 import {UserProvider} from "@/hooks/UserProvider";
 import {ClassesProvider} from "@/hooks/ClassesProvider";
-import {LastClassProvider} from "@/hooks/LastClassProvider";
 import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
 import {SoftSkillsProvider} from "@/hooks/SkillsProvider/SoftSkillsProvider";
 import {SteamSkillsProvider} from "@/hooks/SkillsProvider/SteamSkillsProvider";

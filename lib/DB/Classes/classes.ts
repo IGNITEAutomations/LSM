@@ -1,7 +1,10 @@
 import ModelClass from "@/lib/DB/Classes/model";
 import {Group} from "@/hooks/ClassesProvider";
 import {Days} from "@/utils/Days";
-import {QueueItem} from "@/lib/Queue/queue";
+import {QueueDataItem, QueueItem} from "@/lib/Queue/queue";
+import {SkillsTypes} from "@/utils/types/types";
+import {SkillMatrix} from "@/hooks/SkillsProvider/CommonProvider";
+import {opt} from "ts-interface-checker";
 
 class CClasses {
 
@@ -42,7 +45,30 @@ class CClasses {
         };
     }
 
-    public async updateStudentsChallenges(data: QueueItem[]): Promise<boolean> {
+    public async getSkills(classID: number, teacherId: string, type: SkillsTypes) {
+        const [skills, skillsOptions] = await Promise.all([
+          ModelClass.getSkillsByClass(classID, teacherId, type),
+          ModelClass.getSkillsOptions(type)
+        ]);
+
+        if (!skills?.students || !skillsOptions) return [];
+
+        const options = skillsOptions.map(({ id, name }) => ({ id, label: name }));
+
+        const matrix = skills.students.map(({ id, name, surname, Skills }) => ({
+          student: { id, displayName: `${name} ${surname}` },
+          skills: Skills.map(({ skill }) => ({
+            id: skill.id,
+            value: skill.name
+          }))
+            .slice(0, 3)
+            .concat(Array(3 - Skills.length).fill({ id: "", value: "" }))
+        }));
+
+        return { options, matrix } as SkillMatrix;
+        }
+
+    public async updateStudentsChallenges(data: QueueDataItem[]): Promise<boolean> {
         const insertsChallenges: { studentId: number; challengeId: string }[] = [];
         const deleteChallenges: { studentId: number; challengeId: string }[] = [];
 

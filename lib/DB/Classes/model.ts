@@ -1,5 +1,5 @@
 import prismadb from "@/prisma/prismadb";
-import {Simulate} from "react-dom/test-utils";
+import {SkillsTypes} from "@/utils/types/types";
 
 class CModelClass {
     public async getClasses() {
@@ -57,6 +57,45 @@ class CModelClass {
             })
         } catch (error) {
             console.error("Error getting challenges data: " + error)
+        }
+    }
+
+    public async getSkillsByClass(classId: number, teacherId: string, type: SkillsTypes) {
+        try {
+            return prismadb.class.findUnique({
+                where: {
+                    id: classId,
+                    teacherUid: teacherId
+                }, include: {
+                    students: {
+                        include: {
+                            Skills: {
+                                where: {
+                                    skill: {
+                                        type: type.toString()
+                                    }
+                                }, include: {
+                                    skill: true
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        } catch (error) {
+            console.error("Error getting challenges data: " + error)
+        }
+    }
+
+    public async getSkillsOptions(type: SkillsTypes) {
+        try {
+            return prismadb.skillsHeaders.findMany({
+                where: {
+                    type: type.toString()
+                }
+            })
+        } catch (error) {
+            console.error("Error getting skills headers: " + error)
         }
     }
 
