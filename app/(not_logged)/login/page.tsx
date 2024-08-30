@@ -5,10 +5,14 @@ import Image from "next/image";
 import FirebaseClient from "@/lib/Firebase/Client/AuthClient";
 import {useRouter} from 'next/navigation'
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
+import {useState} from "react";
 
 export default function Login() {
     const router = useRouter()
+    const [loginEnabled, setLoginEnabled] = useState<boolean>(true)
+
     function signIn() {
+        setLoginEnabled(false)
         FirebaseClient.signIn().then((response) => {
             if (response.success)
                 router.push("/desktop")
@@ -16,8 +20,10 @@ export default function Login() {
                 FirebaseClient.signOut().then()
                 setNotification(response.error, NotificationColor.ERROR)
             }
+            setLoginEnabled(true)
         }).catch(() => {
             setNotification("An error has occurred during the session. Contact the administrator", NotificationColor.ERROR)
+            setLoginEnabled(true)
         })
     }
 
@@ -34,6 +40,7 @@ export default function Login() {
                         <Button
                             className={"bg-gradient-to-r from-[#4697da] to-[#2180c1] text-sm rounded-3xl gap-3"}
                             onClick={signIn}
+                            disabled={!loginEnabled}
                         >
                             <svg className={"fill-white w-4 h-4"} xmlns="http://www.w3.org/2000/svg"
                                  viewBox="0 0 488 512">
