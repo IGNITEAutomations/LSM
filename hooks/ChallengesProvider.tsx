@@ -29,8 +29,8 @@ const ChallengesContext = React.createContext<ChallengesContextType | undefined>
 
 export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) => {
     const [challengesData, setChallengesData] = useState<ChallengesMatrix>({ headers: [], matrix: [] });
+    const [classId, setClassId] = useState<string>("")
     const searchParams = useSearchParams();
-    const classId = searchParams.get("id");
 
     const init = useCallback(async (classId: string) => {
         try {
@@ -51,6 +51,12 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
             init(classId);
         }
     }, [classId, init]);
+
+    useEffect(() => {
+        const idFromUrl = searchParams.get('id')
+        if (!classId && idFromUrl)
+            setClassId(idFromUrl)
+    }, [searchParams, classId]);
 
     const setChallengeValue = useCallback((row: number, col: number, value: boolean) => {
         setChallengesData(prevState => {

@@ -1,10 +1,11 @@
 "use client"
 
-import Navigation from "@/app/(logged)/_components/nav";
 import ChallengesTable from "@/app/(logged)/(teacher)/challenges/table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import {useClasses} from "@/hooks/ClassesProvider";
 import {useChallenges} from "@/hooks/ChallengesProvider";
+import {Suspense} from "react";
+import Navigation from "@/app/(logged)/_components/nav";
 
 export default function ChallengesPage({searchParams}: { searchParams: { id: string }}) {
     const classId = searchParams.id

@@ -32,7 +32,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
         const [skillsData, setSkillsData] = useState<SkillMatrix>({options: [], matrix: []});
 
         const searchParams = useSearchParams();
-        const classId = searchParams.get("id");
+        const [classId, setClassId] = useState<string>("")
 
         const init = useCallback(async (classId: string) => {
             try {
@@ -52,6 +52,12 @@ export function createSkillGenericContext(type: SkillsTypes) {
                 init(classId);
             }
         }, [classId, init]);
+
+        useEffect(() => {
+            const idFromUrl = searchParams.get('id')
+            if (!classId && idFromUrl)
+                setClassId(idFromUrl)
+        }, [searchParams, classId]);
 
         const setSkillValue = useCallback((row: number, col: number, value: string) => {
             setSkillsData(prevState => {
