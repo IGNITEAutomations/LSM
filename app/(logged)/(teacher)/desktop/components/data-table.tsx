@@ -15,8 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import AddClassBtn from "@/app/(logged)/(teacher)/desktop/components/AddClassBtn";
 import { useRouter } from 'next/navigation'
+import AddClassBtn from "@/app/(logged)/(teacher)/desktop/components/AddClassBtn";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

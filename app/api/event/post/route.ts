@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { QueueRequest, QueueTypes } from "@/lib/Queue/queue";
 import FirebaseServer from "@/lib/Firebase/Server/AuthServer";
 import updateStudentChallenges from "@/app/api/event/post/challenges";
+import updateStudentSkills from "@/app/api/event/post/skills";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,10 +22,10 @@ export async function POST(request: NextRequest) {
         await updateStudentChallenges(queueRequest.data);
         break;
       case QueueTypes.SKILLS:
-        console.log(queueRequest.data)
+        await updateStudentSkills(queueRequest.data)
         break;
       case QueueTypes.MENTIONS:
-        console.log(queueRequest.data)
+        await updateStudentSkills(queueRequest.data)
         break;
     }
 

@@ -6,11 +6,11 @@ export function Table({children}: Readonly<{children: React.ReactNode}>) {
     )
 }
 
-export function THead({numCols, headers}: {numCols: number, headers: string[]}) {
+export function THead({headers, empty = false}: {headers: string[], empty?: boolean}) {
     return (
         <thead>
             <tr className={"h-12 text-sm text-blue-1001 border-b border-b-gray-200"}>
-                <th className={"w-[20%] pl-2 text-left"}>Students</th>
+                {empty ? null : <th className={"w-[20%] pl-2 text-left"}>Students</th>}
                 {headers.map((header, index) => {
                     return (<th className={"font-semibold"} key={index}>{header}</th>)
                 })}

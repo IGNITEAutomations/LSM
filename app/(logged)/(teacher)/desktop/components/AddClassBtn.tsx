@@ -1,3 +1,5 @@
+"use client"
+
 import {
     Dialog,
     DialogContent,
@@ -7,59 +9,67 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {Plus} from "lucide-react";
-import Combobox from "@/components/atomi/Combobox";
+import {Group, useClasses} from "@/hooks/ClassesProvider";
+import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
+import {Option} from "@/utils/types/types";
+import {Button} from "@/components/ui/button";
+import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 import {useEffect, useState} from "react";
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {Days} from "@/utils/Days";
-
-type option = {
-    value: string, label: string
-}
-const schools: option[] = [
-    {value: "1234", label: "Fedac Horta"},
-    {value: "1235", label: "Fedac Sant Andreu"},
-    {value: "1236", label: "Fedac Amilcar"},
-    {value: "1237", label: "Fedac Santa Coloma"},
-]
-
-const enum GroupsTypes {
-    Robotics = "0",
-    Coding = "1"
-}
-
-const groupTypesOptions: option[] = [
-    {value: "0", label: "Robotics ESO"},
-    {value: "1", label: "Coding PRIM"}
-]
-
-type group = {
-    id: string,
-    school: string,
-    group: string,
-    day: Days,
-    action: boolean
-}
-
-let groups: group[] = [
-    {id: "1234", school: "Fedac Horta", group:  "Robotics ESO", day: Days.Monday, action: true}
-]
-
 
 export default function AddClassBtn() {
-    const [school, setSchool] = useState("")
-    const [group, setGroup] = useState("")
-    const [day, setDay] = useState("")
-    const [currGroups, setCurrGroups] = useState<group[]>([])
+    const classes = useClasses()
+    const [filteredClasses, setFilteredClasses] = useState<Group[]>([])
+    const [schoolFilter, setSchoolFilter] = useState("")
+    const [groupFilter, setGroupFilter] = useState("")
+
+    const schoolsOpt: Option[] = classes.notAssignedGroups.map(group => ({id: group.school.toLowerCase(), label: group.school}))
+    const groupsOpt: Option[] = classes.notAssignedGroups.map(group => ({id: group.group.toLowerCase(), label: group.group}))
 
     useEffect(() => {
-        const temp = (group == "0" || !group) ? groups : []
-        setCurrGroups(filter(school, 0, temp))
-    }, [school, group]);
+        if (!schoolFilter && !groupFilter)
+            setFilteredClasses(classes.notAssignedGroups)
+    },[classes.notAssignedGroups, schoolFilter, groupFilter]);
 
-    function filter(key: string, index: number, groups: group[]) {
-        if (!key)
-            return groups
-        return groups?.filter((group) => Object.values(group)[index] === key)
+    const handleSchoolFilter = (id: string, value: string) => {
+        if (value && groupFilter) {
+            setSchoolFilter(id)
+            setFilteredClasses(classes.notAssignedGroups.filter(group => (group.school.toLowerCase() === id && group.group.toLowerCase() === groupFilter)))
+        } else if (!value && groupFilter) {
+            setSchoolFilter("")
+            setFilteredClasses(classes.notAssignedGroups.filter(group => group.group.toLowerCase() === groupFilter))
+        } else if (value && !groupFilter) {
+            setSchoolFilter(id)
+            setFilteredClasses(classes.notAssignedGroups.filter(group => group.school.toLowerCase() === id))
+        } else {
+            setSchoolFilter("")
+            setFilteredClasses(classes.notAssignedGroups)
+        }
+    }
+
+    const handleGroupFilter = (id: string, value: string) => {
+        if (value && schoolFilter) {
+            setGroupFilter(id)
+            setFilteredClasses(classes.notAssignedGroups.filter(group => (group.school.toLowerCase() === schoolFilter && group.group.toLowerCase() === id)))
+        } else if (!value && schoolFilter) {
+            setGroupFilter("")
+            setFilteredClasses(classes.notAssignedGroups.filter(group => group.school.toLowerCase() === schoolFilter))
+        } else if (value && !schoolFilter) {
+            setGroupFilter(id)
+            setFilteredClasses(classes.notAssignedGroups.filter(group => group.group.toLowerCase() === id))
+        } else {
+            setGroupFilter("")
+            setFilteredClasses(classes.notAssignedGroups)
+        }
+    }
+
+    const handleAddGroup = (classId: string) => {
+        classes.assignNewGroup(classId).then(response => {
+            if (response)
+                setNotification("New group assigned 👍", NotificationColor.SUCCESS)
+            else
+                setNotification("Error: Unable to assign class 🚩", NotificationColor.ERROR)
+        })
     }
 
     return (
@@ -75,46 +85,39 @@ export default function AddClassBtn() {
                     </DialogDescription>
                 </DialogHeader>
                 <section className={"flex flex-col gap-4"}>
-                    <div>
-                        <h2 className={"text-sm font-medium border-b border-b-gray-100 mb-2"}>Filter</h2>
-                        <div className={"flex flex-row gap-2"}>
-                            <Combobox options={schools} label={"school"} onChange={(school) => setSchool(school)}/>
-                            <Combobox options={groupTypesOptions} label={"group"} onChange={(group) => setGroup(group)}/>
-                            {/*<Combobox options={schools} label={"day"} onChange={(day) => setDay(day)}/>*/}
-                        </div>
+                    <div className={"flex flex-row gap-16"}>
+                        <ComboBox name={"school"} defaultValue={schoolFilter} options={schoolsOpt} onChange={handleSchoolFilter}/>
+                        <ComboBox name={"group"} defaultValue={groupFilter} options={groupsOpt} onChange={handleGroupFilter}/>
                     </div>
-                    <div>
-                        <h2 className={"text-sm font-medium border-b border-b-gray-100 mb-2"}>Classes</h2>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className={"w-[15%]"}>Class Id</TableHead>
-                                    <TableHead className={"w-[25%]"}>School</TableHead>
-                                    <TableHead className={"w-[30%]"}>Group</TableHead>
-                                    <TableHead className={"w-[20%]"}>Day</TableHead>
-                                    <TableHead className={"w-[10%]"}>Action</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {
-                                    currGroups.map((group, i) => {
-                                        return (
-                                            <TableRow key={i}>
-                                                <TableCell>{group.id}</TableCell>
-                                                <TableCell>{group.school}</TableCell>
-                                                <TableCell>{group.group}</TableCell>
-                                                <TableCell>{group.day}</TableCell>
-                                                <TableCell className={"flex justify-center"}><Plus className={"w-5 text-green-500 hover:scale-125 cursor-pointer"}/></TableCell>
-                                            </TableRow>
-                                        )
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </div>
+                    <ClassesTable addGroup={handleAddGroup} classes={filteredClasses}/>
+
                 </section>
             </DialogContent>
         </Dialog>
     )
 }
 
+type ClassesTableProps = {
+    classes: Group[],
+    addGroup: (classId: string) => void
+}
+
+function ClassesTable({classes, addGroup}: ClassesTableProps) {
+    const headers = ["Class Id", "School", "Group", "Day", "Action"]
+    return (
+            <Table>
+            <THead empty={true} headers={headers}/>
+            <TBody>
+                {classes.map((item, i) => (
+                    <TRow key={i}>
+                        <TCell>{item.id}</TCell>
+                        <TCell>{item.school}</TCell>
+                        <TCell>{item.group}</TCell>
+                        <TCell>{item.day}</TCell>
+                        <TCell>{<Button className={"bg-transparent hover:bg-transparent hover:text-green-700 text-green-500 p-1.5 w-8 h-8"} onClick={() => addGroup(item.id)}><Plus/></Button>}</TCell>
+                    </TRow>
+                ))}
+            </TBody>
+        </Table>
+    )
+}

@@ -27,14 +27,13 @@ model Student {
 }
 
 model Class {
-  id         Int       @id @default(autoincrement())
-  name       String
-  students   Student[]
-  day        String
-  school     School    @relation(fields: [schoolId], references: [id])
-  schoolId   Int
-  teacher    Teacher   @relation(fields: [teacherUid], references: [uid])
-  teacherUid String
+  id       Int       @id @default(autoincrement())
+  name     String
+  students Student[]
+  day      String
+  school   School    @relation(fields: [schoolId], references: [id])
+  schoolId Int
+  teachers Teacher[]
 }
 
 model School {
@@ -44,7 +43,7 @@ model School {
 }
 
 model Teacher {
-  uid         String? @unique
+  uid         String  @id
   token       String? @unique
   displayName String
   name        String

@@ -66,7 +66,34 @@ class CClasses {
         }));
 
         return { options, matrix } as SkillMatrix;
+    }
+
+    public async updateStudentsSkills(data: QueueDataItem[]): Promise<boolean> {
+        const insertsSkills: { studentId: number; skillId: string }[] = [];
+        const deleteSkills: { studentId: number; skillId: string }[] = [];
+
+        const toInsertSet = new Set<string>();
+        const toDeleteSet = new Set<string>();
+
+        for (let i = data.length - 1; i >= 0; i--) {
+            const item = data[i];
+            const elementKey = `${item.studentId}-${item.evaluationId}`;
+            const element = { studentId: item.studentId, skillId: item.evaluationId };
+
+            if (item.value && !toDeleteSet.has(elementKey)) {
+                insertsSkills.push(element);
+                toInsertSet.add(elementKey);
+            } else if (!toInsertSet.has(elementKey)) {
+                deleteSkills.push(element);
+                toDeleteSet.add(elementKey);
+            }
         }
+
+        const insertResult = await ModelClass.insertStudentSkills(insertsSkills);
+        const deleteResult = await ModelClass.deleteStudentSkills(deleteSkills);
+
+        return insertResult && deleteResult;
+    }
 
     public async updateStudentsChallenges(data: QueueDataItem[]): Promise<boolean> {
         const insertsChallenges: { studentId: number; challengeId: string }[] = [];
@@ -93,6 +120,17 @@ class CClasses {
         const deleteResult = await ModelClass.deleteStudentChallenge(deleteChallenges);
 
         return insertResult && deleteResult;
+    }
+
+    public async getNotAssignedGroups(teacherId: string) {
+        const groups = await ModelClass.getNotAssignedGroups(teacherId)
+        if (groups)
+            return groups.map(group => (this.formatGroupData(group)))
+        else return []
+    }
+
+    public async assignGroup(teacherId: string, classId: number) {
+        return await ModelClass.assignGroup(teacherId, classId)
     }
 
     private formatGroupData(group: any): Group {

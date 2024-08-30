@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
         const user = await  FirebaseServer.getUser(idToken)
 
         if (user && !await User.login(user.email!, user.uid!)) {
-            console.log("User not found")
+            console.error("User not found")
             return NextResponse.json({success: false, error: "User not found"})
         }
 

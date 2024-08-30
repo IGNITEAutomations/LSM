@@ -41,10 +41,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
 
                 const data = await response.json();
                 if (!data.success) throw new Error("Error getting data: " + data.error);
-
                 setSkillsData(data.data);
-                console.log("Type: " + type)
-                console.log(data.data)
             } catch (error) {
                 setNotification((error as Error).message, NotificationColor.ERROR);
             }
@@ -54,7 +51,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
             if (classId) {
                 init(classId);
             }
-        }, [classId]);
+        }, [classId, init]);
 
         const setSkillValue = useCallback((row: number, col: number, value: string) => {
             setSkillsData(prevState => {

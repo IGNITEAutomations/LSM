@@ -9,18 +9,19 @@ import { cn } from "@/lib/utils";
 import {Option} from "@/utils/types/types";
 
 type ComboBoxProps = {
-    options: Option[]
+    options: Option[],
+    defaultValue?: string,
     name?: string ,
-    onChange: (value: string) => void;
+    onChange: (id: string, value: string) => void;
 }
 
-export default function ComboBox({ options, name = "option", onChange }: ComboBoxProps) {
+export default function ComboBox({ options, name = "option", onChange, defaultValue = "" }: ComboBoxProps) {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(defaultValue);
 
     const handleChange = useCallback((currentValue: string) => {
         const nextValue = value === currentValue ? "" : currentValue
-        onChange(nextValue)
+        onChange(currentValue, nextValue)
         setValue(nextValue)
         setOpen(false);
       }, [onChange, value]
