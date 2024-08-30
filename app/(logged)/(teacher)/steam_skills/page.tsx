@@ -1,13 +1,12 @@
 "use client"
 
 import {useClasses} from "@/hooks/ClassesProvider";
-import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
 import {useCallback, useMemo} from "react";
-import {Table, TableSkeleton, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import {useSteamSkills} from "@/hooks/SkillsProvider/SteamSkillsProvider";
 import Navigation from "@/app/(logged)/_components/nav";
-import {SkillsTable} from "@/app/(logged)/(teacher)/mentions/page";
+import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";
 
 const NUM_COLS = 3
 

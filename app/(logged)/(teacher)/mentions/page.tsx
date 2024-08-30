@@ -1,14 +1,12 @@
 "use client"
 
 import {useClasses} from "@/hooks/ClassesProvider";
-import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
 import {useCallback, useMemo} from "react";
-import {Table, TableSkeleton, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import {useMentions} from "@/hooks/SkillsProvider/MentionsProvider";
 import Navigation from "@/app/(logged)/_components/nav";
-import {SkillsDataRow} from "@/hooks/SkillsProvider/CommonProvider";
-import {Option} from "@/utils/types/types";
+import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";
 
 const NUM_COLS = 3
 
@@ -52,29 +50,4 @@ export default function MentionsSkillsPage({searchParams}: { searchParams: { id:
             </section>
         </main>
     );
-}
-
-type SkillsTableProps = {
-    headers: string[],
-    matrix: SkillsDataRow[],
-    options: Option[],
-    onChange: (row: number, col: number, id: string, value: string) => void
-}
-export function SkillsTable({headers, matrix, options, onChange}: SkillsTableProps) {
-    return (
-        <Table>
-            <THead headers={headers}/>
-            <TBody>
-                {matrix.map((row, rowIndex) => (
-                    <TRow key={rowIndex}>
-                        <TCell>
-                            <p className={"w-full pl-2 text-left"}>{row.student.displayName}</p>
-                        </TCell>
-                        {row.skills.map((skill, colIndex) => (<TCell key={colIndex}>
-                            <ComboBox options={options} defaultValue={skill.id} onChange={(id, value) => onChange(rowIndex, colIndex, id, value)}/>
-                        </TCell>))}
-                    </TRow>))}
-            </TBody>
-        </Table>
-    )
 }

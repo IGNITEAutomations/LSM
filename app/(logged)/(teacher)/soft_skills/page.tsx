@@ -2,14 +2,11 @@
 
 import {useClasses} from "@/hooks/ClassesProvider";
 import {useSoftSkills} from "@/hooks/SkillsProvider/SoftSkillsProvider";
-import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
 import {useCallback, useMemo} from "react";
-import {Table, TableSkeleton, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import Navigation from "@/app/(logged)/_components/nav";
-import {SkillsDataRow} from "@/hooks/SkillsProvider/CommonProvider";
-import {Option} from "@/utils/types/types";
-import {SkillsTable} from "@/app/(logged)/(teacher)/mentions/page";
+import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";
 
 const NUM_COLS = 3
 
