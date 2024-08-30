@@ -2,11 +2,12 @@
 
 import {useClasses} from "@/hooks/ClassesProvider";
 import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
-import {Suspense, useCallback, useMemo} from "react";
-import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import {useCallback, useMemo} from "react";
+import {Table, TableSkeleton, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import {useSteamSkills} from "@/hooks/SkillsProvider/SteamSkillsProvider";
 import Navigation from "@/app/(logged)/_components/nav";
+import {SkillsTable} from "@/app/(logged)/(teacher)/mentions/page";
 
 const NUM_COLS = 3
 
@@ -36,20 +37,17 @@ export default function SteamSkillsPage({searchParams}: { searchParams: { id: st
             <h1>STEAM Skills</h1>
             <h2>{classes.getClassName(classId)}</h2>
             <section className="mt-8 flex-1 overflow-y-auto">
-                <Table>
-                    <THead headers={headers}/>
-                    <TBody>
-                        {skills.skillsMatrix.map((row, rowIndex) => (
-                            <TRow key={rowIndex}>
-                                <TCell>
-                                    <p className={"w-full pl-2 text-left"}>{row.student.displayName}</p>
-                                </TCell>
-                                {row.skills.map((skill, colIndex) => (<TCell key={colIndex}>
-                                        <ComboBox options={skills.skillsOptions} defaultValue={skill.id} onChange={(id, value) => handleChange(rowIndex, colIndex, id, value)}/>
-                                    </TCell>))}
-                            </TRow>))}
-                    </TBody>
-                </Table>
+                {!skills.loaded ? (
+                    <TableSkeleton headerName={"Challenge"} nCols={4} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
+                    <p className="text-red-500">
+                        No students assigned to this group have been found.
+                    </p>) : (<SkillsTable
+                        matrix={skills.skillsMatrix}
+                        headers={headers}
+                        options={skills.skillsOptions}
+                        onChange={handleChange}
+                    />)
+                }
             </section>
         </main>
     );

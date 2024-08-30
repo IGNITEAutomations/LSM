@@ -5,7 +5,7 @@ import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotif
 import {useSearchParams} from "next/navigation";
 import {Option, Skill, SkillsTypes, Student} from "@/utils/types/types";
 
-type SkillsDataRow = {
+export type SkillsDataRow = {
   student: Student;
   skills: Skill[];
 };
@@ -19,6 +19,7 @@ type SkillsContextType = {
     skillsOptions: Option[];
     skillsMatrix: SkillsDataRow[];
     setSkillValue: (row: number, col: number, value: string) => void;
+    loaded: boolean
 };
 
 type SkillsProviderProps = {
@@ -30,6 +31,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
 
     const SkillsProvider: FC<SkillsProviderProps> = ({children}) => {
         const [skillsData, setSkillsData] = useState<SkillMatrix>({options: [], matrix: []});
+        const [loaded, setLoaded] = useState<boolean>(false)
 
         const searchParams = useSearchParams();
         const [classId, setClassId] = useState<string>("")
@@ -45,17 +47,20 @@ export function createSkillGenericContext(type: SkillsTypes) {
             } catch (error) {
                 setNotification((error as Error).message, NotificationColor.ERROR);
             }
+            setLoaded(true)
         }, []);
 
         useEffect(() => {
             if (classId) {
+                setSkillsData({options: [], matrix: []})
+                setLoaded(false)
                 init(classId);
             }
         }, [classId, init]);
 
         useEffect(() => {
             const idFromUrl = searchParams.get('id')
-            if (!classId && idFromUrl)
+            if (idFromUrl)
                 setClassId(idFromUrl)
         }, [searchParams, classId]);
 
@@ -69,11 +74,12 @@ export function createSkillGenericContext(type: SkillsTypes) {
 
         const contextValue = useMemo(
             () => ({
-              skillsOptions: skillsData.options,
-              skillsMatrix: skillsData.matrix,
-              setSkillValue,
+                skillsOptions: skillsData.options,
+                skillsMatrix: skillsData.matrix,
+                setSkillValue,
+                loaded
             }),
-            [skillsData, setSkillValue]
+            [skillsData, setSkillValue, loaded]
           );
 
         return (

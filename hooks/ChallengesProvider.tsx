@@ -19,6 +19,7 @@ type ChallengesContextType = {
     challengesHeader: string[];
     challengesMatrix: ChallengeDataRow[];
     setChallengeValue: (row: number, col: number, value: boolean) => void;
+    loaded: boolean
 };
 
 type ChallengesProviderProps = {
@@ -30,6 +31,7 @@ const ChallengesContext = React.createContext<ChallengesContextType | undefined>
 export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) => {
     const [challengesData, setChallengesData] = useState<ChallengesMatrix>({ headers: [], matrix: [] });
     const [classId, setClassId] = useState<string>("")
+    const [loaded, setLoaded] = useState<boolean>(false)
     const searchParams = useSearchParams();
 
     const init = useCallback(async (classId: string) => {
@@ -44,10 +46,13 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
         } catch (error) {
             setNotification((error as Error).message, NotificationColor.ERROR);
         }
+        setLoaded(true)
     }, []);
 
     useEffect(() => {
         if (classId) {
+            setLoaded(false)
+            setChallengesData({ headers: [], matrix: [] })
             init(classId);
         }
     }, [classId, init]);
@@ -78,7 +83,8 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
         challengesHeader: challengesData.headers,
         challengesMatrix: challengesData.matrix,
         setChallengeValue,
-    }), [challengesData, setChallengeValue]);
+        loaded
+    }), [challengesData, setChallengeValue, loaded]);
 
     return (
         <ChallengesContext.Provider value={contextValue}>

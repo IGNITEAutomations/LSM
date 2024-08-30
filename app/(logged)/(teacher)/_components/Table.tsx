@@ -41,3 +41,22 @@ export function TCell({children}: Readonly<{children: React.ReactNode}>) {
         </td>
     )
 }
+
+export function TableSkeleton({headerName, nCols, nRows}: {headerName: string, nCols: number, nRows: number}) {
+    const headers = [...Array(nCols)].map((_, i) => (`${headerName} ${i+1}`))
+    return (
+        <Table>
+            <THead headers={headers}/>
+            <TBody>
+                {[...Array(nRows)].map((_, i) => (
+                        <TRow key={i}>
+                            {[...Array(nCols+1)].map((_, j) => (
+                                <TCell key={j}><div className={"w-full h-8 flex justify-center items-center"}><div className={"w-[80%] h-4 animate-pulse bg-gray-200 rounded-3xl"}/></div></TCell>
+                            ))}
+                        </TRow>
+                    ))
+                }
+            </TBody>
+        </Table>
+    )
+}
