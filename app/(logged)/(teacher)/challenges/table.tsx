@@ -14,7 +14,6 @@ export default function ChallengesTable({matrix, headers, onChange}: ChallengesT
             <THead headers={headers}/>
             <TBody>
                 {
-                    !matrix.length ? <p className={"w-full text-sm text-red-500"}>Empty group</p> :
                     matrix?.map(((row, i) => (
                         <TRow key={i}>
                             <TCell><p className={"w-full text-left pl-2"}>{row.student.displayName}</p></TCell>

@@ -39,8 +39,7 @@ export default function SoftSkillsPage({searchParams}: { searchParams: { id: str
                 <Table>
                     <THead headers={headers}/>
                     <TBody>
-                        {!skills.skillsMatrix.length ? <p className={"w-full text-sm text-red-500"}>Empty group</p> :
-                            skills.skillsMatrix.map((row, rowIndex) => (
+                        {skills.skillsMatrix.map((row, rowIndex) => (
                             <TRow key={rowIndex}>
                                 <TCell>
                                     <p className={"w-full pl-2 text-left"}>{row.student.displayName}</p>

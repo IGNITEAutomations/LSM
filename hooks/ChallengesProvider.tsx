@@ -54,7 +54,7 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
 
     useEffect(() => {
         const idFromUrl = searchParams.get('id')
-        if (!classId && idFromUrl)
+        if (idFromUrl)
             setClassId(idFromUrl)
     }, [searchParams, classId]);
 
