@@ -9,7 +9,7 @@ export async function GET() {
         if (!firebaseUser)
             throw new Error("getting user credentials")
 
-        const userData = await User.user(firebaseUser.uid)
+        const userData = await User.user(firebaseUser.email!)
         if (!userData)
             throw new Error("user not found in bd")
 

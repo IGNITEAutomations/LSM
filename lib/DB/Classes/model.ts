@@ -14,11 +14,11 @@ class CModelClass {
         }
     }
 
-    public async getTeacher(teacherId: string) {
+    public async getTeacher(teacherEmail: string) {
         try {
             return await prismadb.teacher.findUnique({
                 where: {
-                    uid: teacherId
+                    email: teacherEmail
                 },
                 include: {
                     classes: {
@@ -35,14 +35,14 @@ class CModelClass {
         }
     }
 
-    public async getChallengesByClass(classId: number, teacherId: string) {
+    public async getChallengesByClass(classId: number, teacherEmail: string) {
         try {
             return await prismadb.class.findUnique({
                 where: {
                     id: classId,
                     teachers: {
                         some: {
-                            uid: teacherId
+                            email: teacherEmail
                         }
                     }
                 },
@@ -64,14 +64,14 @@ class CModelClass {
         }
     }
 
-    public async getSkillsByClass(classId: number, teacherId: string, type: SkillsTypes) {
+    public async getSkillsByClass(classId: number, teacherEmail: string, type: SkillsTypes) {
         try {
             return prismadb.class.findUnique({
                 where: {
                     id: classId,
                     teachers: {
                         some: {
-                            uid: teacherId
+                            email: teacherEmail
                         }
                     }
                 }, include: {
@@ -169,13 +169,13 @@ class CModelClass {
         return true
     }
 
-    public async getNotAssignedGroups(teacherId: string) {
+    public async getNotAssignedGroups(teacherEmail: string) {
         try {
             return await prismadb.class.findMany({
                 where: {
                     teachers: {
                         none: {
-                            uid: teacherId
+                            email: teacherEmail
                         }
                     }
                 }, include: {
@@ -183,25 +183,12 @@ class CModelClass {
                     students: true
                 }
             })
-
-
-            /*return await prismadb.class.findMany({
-                where: {
-                    NOT: {
-                        teacherUid: teacherId
-                    }
-                },
-                include: {
-                    school: true,
-                    students: true
-                }
-            })*/
         } catch (error) {
             console.error(error)
         }
     }
 
-    public async assignGroup(teacherId: string, classId: number) {
+    public async assignGroup(teacherEmail: string, classId: number) {
         try {
             await prismadb.class.update({
                 where: {
@@ -210,7 +197,7 @@ class CModelClass {
                 data: {
                     teachers: {
                         connect: {
-                            uid: teacherId
+                            email: teacherEmail
                         }
                     }
                 }

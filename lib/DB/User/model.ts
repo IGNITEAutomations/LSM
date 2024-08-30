@@ -2,11 +2,11 @@ import prismadb from "@/prisma/prismadb";
 
 class CModelUser {
 
-    public async findByUserId(userId: string) {
+    public async findByUserId(teacherEmail: string) {
         try {
             return prismadb.teacher.findUnique({
                 where: {
-                    uid: userId
+                    email: teacherEmail
                 }
             })
         } catch (error) {

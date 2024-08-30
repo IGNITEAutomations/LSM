@@ -8,7 +8,7 @@ export async function GET() {
         if (!user)
             throw new Error("User not found")
 
-        return NextResponse.json({success: true, data: {assigned: await Classes.getClassesByTeacher(user.uid), notAssigned: await Classes.getNotAssignedGroups(user.uid)}})
+        return NextResponse.json({success: true, data: {assigned: await Classes.getClassesByTeacher(user.email!), notAssigned: await Classes.getNotAssignedGroups(user.email!)}})
 
     } catch (error) {
         console.error(error)

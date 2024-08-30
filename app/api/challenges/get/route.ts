@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
         if (!classId)
             throw new Error("ClassId is empty")
 
-        return NextResponse.json({success: true, data: await Classes.getChallenges(parseInt(classId), user.uid)})
+        return NextResponse.json({success: true, data: await Classes.getChallenges(parseInt(classId), user.email!)})
 
     } catch(error) {
         console.error(error)

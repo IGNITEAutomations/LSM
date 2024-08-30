@@ -43,7 +43,8 @@ model School {
 }
 
 model Teacher {
-  uid         String  @id
+  id          Int     @id @default(autoincrement())
+  uid         String? @unique
   token       String? @unique
   displayName String
   name        String

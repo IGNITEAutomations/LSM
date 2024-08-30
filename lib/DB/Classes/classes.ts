@@ -15,15 +15,15 @@ class CClasses {
         return schools.map((school) => this.formatGroupData(school));
     }
 
-    public async getClassesByTeacher(teacherId: string): Promise<Group[]> {
-        const teacher = await ModelClass.getTeacher(teacherId);
+    public async getClassesByTeacher(teacherEmail: string): Promise<Group[]> {
+        const teacher = await ModelClass.getTeacher(teacherEmail);
         if (!teacher || !teacher.classes) return [];
 
         return teacher.classes.map((group) => this.formatGroupData(group));
     }
 
-    public async getChallenges(classID: number, teacherId: string) {
-        const [challenges, challengesHeaders] = await Promise.all([ModelClass.getChallengesByClass(classID, teacherId), ModelClass.getChallengesHeaders()]);
+    public async getChallenges(classID: number, teacherEmail: string) {
+        const [challenges, challengesHeaders] = await Promise.all([ModelClass.getChallengesByClass(classID, teacherEmail), ModelClass.getChallengesHeaders()]);
 
         if (!challenges || !challengesHeaders || !challenges.students) return [];
 
@@ -45,9 +45,9 @@ class CClasses {
         };
     }
 
-    public async getSkills(classID: number, teacherId: string, type: SkillsTypes) {
+    public async getSkills(classID: number, teacherEmail: string, type: SkillsTypes) {
         const [skills, skillsOptions] = await Promise.all([
-          ModelClass.getSkillsByClass(classID, teacherId, type),
+          ModelClass.getSkillsByClass(classID, teacherEmail, type),
           ModelClass.getSkillsOptions(type)
         ]);
 
@@ -122,15 +122,15 @@ class CClasses {
         return insertResult && deleteResult;
     }
 
-    public async getNotAssignedGroups(teacherId: string) {
-        const groups = await ModelClass.getNotAssignedGroups(teacherId)
+    public async getNotAssignedGroups(teacherEmail: string) {
+        const groups = await ModelClass.getNotAssignedGroups(teacherEmail)
         if (groups)
             return groups.map(group => (this.formatGroupData(group)))
         else return []
     }
 
-    public async assignGroup(teacherId: string, classId: number) {
-        return await ModelClass.assignGroup(teacherId, classId)
+    public async assignGroup(teacherEmail: string, classId: number) {
+        return await ModelClass.assignGroup(teacherEmail, classId)
     }
 
     private formatGroupData(group: any): Group {

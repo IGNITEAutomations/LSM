@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
         if (classId === -1)
             throw new Error("Class id not found")
 
-        return NextResponse.json({success: true, data: await Classes.assignGroup(user.uid, classId)})
+        return NextResponse.json({success: true, data: await Classes.assignGroup(user.email!, classId)})
 
     } catch (error) {
         console.error(error)

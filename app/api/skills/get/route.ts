@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
         if (type === -1 || !(type in SkillsTypes))
             throw new Error("Operation type not found")
 
-        return NextResponse.json({success: true, data: await Classes.getSkills(parseInt(classId), user.uid, type as SkillsTypes)})
+        return NextResponse.json({success: true, data: await Classes.getSkills(parseInt(classId), user.email!, type as SkillsTypes)})
 
     } catch(error) {
         console.error(error)
