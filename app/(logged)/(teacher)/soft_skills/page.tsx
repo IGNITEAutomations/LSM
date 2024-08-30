@@ -54,29 +54,3 @@ export default function SoftSkillsPage({searchParams}: { searchParams: { id: str
         </main>
     );
 }
-
-/*type SkillsTableProps = {
-    headers: string[],
-    matrix: SkillsDataRow[],
-    options: Option[],
-    onChange: (row: number, col: number, id: string, value: string) => void
-}
-
-function SkillsTable({headers, matrix, options, onChange}: SkillsTableProps) {
-    return (
-        <Table>
-            <THead headers={headers}/>
-            <TBody>
-                {matrix.map((row, rowIndex) => (
-                    <TRow key={rowIndex}>
-                        <TCell>
-                            <p className={"w-full pl-2 text-left"}>{row.student.displayName}</p>
-                        </TCell>
-                        {row.skills.map((skill, colIndex) => (<TCell key={colIndex}>
-                            <ComboBox options={options} defaultValue={skill.id} onChange={(id, value) => onChange(rowIndex, colIndex, id, value)}/>
-                        </TCell>))}
-                    </TRow>))}
-            </TBody>
-        </Table>
-    )
-}*/

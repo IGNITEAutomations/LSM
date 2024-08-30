@@ -42,7 +42,7 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
                 {!challenges.loaded ? (
                     <TableSkeleton headerName={"Challenge"} nCols={4} nRows={3}/>) : challenges.challengesMatrix.length === 0 ? (
                     <p className="text-red-500">
-                        No students assigned to this group have been found.
+                        No students have been assigned to this group.
                     </p>) : (<ChallengesTable
                         matrix={challenges.challengesMatrix}
                         headers={challenges.challengesHeader}

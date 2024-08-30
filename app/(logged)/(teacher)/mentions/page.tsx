@@ -41,7 +41,7 @@ export default function MentionsSkillsPage({searchParams}: { searchParams: { id:
                 {!skills.loaded ? (
                     <TableSkeleton headerName={"Challenge"} nCols={4} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
                     <p className="text-red-500">
-                        No students assigned to this group have been found.
+                        No students have been assigned to this group.
                     </p>) : (<SkillsTable
                         matrix={skills.skillsMatrix}
                         headers={headers}
