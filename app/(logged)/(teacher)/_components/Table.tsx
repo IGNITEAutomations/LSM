@@ -27,9 +27,9 @@ export function TBody({children}: Readonly<{children: React.ReactNode}>) {
     )
 }
 
-export function TRow({children}: Readonly<{children: React.ReactNode}>) {
+export function TRow({children, onClick = () => {}, clickEnable = false, enableColor = false}: Readonly<{children: React.ReactNode, onClick?: () => void, clickEnable?: boolean, enableColor?: boolean}>) {
     return (
-        <tr className={"odd:bg-white even:bg-[#F2F8FF] text-sm h-12"}>
+        <tr className={`odd:bg-[#F2F8FF] even:bg-white text-sm h-12 ${enableColor ? "hover:bg-gray-100 transition-colors duration-300" : "" }  ${clickEnable ? "cursor-pointer" : ""}`} onClick={onClick}>
             {children}
         </tr>)
 }

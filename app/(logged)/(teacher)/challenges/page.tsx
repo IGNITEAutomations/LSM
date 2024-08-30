@@ -7,6 +7,7 @@ import {useClasses} from "@/hooks/ClassesProvider";
 import {useChallenges} from "@/hooks/ChallengesProvider";
 import Navigation from "@/app/(logged)/_components/nav";
 import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
+import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
 
 interface ChallengesPageProps {
     searchParams: { id: string };
@@ -35,6 +36,7 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
 
     return (
         <main className="flex flex-col max-h-[650px]">
+            <SavedIndicator/>
             <Navigation classId={classId}/>
             <h1>Challenges</h1>
             <h2>{className}</h2>

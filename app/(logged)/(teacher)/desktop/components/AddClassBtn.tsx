@@ -74,7 +74,7 @@ export default function AddClassBtn() {
 
     return (
         <Dialog>
-            <DialogTrigger className={"flex flex-row items-center w-fit px-4 h-7 font-light text-sm text-white rounded-xl bg-yellow-1000 hover:bg-yellow-1001 absolute -top-14"}>
+            <DialogTrigger className={"flex flex-row items-center w-fit px-4 h-7 font-light text-sm text-white rounded-xl bg-yellow-1000 hover:bg-yellow-1001 absolute mt-10"}>
                 <Plus className={"w-4 h-4 stroke-1.5"}/> Add class
             </DialogTrigger>
             <DialogContent className={"sm:min-w-[80%] md:min-w-[50%]"}>

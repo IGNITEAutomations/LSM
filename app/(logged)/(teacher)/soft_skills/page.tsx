@@ -7,6 +7,7 @@ import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import Navigation from "@/app/(logged)/_components/nav";
 import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";
+import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
 
 const NUM_COLS = 3
 
@@ -32,6 +33,7 @@ export default function SoftSkillsPage({searchParams}: { searchParams: { id: str
 
     return (
         <main className="flex flex-col max-h-[650px]">
+            <SavedIndicator/>
             <Navigation classId={classId}/>
             <h1>Soft Skills</h1>
             <h2>{classes.getClassName(classId)}</h2>
