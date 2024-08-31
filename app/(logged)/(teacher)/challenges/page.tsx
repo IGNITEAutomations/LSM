@@ -35,6 +35,7 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
     }, [challenges]);
 
     console.log("CLASS ID on challenges: " + classId)
+    console.log("PARAMS on challenges: " + searchParams)
 
     return (
         <main className="flex flex-col max-h-[650px]">
