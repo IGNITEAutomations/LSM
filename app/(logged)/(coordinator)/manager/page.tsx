@@ -10,7 +10,7 @@ import {TableSkeleton} from "@/app/(logged)/_components/Table";
 import {AddStudent} from "@/app/(logged)/(coordinator)/_components/AddStudent";
 import {useUser} from "@/hooks/UserProvider";
 import {UserRoles} from "@/lib/User/utils/users_roles";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 type StudentManagerPageProps = {
   searchParams: { id: string; p: number };
@@ -19,7 +19,7 @@ type StudentManagerPageProps = {
 const StudentsManagerPage: React.FC<StudentManagerPageProps> = ({
   searchParams,
 }) => {
-  const { id: classId, p } = searchParams;
+  const classId = useSearchParams().get("id") ?? ""
   const [students, setStudents] = useState<StudentData[]>([]);
   const [loaded, setLoaded] = useState(false)
   const classes = useClasses();

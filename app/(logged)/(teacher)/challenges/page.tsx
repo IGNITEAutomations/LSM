@@ -15,10 +15,9 @@ interface ChallengesPageProps {
 }
 
 const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
-    const {id: classId} = searchParams;
     const challenges = useChallenges();
     const classes = useClasses();
-    const temp = useSearchParams()
+    const classId = useSearchParams().get("id") ?? ""
 
     const className = useMemo(() => classes.getClassName(classId), [classId, classes]);
 
@@ -37,10 +36,6 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
     }, [challenges]);
 
     console.log("CLASS ID on challenges: " + classId)
-    console.log("PARAMS on challenges: ")
-    console.log(searchParams)
-    console.log("Prueba")
-    console.log(temp.get("id"))
 
     return (
         <main className="flex flex-col max-h-[650px]">

@@ -8,13 +8,14 @@ import {useSteamSkills} from "@/hooks/SkillsProvider/SteamSkillsProvider";
 import Navigation from "@/app/(logged)/_components/nav";
 import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";
 import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
+import {useSearchParams} from "next/navigation";
 
 const NUM_COLS = 3
 
 export default function SteamSkillsPage({searchParams}: { searchParams: { id: string } }) {
     const classes = useClasses();
     const skills = useSteamSkills();
-    const {id: classId} = searchParams;
+    const classId = useSearchParams().get("id") ?? ""
 
     const handleChange = useCallback((row: number, col: number, id: string, value: string) => {
         skills.setSkillValue(row, col, value)
