@@ -8,6 +8,7 @@ import {useChallenges} from "@/hooks/ChallengesProvider";
 import Navigation from "@/app/(logged)/_components/nav";
 import {TableSkeleton} from "@/app/(logged)/_components/Table";
 import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
+import {useSearchParams} from "next/navigation";
 
 interface ChallengesPageProps {
     searchParams: { id: string };
@@ -17,6 +18,7 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
     const {id: classId} = searchParams;
     const challenges = useChallenges();
     const classes = useClasses();
+    const temp = useSearchParams()
 
     const className = useMemo(() => classes.getClassName(classId), [classId, classes]);
 
@@ -37,6 +39,8 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
     console.log("CLASS ID on challenges: " + classId)
     console.log("PARAMS on challenges: ")
     console.log(searchParams)
+    console.log("Prueba")
+    console.log(temp.get("id"))
 
     return (
         <main className="flex flex-col max-h-[650px]">
