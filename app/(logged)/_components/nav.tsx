@@ -4,8 +4,7 @@ import {ArrowLeft, Settings2} from "lucide-react";
 import Link from "next/link";
 import ToggleGroup from "@/components/ui/toggle-group";
 import {usePathname, useRouter} from "next/navigation";
-import {useCallback, useMemo} from "react";
-import {Button} from "@/components/ui/button";
+import {useMemo} from "react";
 import {useUser} from "@/hooks/UserProvider";
 import {UserRoles} from "@/lib/User/utils/users_roles";
 
@@ -35,8 +34,8 @@ export default function Navigation({classId}: { classId: string }) {
         </div>
         <div>
             {user.role === UserRoles.Coordinator ?
-                <div>
-                    <Link href={`/manager?id=${classId}&p=0`} className={"bg-[#C0C0C0] hover:bg-gray-400 text-white text-xs rounded-xl p-0 w-8 h-8"} title={"Student manager"}>
+                <div className={"flex"}>
+                    <Link href={`/manager?id=${classId}&p=0`} className={"bg-[#C0C0C0] hover:bg-gray-400 text-white text-xs rounded-xl p-0 w-8 h-8 flex justify-center items-center"} title={"Student manager"}>
                         <Settings2 className={"h-5 w-5"}/>
                     </Link>
                 </div>
