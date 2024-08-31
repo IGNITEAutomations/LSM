@@ -19,7 +19,9 @@ type StudentManagerPageProps = {
 const StudentsManagerPage: React.FC<StudentManagerPageProps> = ({
   searchParams,
 }) => {
-  const classId = useSearchParams().get("id") ?? ""
+  const params = useSearchParams()
+  const classId = params.get("id") ?? ""
+  const p = params.get("p") ?? ""
   const [students, setStudents] = useState<StudentData[]>([]);
   const [loaded, setLoaded] = useState(false)
   const classes = useClasses();
