@@ -35,8 +35,6 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
         queue.add(queueItem);
     }, [challenges]);
 
-    console.log("CLASS ID on challenges: " + classId)
-
     return (
         <main className="flex flex-col max-h-[650px]">
             <SavedIndicator/>
