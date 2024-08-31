@@ -24,3 +24,11 @@ export enum SkillsTypes {
   Mention = 2,
   BestOf = 3
 }
+
+export type StudentData = {
+  id: number,
+  name: string,
+  email: string,
+  password: string,
+  activated: boolean
+}

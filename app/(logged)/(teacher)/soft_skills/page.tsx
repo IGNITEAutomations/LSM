@@ -3,7 +3,7 @@
 import {useClasses} from "@/hooks/ClassesProvider";
 import {useSoftSkills} from "@/hooks/SkillsProvider/SoftSkillsProvider";
 import {useCallback, useMemo} from "react";
-import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
+import {TableSkeleton} from "@/app/(logged)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import Navigation from "@/app/(logged)/_components/nav";
 import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";

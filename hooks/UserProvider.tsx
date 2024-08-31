@@ -13,24 +13,35 @@ type User = {
     token: string;
 };
 
-const UserContext = React.createContext<User | undefined>(undefined);
+type UserContextType = User & {
+    loaded: boolean
+}
+
+const UserContext = React.createContext<UserContextType | undefined>(undefined);
 
 type UserProviderProps = {
     children: ReactNode;
 };
 
 export const UserProvider: FC<UserProviderProps> = ({children}) => {
-    const [user, setUser] = useState<User>({displayName: "", avatar: "", role: UserRoles.Teacher, email: "", token: ""});
-     const router = useRouter()
+    const [user, setUser] = useState<User>({
+        displayName: "",
+        avatar: "",
+        role: UserRoles.Teacher,
+        email: "",
+        token: ""
+    });
+    const [loaded, setLoaded] = useState(false)
+    const router = useRouter()
 
     //TODO use lib ReactQuery https://tanstack.com/
     const restartUser = async () => {
         try {
             const ok = await UserClient.init()
-            if (!ok)
-                throw new Error("The session could not be started")
+            if (!ok) throw new Error("The session could not be started")
 
             setUser(UserClient.getUser())
+            setLoaded(true)
         } catch (error) {
             console.error("Failed to fetch user getHistory:", error);
             router.push("/login")
@@ -41,12 +52,19 @@ export const UserProvider: FC<UserProviderProps> = ({children}) => {
         restartUser();
     }, []);
 
-    return (<UserContext.Provider value={user}>
+    return (<UserContext.Provider value={{
+        displayName: user.displayName,
+        avatar: user.avatar,
+        role: user.role,
+        email: user.email,
+        token: user.token,
+        loaded: loaded
+    }}>
         {children}
     </UserContext.Provider>);
 };
 
-export const useUser = (): User => {
+export const useUser = (): UserContextType => {
     const context = useContext(UserContext);
     if (!context) {
         throw new Error("useUser must be used within a UserProvider");

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import {Plus} from "lucide-react";
 import {Group, useClasses} from "@/hooks/ClassesProvider";
-import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";
 import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
 import {Option} from "@/utils/types/types";
 import {Button} from "@/components/ui/button";

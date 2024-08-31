@@ -137,6 +137,28 @@ class CClasses {
         return await ModelClass.unassignGroup(teacherEmail, classId)
     }
 
+    public async getStudents(classId: number) {
+        const group = await ModelClass.getStudents(classId)
+        if (!group) return []
+        return group.map(student => ({
+            id: student.id,
+            name: `${student.name} ${student.surname}`,
+            email: student.email,
+            password: student.password,
+            activated: student.activated
+        }))
+    }
+
+    public async addNewStudent(name: string, surname: string, classId: number) {
+        await ModelClass.addNewStudent(name, surname, classId)
+        return
+    }
+
+    public async  updateActiveStatusStudent(studentId: number, value: boolean) {
+        await ModelClass.updateActiveStatusStudent(studentId, value)
+        return
+    }
+
     private formatGroupData(group: any): Group {
         return {
             id: group.id.toString().padStart(4, '0'),

@@ -9,6 +9,7 @@ import {MentionsProvider} from "@/hooks/SkillsProvider/MentionsProvider";
 import {ChallengesProvider} from "@/hooks/ChallengesProvider";
 import {Suspense} from "react";
 import TableSkeleton from "@/app/(logged)/loading";
+import Navigation from "@/app/(logged)/_components/nav";
 
 export default function RootLayout({children}: Readonly<{
     children: React.ReactNode

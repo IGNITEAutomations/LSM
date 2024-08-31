@@ -48,6 +48,9 @@ class CModelClass {
                 },
                 include: {
                     students: {
+                        where: {
+                            activated: true
+                        },
                         include: {
                             Challenges: {
                                 include: {
@@ -76,6 +79,9 @@ class CModelClass {
                     }
                 }, include: {
                     students: {
+                        where: {
+                            activated: true
+                        },
                         include: {
                             Skills: {
                                 where: {
@@ -227,6 +233,56 @@ class CModelClass {
         } catch (error) {
             console.error(error)
             return false
+        }
+    }
+
+    public async getStudents(classId: number) {
+        try {
+            const students = await prismadb.class.findUnique({
+                where: {
+                    id: classId
+                },
+                include: {
+                    students: true
+                }
+            })
+            if (!students || !students.students)
+                return []
+            return students.students.filter(student => student.email != '')
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    public async addNewStudent(name: string, surname: string, classId: number) {
+        try {
+            return prismadb.student.create({
+                data: {
+                    name: name,
+                    surname: surname,
+                    password: "IgniteSP",
+                    activated: true,
+                    classId: classId,
+                    email: ""
+                }
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    public async updateActiveStatusStudent(studentId: number, value: boolean) {
+        try {
+            return prismadb.student.update({
+                where: {
+                    id: studentId
+                },
+                data: {
+                    activated: value
+                }
+            })
+        } catch (error) {
+            console.error(error)
         }
     }
 }

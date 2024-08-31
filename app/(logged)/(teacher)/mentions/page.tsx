@@ -2,7 +2,7 @@
 
 import {useClasses} from "@/hooks/ClassesProvider";
 import {useCallback, useMemo} from "react";
-import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
+import {TableSkeleton} from "@/app/(logged)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import {useMentions} from "@/hooks/SkillsProvider/MentionsProvider";
 import Navigation from "@/app/(logged)/_components/nav";

@@ -1,5 +1,5 @@
 import {ChallengeDataRow} from "@/hooks/ChallengesProvider";
-import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";
 
 type ChallengesTableProps = {
     matrix: ChallengeDataRow[],

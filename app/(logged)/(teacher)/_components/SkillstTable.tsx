@@ -1,6 +1,6 @@
 import {SkillsDataRow} from "@/hooks/SkillsProvider/CommonProvider";
 import {Option} from "@/utils/types/types";
-import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/(teacher)/_components/Table";
+import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";
 import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
 
 type SkillsTableProps = {

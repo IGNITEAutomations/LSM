@@ -17,7 +17,7 @@ model Student {
   id         Int          @id @default(autoincrement())
   name       String
   surname    String
-  email      String
+  email      String?
   password   String
   activated  Boolean
   class      Class        @relation(fields: [classId], references: [id])

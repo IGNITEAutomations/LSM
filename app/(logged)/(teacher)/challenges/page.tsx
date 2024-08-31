@@ -6,7 +6,7 @@ import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
 import {useClasses} from "@/hooks/ClassesProvider";
 import {useChallenges} from "@/hooks/ChallengesProvider";
 import Navigation from "@/app/(logged)/_components/nav";
-import {TableSkeleton} from "@/app/(logged)/(teacher)/_components/Table";
+import {TableSkeleton} from "@/app/(logged)/_components/Table";
 import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
 
 interface ChallengesPageProps {
