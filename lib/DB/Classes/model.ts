@@ -208,6 +208,27 @@ class CModelClass {
             return false
         }
     }
+
+    public async unassignGroup(teacherEmail: string, classId: number) {
+        try {
+            await prismadb.class.update({
+                where: {
+                    id: classId,
+                },
+                data: {
+                    teachers: {
+                        disconnect: {
+                            email: teacherEmail
+                        }
+                    }
+                }
+            })
+            return true
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
 }
 
 const ModelClass = new CModelClass()

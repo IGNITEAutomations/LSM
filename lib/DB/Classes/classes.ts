@@ -133,6 +133,10 @@ class CClasses {
         return await ModelClass.assignGroup(teacherEmail, classId)
     }
 
+    public async unassignGroup(teacherEmail: string, classId: number) {
+        return await ModelClass.unassignGroup(teacherEmail, classId)
+    }
+
     private formatGroupData(group: any): Group {
         return {
             id: group.id.toString().padStart(4, '0'),

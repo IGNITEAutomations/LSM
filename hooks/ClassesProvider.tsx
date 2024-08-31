@@ -60,9 +60,31 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({ children }) => {
     }
 }, [notAssignedGroups]);
 
-  const removeGroup = useCallback((id: string) => {
-    setAssignedGroups(prevGroups => prevGroups.filter(group => group.id !== id));
-  }, []);
+  const removeGroup = useCallback(async (id: string) => {
+    const unassignedGroup = assignedGroups.find(group => group.id === id)
+    try {
+        const response = await fetch("/api/groups/unassign", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ classId: unassignedGroup?.id })
+        });
+
+        if (!response.ok) throw new Error("Network response was not ok.")
+
+        const result = await response.json();
+        if (!result) throw new Error("Server returned an invalid response.")
+
+        setAssignedGroups(prevGroups => prevGroups.filter(group => group.id !== id));
+        setNotAssignedGroups(prevState => [...prevState, unassignedGroup!])
+
+        setNotification("Group unassigned successfully 👍", NotificationColor.SUCCESS)
+
+        return true;
+    } catch (error) {
+        console.error("An error occurred while unassigning the group:", error);
+        return false;
+    }
+  }, [assignedGroups]);
 
   const getClassName = useCallback((id: string) => {
     const group = assignedGroups.find(group => group.id === id);
