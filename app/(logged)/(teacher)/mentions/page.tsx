@@ -12,7 +12,7 @@ import {useSearchParams} from "next/navigation";
 
 const NUM_COLS = 3
 
-export default function MentionsSkillsPage({searchParams}: { searchParams: { id: string } }) {
+export default function MentionsSkillsPage() {
     const classes = useClasses();
     const skills = useMentions();
     const classId = useSearchParams().get("id") ?? ""

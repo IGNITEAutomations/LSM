@@ -16,6 +16,7 @@ import {Option} from "@/utils/types/types";
 import {Button} from "@/components/ui/button";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 import {useEffect, useState} from "react";
+import {Label} from "@/components/ui/label";
 
 export default function AddClassBtn() {
     const classes = useClasses()
@@ -23,8 +24,29 @@ export default function AddClassBtn() {
     const [schoolFilter, setSchoolFilter] = useState("")
     const [groupFilter, setGroupFilter] = useState("")
 
-    const schoolsOpt: Option[] = classes.notAssignedGroups.map(group => ({id: group.school.toLowerCase(), label: group.school}))
-    const groupsOpt: Option[] = classes.notAssignedGroups.map(group => ({id: group.group.toLowerCase(), label: group.group}))
+    const schoolsOpt = (): Option[] => {
+        const seenSchools = new Set<string>();
+        return classes.notAssignedGroups.reduce<Option[]>((options, item) => {
+            const schoolLower = item.school.toLowerCase();
+            if (!seenSchools.has(schoolLower)) {
+                seenSchools.add(schoolLower);
+                options.push({ id: schoolLower, label: item.school });
+            }
+            return options;
+        }, []);
+    }
+
+    const groupsOpt = (): Option[] => {
+        const seenSchools = new Set<string>();
+        return classes.notAssignedGroups.reduce<Option[]>((options, item) => {
+            const schoolLower = item.group.toLowerCase();
+            if (!seenSchools.has(schoolLower)) {
+                seenSchools.add(schoolLower);
+                options.push({ id: schoolLower, label: item.group });
+            }
+            return options;
+        }, []);
+    }
 
     useEffect(() => {
         if (!schoolFilter && !groupFilter)
@@ -84,10 +106,18 @@ export default function AddClassBtn() {
                         Select the classes you wish to add. These will be automatically linked to your account. If you wish, you can unlink them later.
                     </DialogDescription>
                 </DialogHeader>
-                <section className={"flex flex-col gap-4"}>
-                    <div className={"flex flex-row gap-16"}>
-                        <ComboBox name={"school"} defaultValue={schoolFilter} options={schoolsOpt} onChange={handleSchoolFilter}/>
-                        <ComboBox name={"group"} defaultValue={groupFilter} options={groupsOpt} onChange={handleGroupFilter}/>
+                <section className={"flex flex-col gap-4 bg-gray-50 p-3 rounded-xl"}>
+                    <div className={"flex flex-row gap-16 mt-3"}>
+                        <div className={"flex flex-col gap-2"}>
+                            <Label htmlFor={"school"}>School</Label>
+                            <ComboBox name={"school"} defaultValue={schoolFilter} options={schoolsOpt()}
+                                      onChange={handleSchoolFilter}/>
+                        </div>
+                        <div className={"flex flex-col gap-2"}>
+                            <Label htmlFor={"group"}>Group</Label>
+                            <ComboBox name={"group"} defaultValue={groupFilter} options={groupsOpt()}
+                                  onChange={handleGroupFilter}/>
+                        </div>
                     </div>
                     <ClassesTable addGroup={handleAddGroup} classes={filteredClasses}/>
 

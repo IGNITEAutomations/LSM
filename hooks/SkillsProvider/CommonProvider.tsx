@@ -19,7 +19,8 @@ type SkillsContextType = {
     skillsOptions: Option[];
     skillsMatrix: SkillsDataRow[];
     setSkillValue: (row: number, col: number, value: string) => void;
-    loaded: boolean
+    loaded: boolean,
+    restart: () => void
 };
 
 type SkillsProviderProps = {
@@ -64,6 +65,10 @@ export function createSkillGenericContext(type: SkillsTypes) {
                 setClassId(idFromUrl)
         }, [searchParams, classId]);
 
+        const restart = useCallback( async() => {
+            await init(classId)
+        }, [init, classId])
+
         const setSkillValue = useCallback((row: number, col: number, value: string) => {
             setSkillsData(prevState => {
                 const updatedMatrix = [...prevState.matrix];
@@ -77,9 +82,10 @@ export function createSkillGenericContext(type: SkillsTypes) {
                 skillsOptions: skillsData.options,
                 skillsMatrix: skillsData.matrix,
                 setSkillValue,
-                loaded
+                loaded,
+                restart
             }),
-            [skillsData, setSkillValue, loaded]
+            [skillsData, setSkillValue, loaded, restart]
           );
 
         return (

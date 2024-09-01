@@ -19,7 +19,8 @@ type ChallengesContextType = {
     challengesHeader: string[];
     challengesMatrix: ChallengeDataRow[];
     setChallengeValue: (row: number, col: number, value: boolean) => void;
-    loaded: boolean
+    loaded: boolean,
+    restart: () => void
 };
 
 type ChallengesProviderProps = {
@@ -48,6 +49,10 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
         }
         setLoaded(true)
     }, []);
+
+    const restart = useCallback( async() => {
+        await init(classId)
+    }, [init, classId])
 
     useEffect(() => {
         if (classId) {
@@ -83,8 +88,9 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
         challengesHeader: challengesData.headers,
         challengesMatrix: challengesData.matrix,
         setChallengeValue,
-        loaded
-    }), [challengesData, setChallengeValue, loaded]);
+        loaded,
+        restart
+    }), [challengesData, setChallengeValue, loaded, restart]);
 
     return (
         <ChallengesContext.Provider value={contextValue}>

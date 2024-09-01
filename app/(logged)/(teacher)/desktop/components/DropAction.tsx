@@ -3,7 +3,7 @@
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {EllipsisVertical, Settings2, X} from "lucide-react";
 import {useClasses} from "@/hooks/ClassesProvider";
-import {useCallback} from "react";
+import {useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 
 type DropActionProps = {
@@ -14,9 +14,12 @@ type DropActionProps = {
 export default function DropAction({classId, isCoordinator = false}: DropActionProps) {
     const classes = useClasses()
     const router = useRouter()
+    const [disable, setDisable] = useState(false)
 
-    const handleDelete = useCallback(() => {
-        classes.removeGroup(classId)
+    const handleDelete = useCallback(async() => {
+        setDisable(true)
+        await classes.removeGroup(classId)
+        setDisable(false)
     }, [classes, classId]);
 
     const handleStudentManager = useCallback(() => {
@@ -31,7 +34,7 @@ export default function DropAction({classId, isCoordinator = false}: DropActionP
            </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent side={"bottom"} align={"end"} className={"w-max"}>
-            <DropdownMenuItem onClick={(e) => {e.stopPropagation(); handleDelete()}}>
+            <DropdownMenuItem disabled={disable} onClick={(e) => {e.stopPropagation(); handleDelete()}}>
                 <X className={"h-4"}/>
                 <p className={"text-xs"}>Delete</p>
             </DropdownMenuItem>

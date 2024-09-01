@@ -12,7 +12,7 @@ import {useSearchParams} from "next/navigation";
 
 const NUM_COLS = 3
 
-export default function SteamSkillsPage({searchParams}: { searchParams: { id: string } }) {
+export default function SteamSkillsPage() {
     const classes = useClasses();
     const skills = useSteamSkills();
     const classId = useSearchParams().get("id") ?? ""

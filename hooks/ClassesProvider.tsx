@@ -17,8 +17,9 @@ type Groups = {
   groups: Group[];
   notAssignedGroups: Group[];
   assignNewGroup: (id: string) => Promise<boolean>;
-  removeGroup: (id: string) => void;
+  removeGroup: (id: string) => Promise<boolean>;
   getClassName: (id: string) => string;
+  loaded: boolean
 };
 
 const ClassesContext = React.createContext<Groups | undefined>(undefined);
@@ -30,6 +31,7 @@ type ClassesProviderProps = {
 export const ClassesProvider: FC<ClassesProviderProps> = ({ children }) => {
   const [assignedGroups, setAssignedGroups] = useState<Group[]>([]);
   const [notAssignedGroups, setNotAssignedGroups] = useState<Group[]>([]);
+  const [loaded, setLoaded] = useState(false)
 
   const assignNewGroup = useCallback(async (id: string) => {
     const group = notAssignedGroups.find(group => group.id === id);
@@ -101,6 +103,7 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({ children }) => {
         if (data.success) {
           setAssignedGroups(data.data.assigned);
           setNotAssignedGroups(data.data.notAssigned);
+          setLoaded(true)
         } else {
           setNotification("Internal error: Failed to load classes", NotificationColor.ERROR);
         }
@@ -118,7 +121,8 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({ children }) => {
     notAssignedGroups,
     assignNewGroup,
     removeGroup,
-    getClassName
+    getClassName,
+      loaded
   }), [assignedGroups, notAssignedGroups, assignNewGroup, removeGroup, getClassName]);
 
   return (

@@ -12,7 +12,7 @@ import {useSearchParams} from "next/navigation";
 
 const NUM_COLS = 3
 
-export default function SoftSkillsPage({searchParams}: { searchParams: { id: string } }) {
+export default function SoftSkillsPage() {
     const classes = useClasses();
     const skills = useSoftSkills();
     const classId = useSearchParams().get("id") ?? ""

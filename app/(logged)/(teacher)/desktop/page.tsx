@@ -3,6 +3,7 @@
 import AddClassBtn from "@/app/(logged)/(teacher)/desktop/components/AddClassBtn";
 import React from "react";
 import DesktopTable from "@/app/(logged)/(teacher)/desktop/components/DesktopTable";
+import {useClasses} from "@/hooks/ClassesProvider";
 
 export default function Desktop() {
     return (

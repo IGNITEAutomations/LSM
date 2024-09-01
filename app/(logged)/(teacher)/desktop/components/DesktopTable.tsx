@@ -8,7 +8,7 @@ import {useCallback} from "react";
 import {useRouter} from "next/navigation";
 import {UserRoles} from "@/lib/User/utils/users_roles";
 
-const headers = ["Class Id", "School", "Group", "Day", "#Students"];
+const headers = ["Class Id", "School", "Group", "Day", "#Students", ""];
 
 export default function DesktopTable() {
     const user = useUser()
@@ -19,7 +19,27 @@ export default function DesktopTable() {
         router.push(`/challenges?id=${classId}`);
     }, [router]);
 
-    return (
+    if (!classes.loaded) {
+        return (
+            <Table>
+                <THead headers={headers} empty={true}/>
+                <TBody>
+                    {[...Array(3)].map((_, i) => (
+                        <TRow key={i}>
+                            {[...Array(headers.length)].map((_, j) => (
+                                <TCell key={j}>
+                                    <div className={"w-full h-8 flex justify-center items-center"}>
+                                        <div className={"w-[80%] h-4 animate-pulse bg-gray-200 rounded-3xl"}/>
+                                    </div>
+                                </TCell>
+                            ))}
+                        </TRow>
+                    ))}
+                </TBody>
+            </Table>
+        )
+    } else {
+        return (
         <Table>
             <THead headers={headers} empty={true} />
             <TBody>
@@ -38,4 +58,5 @@ export default function DesktopTable() {
             </TBody>
         </Table>
     );
+    }
 }

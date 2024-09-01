@@ -10,14 +10,11 @@ import {TableSkeleton} from "@/app/(logged)/_components/Table";
 import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
 import {useSearchParams} from "next/navigation";
 
-interface ChallengesPageProps {
-    searchParams: { id: string };
-}
-
-const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
+export default function ChallengesPage() {
     const challenges = useChallenges();
     const classes = useClasses();
-    const classId = useSearchParams().get("id") ?? ""
+    const searchParams = useSearchParams();
+    const classId = searchParams.get("id") ?? "";
 
     const className = useMemo(() => classes.getClassName(classId), [classId, classes]);
 
@@ -25,25 +22,24 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
         challenges.setChallengeValue(row, col, value);
 
         const queueItem: QueueItem = {
-            type: QueueTypes.CHALLENGES,
-            data: {
+            type: QueueTypes.CHALLENGES, data: {
                 studentId: challenges.challengesMatrix[row].student.id,
                 evaluationId: challenges.challengesMatrix[row].challenges[col].id,
-                value: value
+                value: value,
             },
         };
+
         queue.add(queueItem);
     }, [challenges]);
 
-    return (
-        <main className="flex flex-col max-h-[650px]">
+    return (<main className="flex flex-col max-h-[650px]">
             <SavedIndicator/>
             <Navigation classId={classId}/>
             <h1>Challenges</h1>
             <h2>{className}</h2>
             <section className="mt-8 flex-1 overflow-y-auto">
-                {!challenges.loaded ? (
-                    <TableSkeleton headerName={"Challenge"} nCols={4} nRows={3}/>) : challenges.challengesMatrix.length === 0 ? (
+                {!challenges.loaded ? (<TableSkeleton headerName="Challenge" nCols={4}
+                                                      nRows={3}/>) : challenges.challengesMatrix.length === 0 ? (
                     <p className="text-red-500">
                         No students have been assigned to this group.
                     </p>) : (<ChallengesTable
@@ -53,6 +49,4 @@ const ChallengesPage: React.FC<ChallengesPageProps> = ({searchParams}) => {
                     />)}
             </section>
         </main>);
-};
-
-export default ChallengesPage;
+}
