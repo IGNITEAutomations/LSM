@@ -8,7 +8,7 @@ import {useCallback} from "react";
 import {useRouter} from "next/navigation";
 import {UserRoles} from "@/lib/User/utils/users_roles";
 
-const headers = ["Class Id", "School", "Group", "Day", "#Students", ""];
+const headers = ["Class Id", "School", "Group", "Day", "#students", ""];
 
 export default function DesktopTable() {
     const user = useUser()

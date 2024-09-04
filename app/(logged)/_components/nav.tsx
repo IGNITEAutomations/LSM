@@ -18,7 +18,8 @@ export default function Navigation({classId}: { classId: string }) {
     }, {label: "Soft skills", href: `/soft_skills${classId ? '?id=' + classId : ''}`}, {
         label: "STEAM skills",
         href: `/steam_skills${classId ? '?id=' + classId : ''}`
-    }, {label: "Mentions", href: `/mentions${classId ? '?id=' + classId : ''}`},], [classId]);
+    }, {label: "Mentions", href: `/mentions${classId ? '?id=' + classId : ''}`},
+    {label: "Best of", href: `/best_of${classId ? '?id=' + classId : ''}`}], [classId]);
 
     const currentIndex = useMemo(() => {
         return options.findIndex(option => pageName === option.href.split('?')[0]);

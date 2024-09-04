@@ -1,3 +1,5 @@
+"use client"
+
 import {StudentData} from "@/utils/types/types";
 import {Table, TableSkeleton, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";
 import {Plus, X} from "lucide-react";

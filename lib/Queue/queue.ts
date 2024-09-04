@@ -4,7 +4,8 @@ const ELAPSE_TIME = 10000
 export enum QueueTypes {
     CHALLENGES,
     SKILLS,
-    MENTIONS
+    MENTIONS,
+    BEST_OF
 }
 
 export type QueueDataItem = {

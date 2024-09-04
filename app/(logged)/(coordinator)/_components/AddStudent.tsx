@@ -1,11 +1,12 @@
 "use client";
 
-import {Plus} from "lucide-react";
+import {Import, Plus} from "lucide-react";
 import {ChangeEvent, useCallback, useState} from "react";
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
+import doPost from "@/lib/Fetch/Client/fetch";
 
 export function AddStudent({classId}: { classId: string }) {
     const [name, setName] = useState("");
@@ -21,28 +22,9 @@ export function AddStudent({classId}: { classId: string }) {
             setNotification("Some field is incomplete", NotificationColor.ERROR);
             return;
         }
-
-        try {
-            setDisable(true);
-
-            const response = await fetch("/api/groups/students/post/add", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({name, surname, classId: parseInt(classId)}),
-            });
-
-            if (!response.ok) throw new Error("Connection error");
-
-            const data = await response.json();
-            if (!data.success) throw new Error(`Server returned an error: ${data.error}`);
-
-            setNotification("Request sent successfully 👍", NotificationColor.SUCCESS);
-        } catch (error) {
-            console.error(error);
-            setNotification("The request could not be sent", NotificationColor.ERROR);
-        } finally {
-            setDisable(false);
-        }
+        setDisable(true);
+        await doPost("/api/groups/students/post/add", {name, surname, classId: parseInt(classId)})
+        setDisable(false);
     }, [name, surname, classId]);
 
     return (<div className="relative">
