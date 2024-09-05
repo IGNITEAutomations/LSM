@@ -2,9 +2,9 @@ import ModelClass from "@/lib/DB/Classes/model";
 import {Group} from "@/hooks/ClassesProvider";
 import {Days} from "@/utils/Days";
 import {QueueDataItem, QueueItem} from "@/lib/Queue/queue";
-import {SkillsTypes} from "@/utils/types/types";
+import {ClassDB, SchoolDB, SkillsTypes, StudentDB} from "@/utils/types/types";
 import {SkillMatrix} from "@/hooks/SkillsProvider/CommonProvider";
-import {opt} from "ts-interface-checker";
+
 
 class CClasses {
 
@@ -157,6 +157,68 @@ class CClasses {
     public async  updateActiveStatusStudent(studentId: number, value: boolean) {
         await ModelClass.updateActiveStatusStudent(studentId, value)
         return
+    }
+
+    private processImportData(studentsMatrix: string[][]) {
+        const students: StudentDB[] = []
+        const schools: SchoolDB[] = []
+        const classes: ClassDB[] = []
+
+        let lastSchool = -1
+        let lastClass = -1
+
+        for (const student of studentsMatrix) {
+            const classId = parseInt(student[7])
+            students.push({
+                name: student[2],
+                surname: student[3],
+                email: student[0],
+                password: student[1],
+                activated: student[6] === "true",
+                classId: classId
+            })
+
+            if (lastClass != classId) {
+                const schoolId = Math.floor(classId / 100)
+                classes.push({name: student[4], day: Days.Monday, id: classId, schoolId: schoolId})
+                lastClass = classId
+                if (lastSchool != schoolId) {
+                    schools.push({id: schoolId, name: student[5]})
+                }
+            }
+        }
+        return {students, schools, classes}
+    }
+
+    public async importData(data: string[][]) {
+        const {students, schools, classes} = this.processImportData(data)
+        try {
+            const schoolsOk = await ModelClass.insertSchool(schools)
+            const classOK = await ModelClass.insertClasses(classes)
+            const studentsOK = await ModelClass.insertStudents(students)
+            return {success: (schoolsOk && classOK && studentsOK), data: "ok"}
+        } catch (error) {
+            console.error((error as Error).message)
+            return {success: false, error: JSON.stringify((error as Error).message)}
+        }
+    }
+
+    public async reloadImportData(data: string[][]) {
+        const {students, schools, classes} = this.processImportData(data)
+        try {
+            const schoolsOk = await ModelClass.reupdateSchoolsData(schools)
+            const classOK = await ModelClass.reupdateClassesData(classes)
+            const studentsOK = await ModelClass.reupdateStudentsData(students)
+            return {success: (schoolsOk && classOK && studentsOK), data: "ok"}
+        } catch (error) {
+            console.error((error as Error).message)
+            return {success: false, error: JSON.stringify((error as Error).message)}
+        }
+    }
+
+    public async deleteData() {
+        console.error("deleting")
+       await ModelClass.deleteData()
     }
 
     private formatGroupData(group: any): Group {

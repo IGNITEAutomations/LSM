@@ -49,7 +49,7 @@ export default function Nav() {
     const page = usePathname()
 
     return (<nav
-            className={"w-[20%] bg-white flex flex-col justify-between px-8 py-5 border border-gray-100 ml-2 rounded-2xl my-5"}>
+            className={"w-[20%] bg-white flex flex-col justify-between px-8 py-5 border border-gray-100 ml-2 rounded-2xl my-5 sticky top-0 left-0"}>
             <Link href={"/"} className={"h-20 flex items-center"}><Image src={"/img/ignite_logo.png"}
                                                                          alt={"ignite logo"} width={120} height={120}/></Link>
             <div className={"grow flex flex-col justify-between pt-8 pb-10"}>

@@ -10,11 +10,11 @@ export default function RootLayout({children}: Readonly<{
     return (<Suspense>
             <UserProvider>
                 <body
-                    className={"max-w-screen max-h-screen w-screen h-screen flex flex-row overflow-x-hidden overscroll-y-auto bg-gray-50 "}>
+                    className={"max-w-screen max-h-screen w-screen h-screen flex flex-row overflow-x-hidden overflow-y-hidden bg-gray-50 "}>
                 <Nav/>
-                <div className={"w-[80%] flex flex-col max-h-screen overflow-y-auto"}>
+                <div className={"w-[80%] flex flex-col max-h-screen"}>
                     <Header/>
-                    <main className={"flex flex-col grow px-10 pb-5"}>
+                    <main style={{maxHeight: "calc(100% - 116px)"}} className={"flex flex-col grow mb-5 "}>
                         {children}
                     </main>
                 </div>

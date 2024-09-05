@@ -1,7 +1,20 @@
+import {UserRoles} from "@/lib/User/utils/users_roles";
+import {Days} from "@/utils/Days";
+
 export type Student = {
   id: number;
   displayName: string;
 };
+
+export type Teacher = {
+  displayName: string,
+  name: string,
+  email: string,
+  role: UserRoles
+  uid?: string,
+  token?: string,
+  id?: number
+}
 
 export type Challenge = {
   id: string;
@@ -31,4 +44,25 @@ export type StudentData = {
   email: string,
   password: string,
   activated: boolean
+}
+
+export type StudentDB = {
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    activated: boolean,
+    classId: number
+}
+
+export type SchoolDB = {
+    id: number,
+    name: string
+}
+
+export type ClassDB = {
+    id: number,
+    name: string,
+    schoolId: number,
+    day: Days
 }

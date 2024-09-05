@@ -1,6 +1,6 @@
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 
-export default async function doPost(endpoint: string, data: object, notification: boolean = true): Promise<{success: true, data: any}|{success: false, error: string}> {
+export default async function doPost(endpoint: string, data: any, notification: boolean = true): Promise<{success: true, data: any}|{success: false, error: string}> {
     try {
             const response = await fetch(endpoint, {
                 method: "POST",
@@ -18,7 +18,7 @@ export default async function doPost(endpoint: string, data: object, notificatio
             return responseData
         } catch (error) {
             console.error(error);
-            setNotification("The request could not be sent", NotificationColor.ERROR);
+            setNotification((error as Error).message, NotificationColor.ERROR);
             return {success: false, error: (error as Error).message};
         }
 }

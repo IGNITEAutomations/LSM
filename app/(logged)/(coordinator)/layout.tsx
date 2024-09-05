@@ -14,7 +14,7 @@ export default function RootLayout({children}: Readonly<{
     children: React.ReactNode
 }>) {
     return (
-        <body className={" max-w-screen h-screen flex flex-col overflow-x-hidden overscroll-y-auto"}>
+        <body className={" max-w-screen h-screen flex flex-col overflow-x-hidden"}>
             <UserProvider>
             <main
                 className={"flex flex-col max-w-screen max-h-screen bg-gray-100 min-h-screen w-screen px-20"}>

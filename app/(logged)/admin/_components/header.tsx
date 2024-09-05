@@ -22,7 +22,7 @@ export default function Header() {
     }
 
     return (
-        <header className={"h-24 w-full flex flex-row bg-gray-50 items-center justify-end px-10 py-5 mb-3 top-0 sticky"}>
+        <header className={"h-fit w-full flex flex-row bg-gray-50 items-center justify-end px-10 mt-8 mb-4 top-0 sticky"}>
             <div className={"flex flex-row gap-4 items-center"}>
                 <p className={"text-sm text-black font-semibold"}>{capitalizeFirstLetter(user.displayName)}</p>
                 <DropdownMenu>
