@@ -56,6 +56,7 @@ model Teacher {
 model ChallengesHeaders {
   id         String       @unique
   name       String
+  activated  Boolean
   Challenges Challenges[]
 }
 
@@ -69,10 +70,11 @@ model Challenges {
 }
 
 model SkillsHeaders {
-  id     String   @unique
-  name   String
-  type   String
-  Skills Skills[]
+  id        String   @unique
+  name      String
+  type      String
+  activated Boolean
+  Skills    Skills[]
 }
 
 model Skills {

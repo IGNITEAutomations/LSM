@@ -106,7 +106,7 @@ export default function AddGroupBtn() {
                         Select the groups you wish to add. These will be automatically linked to your account. If you wish, you can unlink them later.
                     </DialogDescription>
                 </DialogHeader>
-                <section className={"flex flex-col gap-4 bg-gray-50 p-3 rounded-xl"}>
+                <section className={"flex flex-col gap-4 bg-gray-50 p-3 rounded-xl max-h-[50vh]"}>
                     <div className={"flex flex-row gap-16 mt-3"}>
                         <div className={"flex flex-col gap-2"}>
                             <Label htmlFor={"school"}>School</Label>
@@ -135,19 +135,22 @@ type GroupsTableProps = {
 function GroupsTable({groups, addGroup}: GroupsTableProps) {
     const headers = ["Group Id", "School", "Group", "Day", "Action"]
     return (
+        <div className={"overflow-y-auto"}>
             <Table>
-            <THead empty={true} headers={headers}/>
-            <TBody>
-                {groups.map((item, i) => (
-                    <TRow key={i}>
-                        <TCell>{item.id}</TCell>
-                        <TCell>{item.school}</TCell>
-                        <TCell>{item.group}</TCell>
-                        <TCell>{item.day}</TCell>
-                        <TCell>{<Button className={"bg-transparent hover:bg-transparent hover:text-green-700 text-green-500 p-1.5 w-8 h-8"} onClick={() => addGroup(item.id)}><Plus/></Button>}</TCell>
-                    </TRow>
-                ))}
-            </TBody>
-        </Table>
+                <THead empty={true} headers={headers}/>
+                <TBody>
+                    {groups.map((item, i) => (
+                        <TRow key={i}>
+                            <TCell>{item.id}</TCell>
+                            <TCell>{item.school}</TCell>
+                            <TCell>{item.group}</TCell>
+                            <TCell>{item.day}</TCell>
+                            <TCell>{<Button className={"bg-transparent hover:bg-transparent hover:text-green-700 text-green-500 p-1.5 w-8 h-8"} onClick={() => addGroup(item.id)}><Plus/></Button>}</TCell>
+                        </TRow>
+                    ))}
+                </TBody>
+            </Table>
+        </div>
+
     )
 }
