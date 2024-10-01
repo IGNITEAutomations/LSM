@@ -97,7 +97,8 @@ class CModelGroup {
         try {
             return prismadb.skillsHeaders.findMany({
                 where: {
-                    type: type.toString()
+                    type: type.toString(),
+                    activated: true
                 }
             })
         } catch (error) {
@@ -107,7 +108,11 @@ class CModelGroup {
 
     public async getChallengesHeaders() {
         try {
-            return prismadb.challengesHeaders.findMany()
+            return prismadb.challengesHeaders.findMany({
+                where: {
+                    activated: true
+                }
+            })
         } catch (error) {
             console.error("Error getting challenges headers: " + error)
         }
