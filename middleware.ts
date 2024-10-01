@@ -17,6 +17,10 @@ export async function middleware(request: NextRequest) {
         if (pathname.includes('/login') || pathname === '/') {
             return NextResponse.redirect(new URL('/desktop', request.url));
         }
+
+        if (pathname === '/admin') {
+            return NextResponse.redirect(new URL('/admin/import', request.url));
+        }
     }
 }
 
