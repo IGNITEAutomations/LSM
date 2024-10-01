@@ -32,7 +32,8 @@ class CGroup {
             const studentChallenges = new Set(student.Challenges.map((challenge) => challenge.challengeId));
             return {
                 student: {
-                    displayName: `${student.name} ${student.surname}`, id: student.id,
+                    displayName: `${student.name} ${student.surname}`,
+                    id: student.id,
                 }, challenges: challengesHeaders.map((challenge) => ({
                     id: challenge.id, value: studentChallenges.has(challenge.id),
                 })),
