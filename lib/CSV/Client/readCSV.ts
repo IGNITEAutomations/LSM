@@ -1,4 +1,22 @@
-function cleanCsvData(data: string[][], expectedHeaders: string[]): string[][] {
+function transformBoolValues(list: string[]) {
+    const trueValues = new Set(["verdadero", "true"]);
+    const falseValues = new Set(["falso", "false"]);
+
+    return list.map(value => {
+        const lowerValue = value.toLowerCase();
+        if (trueValues.has(lowerValue)) {
+            //console.log("VALUE: ", lowerValue)
+            return "true";
+        }
+        if (falseValues.has(lowerValue)) {
+            // console.log("VALUE: ", lowerValue)
+            return "false";
+        }
+        return value;
+    });
+}
+
+function cleanCsvData(data: string[][], expectedHeaders: string[]): any[][] {
     if (!data || data.length === 0) {
         throw new Error("The CSV file is empty.")
     }
@@ -13,14 +31,27 @@ function cleanCsvData(data: string[][], expectedHeaders: string[]): string[][] {
         return index;
     });
 
-    const matrix: string[][] = [];
+    const matrix: (string | boolean)[][] = [];
     for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        const newRow = headersCols.map(colPos => row[colPos].replace(cleanRegExp, ""));
-        if (newRow.some(value => value === "")) {
-            throw new Error(`Algunos campos de la fila ${i} están vacios`);
+        try {
+            const row = data[i];
+            const newRow: string[] = headersCols.map(colPos => row[colPos].replace(cleanRegExp, ""));
+            if (newRow.some(value => value === "")) {
+                console.warn(`Algunos campos de la fila ${i} están vacios`)
+                //throw new Error(`Algunos campos de la fila ${i} están vacios`);
+            }
+            const transformedRow = transformBoolValues(newRow)
+
+            console.log("transformedRow")
+
+            if (transformedRow.every(value => value === "")) {
+                return matrix
+            }
+            matrix.push(transformedRow);
+        } catch (error) {
+            console.error(error)
         }
-        matrix.push(newRow);
+
     }
     return matrix;
 }

@@ -10,10 +10,10 @@ import {useMentions} from "@/hooks/SkillsProvider/MentionsProvider";
 
 interface ReturnBtnProps {
     p: number;
-    classId: string;
+    groupId: string;
 }
 
-export default function ReturnBtn({p, classId}: ReturnBtnProps) {
+export default function ReturnBtn({p, groupId}: ReturnBtnProps) {
     const challenges = useChallenges();
     const softSkills = useSoftSkills();
     const steamSkills = useSteamSkills();
@@ -26,7 +26,7 @@ export default function ReturnBtn({p, classId}: ReturnBtnProps) {
         mentions.restart();
     }, [challenges, softSkills, steamSkills, mentions]);
 
-    const href = p === 1 ? `/challenges?id=${classId}` : `/`;
+    const href = p === 1 ? `/challenges?id=${groupId}` : `/`;
 
     return (<div className="flex mb-8">
             <Link

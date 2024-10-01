@@ -8,18 +8,18 @@ import {useMemo} from "react";
 import {useUser} from "@/hooks/UserProvider";
 import {UserRoles} from "@/lib/User/utils/users_roles";
 
-export default function Navigation({classId}: { classId: string }) {
+export default function Navigation({groupId}: { groupId: string }) {
     const pageName = usePathname();
     const user = useUser()
 
     const options = useMemo(() => [{
         label: "Challenges",
-        href: `/challenges${classId ? '?id=' + classId : ''}`
-    }, {label: "Soft skills", href: `/soft_skills${classId ? '?id=' + classId : ''}`}, {
+        href: `/challenges${groupId ? '?id=' + groupId : ''}`
+    }, {label: "Soft skills", href: `/soft_skills${groupId ? '?id=' + groupId : ''}`}, {
         label: "STEAM skills",
-        href: `/steam_skills${classId ? '?id=' + classId : ''}`
-    }, {label: "Mentions", href: `/mentions${classId ? '?id=' + classId : ''}`},
-    {label: "Best of", href: `/best_of${classId ? '?id=' + classId : ''}`}], [classId]);
+        href: `/steam_skills${groupId ? '?id=' + groupId : ''}`
+    }, {label: "Mentions", href: `/mentions${groupId ? '?id=' + groupId : ''}`},
+    {label: "Best of", href: `/best_of${groupId ? '?id=' + groupId : ''}`}], [groupId]);
 
     const currentIndex = useMemo(() => {
         return options.findIndex(option => pageName === option.href.split('?')[0]);
@@ -36,7 +36,7 @@ export default function Navigation({classId}: { classId: string }) {
         <div>
             {user.role === UserRoles.Coordinator ?
                 <div className={"flex"}>
-                    <Link href={`/manager?id=${classId}&p=0`} className={"bg-[#C0C0C0] hover:bg-gray-400 text-white text-xs rounded-xl p-0 w-8 h-8 flex justify-center items-center"} title={"Student manager"}>
+                    <Link href={`/manager?id=${groupId}&p=0`} className={"bg-[#C0C0C0] hover:bg-gray-400 text-white text-xs rounded-xl p-0 w-8 h-8 flex justify-center items-center"} title={"Student manager"}>
                         <Settings2 className={"h-5 w-5"}/>
                     </Link>
                 </div>

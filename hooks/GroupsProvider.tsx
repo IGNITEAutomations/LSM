@@ -19,17 +19,17 @@ type Groups = {
     notAssignedGroups: Group[];
     assignNewGroup: (id: string) => Promise<boolean>;
     removeGroup: (id: string) => Promise<boolean>;
-    getClassName: (id: string) => string;
+    getGroupName: (id: string) => string;
     loaded: boolean
 };
 
-const ClassesContext = React.createContext<Groups | undefined>(undefined);
+const GroupsContext = React.createContext<Groups | undefined>(undefined);
 
-type ClassesProviderProps = {
+type GroupsProviderProps = {
     children: ReactNode;
 };
 
-export const ClassesProvider: FC<ClassesProviderProps> = ({children}) => {
+export const GroupsProvider: FC<GroupsProviderProps> = ({children}) => {
     const [assignedGroups, setAssignedGroups] = useState<Group[]>([]);
     const [notAssignedGroups, setNotAssignedGroups] = useState<Group[]>([]);
     const [loaded, setLoaded] = useState(false)
@@ -40,7 +40,7 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({children}) => {
             console.error(`Group with id ${id} not found in notAssignedGroups`);
             return false;
         }
-        const response = await doPost("/api/groups/assign", {classId: group.id}, false)
+        const response = await doPost("/api/groups/assign", {groupId: group.id}, false)
         if (response.success) {
             setAssignedGroups(prevGroups => [...prevGroups, group]);
             setNotAssignedGroups(prevGroups => prevGroups.filter(g => g.id !== id));
@@ -50,7 +50,7 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({children}) => {
 
     const removeGroup = useCallback(async (id: string) => {
         const unassignedGroup = assignedGroups.find(group => group.id === id)
-        const response = await doPost("/api/groups/unassign", {classId: unassignedGroup?.id})
+        const response = await doPost("/api/groups/unassign", {groupId: unassignedGroup?.id})
         if (response.success) {
             setAssignedGroups(prevGroups => prevGroups.filter(group => group.id !== id));
             setNotAssignedGroups(prevState => [...prevState, unassignedGroup!])
@@ -58,7 +58,7 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({children}) => {
         return response.success
     }, [assignedGroups]);
 
-    const getClassName = useCallback((id: string) => {
+    const getGroupName = useCallback((id: string) => {
         const group = assignedGroups.find(group => group.id === id);
         return group ? `${group.school} - ${group.group}` : "";
     }, [assignedGroups]);
@@ -75,11 +75,11 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({children}) => {
                     setNotAssignedGroups(data.data.notAssigned);
                     setLoaded(true)
                 } else {
-                    setNotification("Internal error: Failed to load classes", NotificationColor.ERROR);
+                    setNotification("Internal error: Failed to load groups", NotificationColor.ERROR);
                 }
             } catch (error) {
                 console.error(error);
-                setNotification("Internal error: Failed to load classes", NotificationColor.ERROR);
+                setNotification("Internal error: Failed to load groups", NotificationColor.ERROR);
             }
         };
 
@@ -87,18 +87,18 @@ export const ClassesProvider: FC<ClassesProviderProps> = ({children}) => {
     }, []);
 
     const contextValue = useMemo(() => ({
-        groups: assignedGroups, notAssignedGroups, assignNewGroup, removeGroup, getClassName, loaded
-    }), [assignedGroups, notAssignedGroups, assignNewGroup, removeGroup, getClassName]);
+        groups: assignedGroups, notAssignedGroups, assignNewGroup, removeGroup, getGroupName, loaded
+    }), [assignedGroups, notAssignedGroups, assignNewGroup, removeGroup, getGroupName]);
 
-    return (<ClassesContext.Provider value={contextValue}>
+    return (<GroupsContext.Provider value={contextValue}>
             {children}
-        </ClassesContext.Provider>);
+        </GroupsContext.Provider>);
 };
 
-export const useClasses = (): Groups => {
-    const context = useContext(ClassesContext);
+export const useGroups = (): Groups => {
+    const context = useContext(GroupsContext);
     if (!context) {
-        throw new Error("useClasses must be used within a ClassesProvider");
+        throw new Error("useGroups must be used within a GroupsProvider");
     }
     return context;
 };

@@ -1,7 +1,6 @@
 import Header from "@/app/(logged)/_components/header";
 import "../style.css";
 import {UserProvider} from "@/hooks/UserProvider";
-import {ClassesProvider} from "@/hooks/ClassesProvider";
 import {SoftSkillsProvider} from "@/hooks/SkillsProvider/SoftSkillsProvider";
 import {SteamSkillsProvider} from "@/hooks/SkillsProvider/SteamSkillsProvider";
 import {MentionsProvider} from "@/hooks/SkillsProvider/MentionsProvider";
@@ -9,6 +8,7 @@ import {ChallengesProvider} from "@/hooks/ChallengesProvider";
 import {Suspense} from "react";
 import TableSkeleton from "@/app/(logged)/loading";
 import {BestOfProvider} from "@/hooks/SkillsProvider/BestOf";
+import {GroupsProvider} from "@/hooks/GroupsProvider";
 
 export default function RootLayout({children}: Readonly<{
     children: React.ReactNode
@@ -25,13 +25,13 @@ export default function RootLayout({children}: Readonly<{
                             <ChallengesProvider>
                                 <SoftSkillsProvider>
                                     <SteamSkillsProvider>
-                                        <ClassesProvider>
+                                        <GroupsProvider>
                                             <MentionsProvider>
                                                 <BestOfProvider>
                                                     {children}
                                                 </BestOfProvider>
                                             </MentionsProvider>
-                                        </ClassesProvider>
+                                        </GroupsProvider>
                                     </SteamSkillsProvider>
                                 </SoftSkillsProvider>
                             </ChallengesProvider>

@@ -52,7 +52,7 @@ export type StudentDB = {
     email: string,
     password: string,
     activated: boolean,
-    classId: number
+    groupId: number
 }
 
 export type SchoolDB = {
@@ -60,7 +60,7 @@ export type SchoolDB = {
     name: string
 }
 
-export type ClassDB = {
+export type GroupDB = {
     id: number,
     name: string,
     schoolId: number,

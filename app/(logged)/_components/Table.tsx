@@ -37,7 +37,9 @@ export function TRow({children, onClick = () => {}, clickEnable = false, enableC
 export function TCell({children}: Readonly<{children: React.ReactNode}>) {
     return (
         <td className={"text-center"}>
-            {children}
+            <div className={"flex justify-center items-center"}>
+                {children}
+            </div>
         </td>
     )
 }

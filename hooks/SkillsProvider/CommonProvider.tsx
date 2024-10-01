@@ -35,11 +35,11 @@ export function createSkillGenericContext(type: SkillsTypes) {
         const [loaded, setLoaded] = useState<boolean>(false)
 
         const searchParams = useSearchParams();
-        const [classId, setClassId] = useState<string>("")
+        const [groupId, setGroupId] = useState<string>("")
 
-        const init = useCallback(async (classId: string) => {
+        const init = useCallback(async (groupId: string) => {
             try {
-                const response = await fetch(`/api/skills/get?id=${classId}&type=${type.toString()}`);
+                const response = await fetch(`/api/skills/get?id=${groupId}&type=${type.toString()}`);
                 if (!response.ok) throw new Error("Failed to fetch challenges data");
 
                 const data = await response.json();
@@ -52,22 +52,22 @@ export function createSkillGenericContext(type: SkillsTypes) {
         }, []);
 
         useEffect(() => {
-            if (classId) {
+            if (groupId) {
                 setSkillsData({options: [], matrix: []})
                 setLoaded(false)
-                init(classId);
+                init(groupId);
             }
-        }, [classId, init]);
+        }, [groupId, init]);
 
         useEffect(() => {
             const idFromUrl = searchParams.get('id')
             if (idFromUrl)
-                setClassId(idFromUrl)
-        }, [searchParams, classId]);
+                setGroupId(idFromUrl)
+        }, [searchParams, groupId]);
 
         const restart = useCallback( async() => {
-            await init(classId)
-        }, [init, classId])
+            await init(groupId)
+        }, [init, groupId])
 
         const setSkillValue = useCallback((row: number, col: number, value: string) => {
             setSkillsData(prevState => {
@@ -98,7 +98,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
     const useSkills = (): SkillsContextType => {
         const context = useContext(SkillsContext);
         if (!context) {
-            throw new Error("useClass must be used within a LastClassProvider");
+            throw new Error("useSkills must be used within a SkillProvider");
         }
         return context;
     };

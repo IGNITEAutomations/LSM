@@ -28,7 +28,7 @@ class CSchoolsServer {
         }
     }
 
-    get groups(): clientSchoolGroup[] {
+    process groups(): clientSchoolGroup[] {
         let groups: clientSchoolGroup[] = []
 
         for (const school of Object.values(this._schools)) {

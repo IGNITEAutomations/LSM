@@ -20,13 +20,13 @@ model Student {
   email      String?      @unique
   password   String
   activated  Boolean
-  class      Class        @relation(fields: [classId], references: [id])
-  classId    Int
+  group      Group        @relation(fields: [groupId], references: [id])
+  groupId    Int
   Challenges Challenges[]
   Skills     Skills[]
 }
 
-model Class {
+model Group {
   id       Int       @id
   name     String
   students Student[]
@@ -37,9 +37,9 @@ model Class {
 }
 
 model School {
-  id      Int     @id
-  name    String  @unique
-  classes Class[]
+  id     Int     @id
+  name   String  @unique
+  groups Group[]
 }
 
 model Teacher {
@@ -50,7 +50,7 @@ model Teacher {
   name        String
   email       String  @unique
   role        Int
-  classes     Class[]
+  groups      Group[]
 }
 
 model ChallengesHeaders {

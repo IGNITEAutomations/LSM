@@ -1,6 +1,6 @@
 "use client"
 
-import {useClasses} from "@/hooks/ClassesProvider";
+import {useGroups} from "@/hooks/GroupsProvider";
 import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";
 import DropAction from "@/app/(logged)/(teacher)/desktop/components/DropAction";
 import {useUser} from "@/hooks/UserProvider";
@@ -8,18 +8,18 @@ import {useCallback} from "react";
 import {useRouter} from "next/navigation";
 import {UserRoles} from "@/lib/User/utils/users_roles";
 
-const headers = ["Class Id", "School", "Group", "Day", "#students", ""];
+const headers = ["Group Id", "School", "Group", "Day", "#students", ""];
 
 export default function DesktopTable() {
     const user = useUser()
-    const classes = useClasses();
+    const groups = useGroups();
     const router = useRouter();
 
-    const handleClick = useCallback((classId: string) => {
-        router.push(`/challenges?id=${classId}`);
+    const handleClick = useCallback((groupId: string) => {
+        router.push(`/challenges?id=${groupId}`);
     }, [router]);
 
-    if (!classes.loaded) {
+    if (!groups.loaded) {
         return (
             <Table>
                 <THead headers={headers} empty={true}/>
@@ -43,7 +43,7 @@ export default function DesktopTable() {
         <Table>
             <THead headers={headers} empty={true} />
             <TBody>
-                {classes.groups.map((row) => (
+                {groups.groups.map((row) => (
                     <TRow key={row.id} enableColor={true} clickEnable={true} onClick={() => handleClick(row.id)}>
                         <TCell>{row.id}</TCell>
                         <TCell>{row.school}</TCell>
@@ -51,7 +51,7 @@ export default function DesktopTable() {
                         <TCell>{row.day}</TCell>
                         <TCell>{row.numStudents}</TCell>
                         <TCell>
-                            <DropAction classId={row.id} isCoordinator={user.role === UserRoles.Coordinator}/>
+                            <DropAction groupId={row.id} isCoordinator={user.role === UserRoles.Coordinator}/>
                         </TCell>
                     </TRow>
                 ))}

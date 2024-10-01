@@ -31,13 +31,13 @@ const ChallengesContext = React.createContext<ChallengesContextType | undefined>
 
 export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) => {
     const [challengesData, setChallengesData] = useState<ChallengesMatrix>({ headers: [], matrix: [] });
-    const [classId, setClassId] = useState<string>("")
+    const [groupId, setGroupId] = useState<string>("")
     const [loaded, setLoaded] = useState<boolean>(false)
     const searchParams = useSearchParams();
 
-    const init = useCallback(async (classId: string) => {
+    const init = useCallback(async (groupId: string) => {
         try {
-            const response = await fetch(`/api/challenges/get?id=${classId}`);
+            const response = await fetch(`/api/challenges/get?id=${groupId}`);
             if (!response.ok) throw new Error("Failed to fetch challenges data");
 
             const data = await response.json();
@@ -51,22 +51,22 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
     }, []);
 
     const restart = useCallback( async() => {
-        await init(classId)
-    }, [init, classId])
+        await init(groupId)
+    }, [init, groupId])
 
     useEffect(() => {
-        if (classId) {
+        if (groupId) {
             setLoaded(false)
             setChallengesData({ headers: [], matrix: [] })
-            init(classId);
+            init(groupId);
         }
-    }, [classId, init]);
+    }, [groupId, init]);
 
     useEffect(() => {
         const idFromUrl = searchParams.get('id')
         if (idFromUrl)
-            setClassId(idFromUrl)
-    }, [searchParams, classId]);
+            setGroupId(idFromUrl)
+    }, [searchParams, groupId]);
 
     const setChallengeValue = useCallback((row: number, col: number, value: boolean) => {
         setChallengesData(prevState => {

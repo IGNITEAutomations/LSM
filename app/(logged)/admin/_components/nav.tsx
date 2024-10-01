@@ -28,8 +28,8 @@ const options = [{
     href: "/admin/students",
     icon: <GraduationCapIcon className={"w-5 h-5"}/>
 }, {label: "Schools", href: "/admin/schools", icon: <School className={"w-5 h-5"}/>}, {
-    label: "Classes",
-    href: "/admin/classes",
+    label: "Groups",
+    href: "/admin/groups",
     icon: <Presentation className={"w-5 h-5"}/>
 }, {label: "Challenges", href: "/admin/challenges", icon: <Pickaxe className={"w-5 h-5"}/>}, {
     label: "Soft Skills",

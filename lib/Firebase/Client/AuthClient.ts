@@ -31,7 +31,7 @@ class AuthClient {
             return await credentials.user.getIdToken();
         } catch (error) {
             console.error("Error getting user ID token:", error);
-            throw new Error("Failed to get user ID token.");
+            throw new Error("Failed to process user ID token.");
         }
     }
 

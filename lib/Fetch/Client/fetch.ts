@@ -22,3 +22,22 @@ export default async function doPost(endpoint: string, data: any, notification: 
             return {success: false, error: (error as Error).message};
         }
 }
+
+export async function doGet(endPoint: string, notification: boolean = true): Promise<{success: true, data: any}|{success: false, error: string}> {
+    try {
+        const response = await fetch(endPoint)
+        if (!response.ok) {
+            throw new Error(response.statusText)
+        }
+        const data = await response.json()
+        if (data.success) {
+            return data;
+        } else {
+            throw new Error(data.error)
+        }
+    } catch (error) {
+        console.error(error)
+        setNotification((error as Error).message, NotificationColor.ERROR);
+        return {success: false, error: (error as Error).message};
+    }
+}

@@ -1,17 +1,16 @@
 import prismadb from "@/prisma/prismadb";
-import {ClassDB, SchoolDB, SkillsTypes, StudentDB} from "@/utils/types/types";
-import {response} from "express";
+import {GroupDB, SchoolDB, SkillsTypes, StudentDB} from "@/utils/types/types";
 
-class CModelClass {
-    public async getClasses() {
+class CModelGroup {
+    public async getGroups() {
         try {
-            return prismadb.class.findMany({
+            return prismadb.group.findMany({
                 include: {
                     students: true, school: true
                 }
             })
         } catch (error) {
-            console.error("Error getting classes data: " + error)
+            console.error("Error getting groups data: " + error)
         }
     }
 
@@ -20,45 +19,39 @@ class CModelClass {
             return await prismadb.teacher.findUnique({
                 where: {
                     email: teacherEmail
-                },
-                include: {
-                    classes: {
+                }, include: {
+                    groups: {
                         include: {
-                            students: true,
-                            school: true,
+                            students: true, school: true,
                         },
                     }
                 }
 
             })
         } catch (error) {
-            console.error("Error getting classes data: " + error)
+            console.error("Error getting groups data: " + error)
         }
     }
 
-    public async getChallengesByClass(classId: number, teacherEmail: string) {
+    public async getChallengesByGroup(groupId: number, teacherEmail: string) {
         try {
-            return await prismadb.class.findUnique({
+            return await prismadb.group.findUnique({
                 where: {
-                    id: classId,
-                    teachers: {
+                    id: groupId, teachers: {
                         some: {
                             email: teacherEmail
                         }
                     }
-                },
-                include: {
+                }, include: {
                     students: {
                         where: {
                             activated: true
-                        },
-                        include: {
+                        }, include: {
                             Challenges: {
                                 include: {
                                     challenge: true
                                 }
-                            },
-                            Skills: true
+                            }, Skills: true
                         }
                     }
                 }
@@ -68,12 +61,11 @@ class CModelClass {
         }
     }
 
-    public async getSkillsByClass(classId: number, teacherEmail: string, type: SkillsTypes) {
+    public async getSkillsByGroup(groupId: number, teacherEmail: string, type: SkillsTypes) {
         try {
-            return prismadb.class.findUnique({
+            return prismadb.group.findUnique({
                 where: {
-                    id: classId,
-                    teachers: {
+                    id: groupId, teachers: {
                         some: {
                             email: teacherEmail
                         }
@@ -82,8 +74,7 @@ class CModelClass {
                     students: {
                         where: {
                             activated: true
-                        },
-                        include: {
+                        }, include: {
                             Skills: {
                                 where: {
                                     skill: {
@@ -122,11 +113,10 @@ class CModelClass {
         }
     }
 
-    public async insertStudentChallenge(items: {studentId: number, challengeId: string}[]) {
+    public async insertStudentChallenge(items: { studentId: number, challengeId: string }[]) {
         try {
             await prismadb.challenges.createMany({
-                data: items,
-                skipDuplicates: true
+                data: items, skipDuplicates: true
             })
         } catch (error) {
             console.error(error)
@@ -135,11 +125,10 @@ class CModelClass {
         return true
     }
 
-    public async insertStudentSkills(items: {studentId: number, skillId: string}[]) {
+    public async insertStudentSkills(items: { studentId: number, skillId: string }[]) {
         try {
             await prismadb.skills.createMany({
-                data: items,
-                skipDuplicates: true
+                data: items, skipDuplicates: true
             })
         } catch (error) {
             console.error(error)
@@ -148,7 +137,7 @@ class CModelClass {
         return true
     }
 
-    public async deleteStudentChallenge(items: {studentId: number, challengeId: string}[]) {
+    public async deleteStudentChallenge(items: { studentId: number, challengeId: string }[]) {
         try {
             await prismadb.challenges.deleteMany({
                 where: {
@@ -162,7 +151,7 @@ class CModelClass {
         return true
     }
 
-    public async deleteStudentSkills(items: {studentId: number, skillId: string}[]) {
+    public async deleteStudentSkills(items: { studentId: number, skillId: string }[]) {
         try {
             await prismadb.skills.deleteMany({
                 where: {
@@ -178,7 +167,7 @@ class CModelClass {
 
     public async getNotAssignedGroups(teacherEmail: string) {
         try {
-            return await prismadb.class.findMany({
+            return await prismadb.group.findMany({
                 where: {
                     teachers: {
                         none: {
@@ -186,8 +175,7 @@ class CModelClass {
                         }
                     }
                 }, include: {
-                    school: true,
-                    students: true
+                    school: true, students: true
                 }
             })
         } catch (error) {
@@ -195,13 +183,12 @@ class CModelClass {
         }
     }
 
-    public async assignGroup(teacherEmail: string, classId: number) {
+    public async assignGroup(teacherEmail: string, groupId: number) {
         try {
-            await prismadb.class.update({
+            await prismadb.group.update({
                 where: {
-                    id: classId
-                },
-                data: {
+                    id: groupId
+                }, data: {
                     teachers: {
                         connect: {
                             email: teacherEmail
@@ -216,13 +203,12 @@ class CModelClass {
         }
     }
 
-    public async unassignGroup(teacherEmail: string, classId: number) {
+    public async unassignGroup(teacherEmail: string, groupId: number) {
         try {
-            await prismadb.class.update({
+            await prismadb.group.update({
                 where: {
-                    id: classId,
-                },
-                data: {
+                    id: groupId,
+                }, data: {
                     teachers: {
                         disconnect: {
                             email: teacherEmail
@@ -237,35 +223,28 @@ class CModelClass {
         }
     }
 
-    public async getStudents(classId: number) {
+    public async getStudents(groupId: number) {
         try {
-            const students = await prismadb.class.findUnique({
+            const students = await prismadb.group.findUnique({
                 where: {
-                    id: classId
-                },
-                include: {
+                    id: groupId
+                }, include: {
                     students: true
                 }
             })
-            if (!students || !students.students)
-                return []
+            if (!students || !students.students) return []
             return students.students.filter(student => student.email != '')
         } catch (error) {
             console.error(error)
         }
     }
 
-    public async addNewStudent(name: string, surname: string, classId: number) {
+    public async addNewStudent(name: string, surname: string, groupId: number) {
 
         try {
             return prismadb.student.create({
                 data: {
-                    name: name,
-                    surname: surname,
-                    password: "IgniteSP",
-                    activated: true,
-                    classId: classId,
-                    email: ""
+                    name: name, surname: surname, password: "IgniteSP", activated: true, groupId: groupId, email: ""
                 }
             })
         } catch (error) {
@@ -276,10 +255,34 @@ class CModelClass {
     public async insertStudents(students: StudentDB[]) {
         if (!students) return false
 
-        await prismadb.student.createMany({
-            data: students
-        })
-        return true
+        try {
+            const values = students.map((_, index) =>
+                `($${index * 6 + 1}, $${index * 6 + 2}, $${index * 6 + 3}, $${index * 6 + 4}, $${index * 6 + 5}, $${index * 6 + 6})`).join(',');
+
+            const parameters = students.flatMap((student) => [
+                student.name, student.surname, student.email, student.password, student.activated, student.groupId
+            ]);
+
+            console.log("Saving stuents")
+
+            const query = `
+            INSERT INTO "Student" (name, surname, email, password, activated, "groupId")
+            VALUES ${values}
+            ON CONFLICT (email) DO UPDATE SET
+              name = EXCLUDED.name,
+              surname = EXCLUDED.surname,
+              password = EXCLUDED.password,
+              activated = EXCLUDED.activated,
+              "groupId" = EXCLUDED."groupId";
+            `;
+
+            await prismadb.$executeRawUnsafe(query, ...parameters);
+            return true
+
+        } catch (error) {
+            console.error(error)
+            return false
+        }
     }
 
     public async insertSchool(schools: SchoolDB[]) {
@@ -291,11 +294,11 @@ class CModelClass {
         return true
     }
 
-    public async insertClasses(classes: ClassDB[]) {
-        if (!classes) return false
+    public async insertGroups(groups: GroupDB[]) {
+        if (!groups) return false
 
-        await prismadb.class.createMany({
-            data: classes
+        await prismadb.group.createMany({
+            data: groups
         })
         return true
     }
@@ -305,8 +308,7 @@ class CModelClass {
             return prismadb.student.update({
                 where: {
                     id: studentId
-                },
-                data: {
+                }, data: {
                     activated: value
                 }
             })
@@ -316,16 +318,10 @@ class CModelClass {
     }
 
     public async deleteData(): Promise<void> {
-        const truncateQueries = [
-            `TRUNCATE TABLE "School" RESTART IDENTITY CASCADE`,
-            `TRUNCATE TABLE "Student" RESTART IDENTITY CASCADE`,
-            `TRUNCATE TABLE "Class" RESTART IDENTITY CASCADE`
-        ];
+        const truncateQueries = [`TRUNCATE TABLE "School" RESTART IDENTITY CASCADE`, `TRUNCATE TABLE "Student" RESTART IDENTITY CASCADE`, `TRUNCATE TABLE "Group" RESTART IDENTITY CASCADE`];
 
         try {
-            await prismadb.$transaction(
-                truncateQueries.map(query => prismadb.$executeRawUnsafe(query))
-            );
+            await prismadb.$transaction(truncateQueries.map(query => prismadb.$executeRawUnsafe(query)));
         } catch (error) {
             console.error('Error truncating tables:', error);
             throw new Error('Failed to delete data from the database.');
@@ -334,15 +330,37 @@ class CModelClass {
 
     public async reupdateStudentsData(students: StudentDB[]) {
         try {
-            const upsertPromises = students.map(student =>
-                prismadb.student.upsert({
+            for (const student of students) {
+                console.log("Saving: ")
+                console.log(student)
+
+                await prismadb.student.upsert({
+                    where: {email: student.email}, update: {
+                        name: student.name,
+                        surname: student.surname,
+                        password: student.password,
+                        activated: student.activated,
+                        groupId: student.groupId
+                    }, create: {
+                        name: student.name,
+                        email: student.email,
+                        surname: student.surname,
+                        password: student.password,
+                        activated: student.activated,
+                        groupId: student.groupId
+                    },
+                })
+            }
+
+            /*const upsertPromises = students.map(student =>
+                 prismadb.student.upsert({
                   where: { email: student.email },
                   update: {
                       name: student.name,
                       surname: student.surname,
                       password: student.password,
                       activated: student.activated,
-                      classId: student.classId
+                      groupId: student.groupId
                   },
                   create: {
                       name: student.name,
@@ -350,12 +368,12 @@ class CModelClass {
                       surname: student.surname,
                       password: student.password,
                       activated: student.activated,
-                      classId: student.classId
+                      groupId: student.groupId
                   },
                 })
               );
-              await Promise.all(upsertPromises);
-              return true
+            await Promise.all(upsertPromises);*/
+            return true
         } catch (error) {
             console.error(error)
         }
@@ -364,50 +382,54 @@ class CModelClass {
 
     public async reupdateSchoolsData(schools: SchoolDB[]) {
         try {
-            const upsertPromises = schools.map(school =>
-                prismadb.school.upsert({
-                  where: { id: school.id },
-                  update: {
-                      name: school.name
-                  },
-                  create: {
-                      id: school.id,
-                      name: school.name
-                  },
-                })
-              );
-              await Promise.all(upsertPromises);
-              return true
+            const upsertPromises = schools.map(school => prismadb.school.upsert({
+                where: {id: school.id}, update: {
+                    name: school.name
+                }, create: {
+                    id: school.id, name: school.name
+                },
+            }));
+            await Promise.all(upsertPromises);
+            return true
         } catch (error) {
             console.error(error)
         }
         return false
     }
 
-    public async reupdateClassesData(classes: ClassDB[]) {
+    public async reupdateGroupsData(groups: GroupDB[]) {
         try {
-            const upsertPromises = classes.map(group =>
-                prismadb.class.upsert({
-                  where: { id: group.id },
-                  update: {
-                      name: group.name
-                  },
-                  create: {
-                      id: group.id,
-                      name: group.name,
-                      schoolId: group.schoolId,
-                      day: group.day
-                  },
-                })
-              );
-              await Promise.all(upsertPromises);
-              return true
+            const upsertPromises = groups.map(group => prismadb.group.upsert({
+                where: {id: group.id}, update: {
+                    name: group.name
+                }, create: {
+                    id: group.id, name: group.name, schoolId: group.schoolId, day: group.day
+                },
+            }));
+            await Promise.all(upsertPromises);
+            return true
         } catch (error) {
             console.error(error)
         }
         return false
+    }
+
+    public async getAllStudents() {
+        try {
+            return prismadb.student.findMany({
+                include: {
+                    group: {
+                        include: {
+                            school: true
+                        }
+                    }
+                }
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 }
 
-const ModelClass = new CModelClass()
-export default ModelClass
+const ModelGroup = new CModelGroup()
+export default ModelGroup

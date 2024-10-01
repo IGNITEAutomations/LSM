@@ -9,7 +9,7 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {Plus} from "lucide-react";
-import {Group, useClasses} from "@/hooks/ClassesProvider";
+import {Group, useGroups} from "@/hooks/GroupsProvider";
 import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";
 import ComboBox from "@/app/(logged)/(teacher)/_components/ComboBox";
 import {Option} from "@/utils/types/types";
@@ -18,15 +18,15 @@ import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotif
 import {useEffect, useState} from "react";
 import {Label} from "@/components/ui/label";
 
-export default function AddClassBtn() {
-    const classes = useClasses()
-    const [filteredClasses, setFilteredClasses] = useState<Group[]>([])
+export default function AddGroupBtn() {
+    const groups = useGroups()
+    const [filteredGroups, setFilteredGroups] = useState<Group[]>([])
     const [schoolFilter, setSchoolFilter] = useState("")
     const [groupFilter, setGroupFilter] = useState("")
 
     const schoolsOpt = (): Option[] => {
         const seenSchools = new Set<string>();
-        return classes.notAssignedGroups.reduce<Option[]>((options, item) => {
+        return groups.notAssignedGroups.reduce<Option[]>((options, item) => {
             const schoolLower = item.school.toLowerCase();
             if (!seenSchools.has(schoolLower)) {
                 seenSchools.add(schoolLower);
@@ -38,7 +38,7 @@ export default function AddClassBtn() {
 
     const groupsOpt = (): Option[] => {
         const seenSchools = new Set<string>();
-        return classes.notAssignedGroups.reduce<Option[]>((options, item) => {
+        return groups.notAssignedGroups.reduce<Option[]>((options, item) => {
             const schoolLower = item.group.toLowerCase();
             if (!seenSchools.has(schoolLower)) {
                 seenSchools.add(schoolLower);
@@ -50,60 +50,60 @@ export default function AddClassBtn() {
 
     useEffect(() => {
         if (!schoolFilter && !groupFilter)
-            setFilteredClasses(classes.notAssignedGroups)
-    },[classes.notAssignedGroups, schoolFilter, groupFilter]);
+            setFilteredGroups(groups.notAssignedGroups)
+    },[groups.notAssignedGroups, schoolFilter, groupFilter]);
 
     const handleSchoolFilter = (id: string, value: string) => {
         if (value && groupFilter) {
             setSchoolFilter(id)
-            setFilteredClasses(classes.notAssignedGroups.filter(group => (group.school.toLowerCase() === id && group.group.toLowerCase() === groupFilter)))
+            setFilteredGroups(groups.notAssignedGroups.filter(group => (group.school.toLowerCase() === id && group.group.toLowerCase() === groupFilter)))
         } else if (!value && groupFilter) {
             setSchoolFilter("")
-            setFilteredClasses(classes.notAssignedGroups.filter(group => group.group.toLowerCase() === groupFilter))
+            setFilteredGroups(groups.notAssignedGroups.filter(group => group.group.toLowerCase() === groupFilter))
         } else if (value && !groupFilter) {
             setSchoolFilter(id)
-            setFilteredClasses(classes.notAssignedGroups.filter(group => group.school.toLowerCase() === id))
+            setFilteredGroups(groups.notAssignedGroups.filter(group => group.school.toLowerCase() === id))
         } else {
             setSchoolFilter("")
-            setFilteredClasses(classes.notAssignedGroups)
+            setFilteredGroups(groups.notAssignedGroups)
         }
     }
 
     const handleGroupFilter = (id: string, value: string) => {
         if (value && schoolFilter) {
             setGroupFilter(id)
-            setFilteredClasses(classes.notAssignedGroups.filter(group => (group.school.toLowerCase() === schoolFilter && group.group.toLowerCase() === id)))
+            setFilteredGroups(groups.notAssignedGroups.filter(group => (group.school.toLowerCase() === schoolFilter && group.group.toLowerCase() === id)))
         } else if (!value && schoolFilter) {
             setGroupFilter("")
-            setFilteredClasses(classes.notAssignedGroups.filter(group => group.school.toLowerCase() === schoolFilter))
+            setFilteredGroups(groups.notAssignedGroups.filter(group => group.school.toLowerCase() === schoolFilter))
         } else if (value && !schoolFilter) {
             setGroupFilter(id)
-            setFilteredClasses(classes.notAssignedGroups.filter(group => group.group.toLowerCase() === id))
+            setFilteredGroups(groups.notAssignedGroups.filter(group => group.group.toLowerCase() === id))
         } else {
             setGroupFilter("")
-            setFilteredClasses(classes.notAssignedGroups)
+            setFilteredGroups(groups.notAssignedGroups)
         }
     }
 
-    const handleAddGroup = (classId: string) => {
-        classes.assignNewGroup(classId).then(response => {
+    const handleAddGroup = (groupId: string) => {
+        groups.assignNewGroup(groupId).then(response => {
             if (response)
                 setNotification("New group assigned 👍", NotificationColor.SUCCESS)
             else
-                setNotification("Error: Unable to assign class 🚩", NotificationColor.ERROR)
+                setNotification("Error: Unable to assign group 🚩", NotificationColor.ERROR)
         })
     }
 
     return (
         <Dialog>
             <DialogTrigger className={"flex flex-row items-center w-fit px-4 h-7 font-light text-sm text-white rounded-xl bg-yellow-1000 hover:bg-yellow-1001 absolute mt-10"}>
-                <Plus className={"w-4 h-4 stroke-1.5"}/> Add class
+                <Plus className={"w-4 h-4 stroke-1.5"}/> Add group
             </DialogTrigger>
             <DialogContent className={"sm:min-w-[80%] md:min-w-[50%]"}>
                 <DialogHeader>
-                    <DialogTitle className={"text-blue-1001"}>Classes available</DialogTitle>
+                    <DialogTitle className={"text-blue-1001"}>Groups available</DialogTitle>
                     <DialogDescription>
-                        Select the classes you wish to add. These will be automatically linked to your account. If you wish, you can unlink them later.
+                        Select the groups you wish to add. These will be automatically linked to your account. If you wish, you can unlink them later.
                     </DialogDescription>
                 </DialogHeader>
                 <section className={"flex flex-col gap-4 bg-gray-50 p-3 rounded-xl"}>
@@ -119,7 +119,7 @@ export default function AddClassBtn() {
                                   onChange={handleGroupFilter}/>
                         </div>
                     </div>
-                    <ClassesTable addGroup={handleAddGroup} classes={filteredClasses}/>
+                    <GroupsTable addGroup={handleAddGroup} groups={filteredGroups}/>
 
                 </section>
             </DialogContent>
@@ -127,18 +127,18 @@ export default function AddClassBtn() {
     )
 }
 
-type ClassesTableProps = {
-    classes: Group[],
-    addGroup: (classId: string) => void
+type GroupsTableProps = {
+    groups: Group[],
+    addGroup: (groupId: string) => void
 }
 
-function ClassesTable({classes, addGroup}: ClassesTableProps) {
-    const headers = ["Class Id", "School", "Group", "Day", "Action"]
+function GroupsTable({groups, addGroup}: GroupsTableProps) {
+    const headers = ["Group Id", "School", "Group", "Day", "Action"]
     return (
             <Table>
             <THead empty={true} headers={headers}/>
             <TBody>
-                {classes.map((item, i) => (
+                {groups.map((item, i) => (
                     <TRow key={i}>
                         <TCell>{item.id}</TCell>
                         <TCell>{item.school}</TCell>

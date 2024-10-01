@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import FirebaseServer from "@/lib/Firebase/Server/AuthServer";
-import Classes from "@/lib/DB/Classes/classes";
+import Groups from "@/lib/DB/Groups/groups";
 
 export async function GET() {
     try {
@@ -8,7 +8,7 @@ export async function GET() {
         if (!user)
             throw new Error("User not found")
 
-        return NextResponse.json({success: true, data: {assigned: await Classes.getClassesByTeacher(user.email!), notAssigned: await Classes.getNotAssignedGroups(user.email!)}})
+        return NextResponse.json({success: true, data: {assigned: await Groups.getGroupsByTeacher(user.email!), notAssigned: await Groups.getNotAssignedGroups(user.email!)}})
 
     } catch (error) {
         console.error(error)

@@ -61,7 +61,7 @@ class AuthServer {
             const decodedIdToken = await this.auth.verifySessionCookie(token!)
             return this.auth.getUser(decodedIdToken.uid)
         } catch (error) {
-            console.error("Failed to get current user:", error);
+            console.error("Failed to process current user:", error);
             return undefined;
         }
     }

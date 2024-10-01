@@ -100,7 +100,7 @@ class CQueue {
             });
 
             if (!response.ok)
-                throw new Error("Failed to post items " + response.statusText)
+                throw new Error("Failed to upload items " + response.statusText)
 
             const data = await response.json()
             if (!data.success)

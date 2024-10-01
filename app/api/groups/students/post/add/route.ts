@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import FirebaseServer from "@/lib/Firebase/Server/AuthServer";
-import Classes from "@/lib/DB/Classes/classes";
+import Groups from "@/lib/DB/Groups/groups";
 
 export async function POST(request: NextRequest) {
   try {
-    const student = (await request.json()) as {name: string, surname: string, classId: number};
+    const student = (await request.json()) as {name: string, surname: string, groupId: number};
 
-    if (!student.name || !student.surname || !student.classId)
+    if (!student.name || !student.surname || !student.groupId)
         throw new Error("some data is missing")
 
     const user = await FirebaseServer.getCurrentUser();
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         throw new Error("unauthenticated request")
     }
 
-    return NextResponse.json({ success: true, data: await Classes.addNewStudent(student.name, student.surname, student.classId)});
+    return NextResponse.json({ success: true, data: await Groups.addNewStudent(student.name, student.surname, student.groupId)});
 
   } catch (error) {
     console.error("Error processing request:", error);

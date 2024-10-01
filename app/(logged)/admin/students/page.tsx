@@ -29,8 +29,8 @@ export default function StudentsPage() {
 function StudentsList() {
     return (
         <div>
-            <AddStudent classId="1000"/>
-            <StudentsTable classId="1000"/>
+            <AddStudent groupId="1000"/>
+            <StudentsTable groupId="1000"/>
         </div>
     )
 }

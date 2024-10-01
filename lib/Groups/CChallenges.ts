@@ -1,5 +1,5 @@
 class CChallenges {
-    public getChallenges(classID: number) {
+    public getChallenges(groupID: number) {
 
     }
 }

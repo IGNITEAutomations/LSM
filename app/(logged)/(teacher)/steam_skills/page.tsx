@@ -1,6 +1,6 @@
 "use client"
 
-import {useClasses} from "@/hooks/ClassesProvider";
+import {useGroups} from "@/hooks/GroupsProvider";
 import {useCallback, useMemo} from "react";
 import {TableSkeleton} from "@/app/(logged)/_components/Table";
 import queue, {QueueItem, QueueTypes} from "@/lib/Queue/queue";
@@ -13,9 +13,9 @@ import {useSearchParams} from "next/navigation";
 const NUM_COLS = 3
 
 export default function SteamSkillsPage() {
-    const classes = useClasses();
+    const groups = useGroups();
     const skills = useSteamSkills();
-    const classId = useSearchParams().get("id") ?? ""
+    const groupId = useSearchParams().get("id") ?? ""
 
     const handleChange = useCallback((row: number, col: number, id: string, value: string) => {
         skills.setSkillValue(row, col, value)
@@ -35,9 +35,9 @@ export default function SteamSkillsPage() {
     return (
         <main className="flex flex-col max-h-[650px]">
             <SavedIndicator/>
-            <Navigation classId={classId}/>
+            <Navigation groupId={groupId}/>
             <h1>STEAM Skills</h1>
-            <h2>{classes.getClassName(classId)}</h2>
+            <h2>{groups.getGroupName(groupId)}</h2>
             <section className="mt-8 flex-1 overflow-y-auto">
                 {!skills.loaded ? (
                     <TableSkeleton headerName={"Challenge"} nCols={4} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (

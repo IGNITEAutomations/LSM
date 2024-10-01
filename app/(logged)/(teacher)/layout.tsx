@@ -1,7 +1,7 @@
 import Header from "@/app/(logged)/_components/header";
 import "../style.css";
 import {UserProvider} from "@/hooks/UserProvider";
-import {ClassesProvider} from "@/hooks/ClassesProvider";
+import {GroupsProvider} from "@/hooks/GroupsProvider";
 import {SoftSkillsProvider} from "@/hooks/SkillsProvider/SoftSkillsProvider";
 import {SteamSkillsProvider} from "@/hooks/SkillsProvider/SteamSkillsProvider";
 import {MentionsProvider} from "@/hooks/SkillsProvider/MentionsProvider";
@@ -25,13 +25,13 @@ export default function RootLayout({children}: Readonly<{
                             <ChallengesProvider>
                                 <SoftSkillsProvider>
                                     <SteamSkillsProvider>
-                                        <ClassesProvider>
+                                        <GroupsProvider>
                                             <MentionsProvider>
                                                 <BestOfProvider>
                                                     {children}
                                                 </BestOfProvider>
                                             </MentionsProvider>
-                                        </ClassesProvider>
+                                        </GroupsProvider>
                                     </SteamSkillsProvider>
                                 </SoftSkillsProvider>
                             </ChallengesProvider>

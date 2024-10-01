@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import FirebaseServer from "@/lib/Firebase/Server/AuthServer";
-import Classes from "@/lib/DB/Classes/classes";
+import Groups from "@/lib/DB/Groups/groups";
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         throw new Error("unauthenticated request")
     }
 
-    return NextResponse.json({ success: true, data: await Classes.updateActiveStatusStudent(student.id, student.value)});
+    return NextResponse.json({ success: true, data: await Groups.updateActiveStatusStudent(student.id, student.value)});
 
   } catch (error) {
     console.error("Error processing request:", error);

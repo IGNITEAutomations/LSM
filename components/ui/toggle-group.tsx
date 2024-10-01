@@ -20,7 +20,7 @@ export default function ToggleGroup({options, def}: ToggleGroupProps) {
                         return (
                             <Link key={option.label} href={option.href}>
                                 <Button
-                                    className={"hover:bg-yellow-1000 hover:text-white rounded-3xl text-sm font-light p-3 h-8 " + (def === i ? "bg-yellow-1001 text-white" : "bg-transparent text-yellow-1000")}>
+                                    className={"rounded-3xl text-sm font-light p-3 h-8 " + (def === i ? "bg-yellow-1001 text-white hover:bg-yellow-1001" : "bg-transparent text-yellow-1000 hover:bg-yellow-100")}>
                                     {option.label}
                                 </Button>
                             </Link>

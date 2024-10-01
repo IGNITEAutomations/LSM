@@ -8,7 +8,7 @@ import {Label} from "@/components/ui/label";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 import doPost from "@/lib/Fetch/Client/fetch";
 
-export function AddStudent({classId}: { classId: string }) {
+export function AddStudent({groupId}: { groupId: string }) {
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [disable, setDisable] = useState(false);
@@ -23,9 +23,9 @@ export function AddStudent({classId}: { classId: string }) {
             return;
         }
         setDisable(true);
-        await doPost("/api/groups/students/post/add", {name, surname, classId: parseInt(classId)})
+        await doPost("/api/groups/students/upload/add", {name, surname, groupId: parseInt(groupId)})
         setDisable(false);
-    }, [name, surname, classId]);
+    }, [name, surname, groupId]);
 
     return (<div className="relative">
             <Dialog>

@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
-import Classes from "@/lib/DB/Classes/classes";
+import Groups from "@/lib/DB/Groups/groups";
 import FirebaseServer from "@/lib/Firebase/Server/AuthServer";
+import {StudentList} from "@/utils/functions/ProcessImportData";
 
 export async function POST(request: NextRequest) {
     try {
@@ -8,12 +9,8 @@ export async function POST(request: NextRequest) {
         if (!user || !user.uid)
             return NextResponse.json({success: false, error: "User not found"});
 
-        const importData = (await request.json()) as {delete: boolean, data: string[][]}
-        if (importData.delete) {
-            await Classes.deleteData()
-            return NextResponse.json(await Classes.importData(importData.data));
-        } else
-            return NextResponse.json(await Classes.reloadImportData(importData.data));
+        const importData = (await request.json()) as StudentList[]
+        return NextResponse.json(await Groups.importData(importData || []));
 
     } catch (error) {
         console.error("Error processing request:", error);

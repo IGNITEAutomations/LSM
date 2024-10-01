@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect, useMemo} from "react";
-import {useClasses} from "@/hooks/ClassesProvider";
+import {useGroups} from "@/hooks/GroupsProvider";
 import ReturnBtn from "@/app/(logged)/(coordinator)/_components/Nav";
 import StudentsTable from "@/app/(logged)/(coordinator)/_components/StudentsTable";
 import {AddStudent} from "@/app/(logged)/(coordinator)/_components/AddStudent";
@@ -11,14 +11,14 @@ import {useRouter, useSearchParams} from "next/navigation";
 
 export default function StudentsManagerPage() {
   const params = useSearchParams();
-    const classId = params.get("id") ?? "";
+    const groupId = params.get("id") ?? "";
     const p = parseInt(params.get("p") ?? "0");
 
-    const classes = useClasses();
+    const groups = useGroups();
     const user = useUser();
     const router = useRouter();
 
-    const className = useMemo(() => classes.getClassName(classId), [classId, classes]);
+    const className = useMemo(() => groups.getGroupName(groupId), [groupId, groups]);
 
     useEffect(() => {
         if (user.loaded && user.role === UserRoles.Teacher) {
@@ -27,12 +27,12 @@ export default function StudentsManagerPage() {
     }, [user, router]);
 
     return (<section>
-        <ReturnBtn classId={classId} p={p}/>
+        <ReturnBtn groupId={groupId} p={p}/>
         <h1>Student Manager</h1>
         <h2>{className}</h2>
-        <AddStudent classId={classId}/>
+        <AddStudent groupId={groupId}/>
         <section className="mt-8 flex-1 overflow-y-auto">
-            <StudentsTable classId={classId}/>
+            <StudentsTable groupId={groupId}/>
         </section>
     </section>);
 }

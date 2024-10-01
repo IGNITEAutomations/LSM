@@ -2,29 +2,29 @@
 
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {EllipsisVertical, Settings2, X} from "lucide-react";
-import {useClasses} from "@/hooks/ClassesProvider";
+import {useGroups} from "@/hooks/GroupsProvider";
 import {useCallback, useState} from "react";
 import {useRouter} from "next/navigation";
 
 type DropActionProps = {
-    classId: string,
+    groupId: string,
     isCoordinator?: boolean
 }
 
-export default function DropAction({classId, isCoordinator = false}: DropActionProps) {
-    const classes = useClasses()
+export default function DropAction({groupId, isCoordinator = false}: DropActionProps) {
+    const groups = useGroups()
     const router = useRouter()
     const [disable, setDisable] = useState(false)
 
     const handleDelete = useCallback(async() => {
         setDisable(true)
-        await classes.removeGroup(classId)
+        await groups.removeGroup(groupId)
         setDisable(false)
-    }, [classes, classId]);
+    }, [groups, groupId]);
 
     const handleStudentManager = useCallback(() => {
-        router.push(`/manager?id=${classId}&p=0`)
-    }, [router, classId]);
+        router.push(`/manager?id=${groupId}&p=0`)
+    }, [router, groupId]);
 
     return (
         <DropdownMenu>

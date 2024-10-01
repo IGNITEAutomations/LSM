@@ -10,7 +10,7 @@ import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotif
 
 const headers = ["Name", "Email", "Password", "Activated", "Action"];
 
-export default function StudentsTable({classId}: {classId: string}) {
+export default function StudentsTable({groupId}: {groupId: string}) {
     const [disable, setDisable] = useState<boolean>(false);
     const [loaded, setLoaded] = useState(false);
 
@@ -18,7 +18,7 @@ export default function StudentsTable({classId}: {classId: string}) {
 
     const handleActivateStatusStudent = useCallback(async (id: number, value: boolean) => {
         setDisable(true);
-        const response = await doPost("/api/groups/students/post/active", {id, value}, false)
+        const response = await doPost("/api/groups/students/upload/active", {id, value}, false)
         if (response.success) {
             setStudents((prevState) => prevState.map((student) => student.id === id ? {
                 ...student, activated: value
@@ -29,7 +29,7 @@ export default function StudentsTable({classId}: {classId: string}) {
 
     const fetchStudents = useCallback(async () => {
         try {
-            const response = await fetch(`/api/groups/students/get?id=${classId}`);
+            const response = await fetch(`/api/groups/students/get?id=${groupId}`);
             if (!response.ok) throw new Error("Connection error");
 
             const data = await response.json();
@@ -41,7 +41,7 @@ export default function StudentsTable({classId}: {classId: string}) {
             setNotification("Failed to load student information", NotificationColor.ERROR);
             console.error(error);
         }
-    }, [classId]);
+    }, [groupId]);
 
     useEffect(() => {
         if (students.length === 0) {
