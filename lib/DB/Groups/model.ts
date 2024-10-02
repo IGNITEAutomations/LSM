@@ -22,7 +22,12 @@ class CModelGroup {
                 }, include: {
                     groups: {
                         include: {
-                            students: true, school: true,
+                            students: {
+                                where: {
+                                    activated: true
+                                }
+                            },
+                            school: true,
                         },
                     }
                 }
@@ -32,7 +37,7 @@ class CModelGroup {
             console.error("Error getting groups data: " + error)
         }
     }
-
+    
     public async getChallengesByGroup(groupId: number, teacherEmail: string) {
         try {
             return await prismadb.group.findUnique({
@@ -180,7 +185,12 @@ class CModelGroup {
                         }
                     }
                 }, include: {
-                    school: true, students: true
+                    school: true,
+                    students: {
+                        where: {
+                            activated: true
+                        }
+                    }
                 }
             })
         } catch (error) {
