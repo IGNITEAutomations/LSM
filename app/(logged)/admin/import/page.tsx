@@ -185,7 +185,7 @@ export default function StudentsPage() {
                             <h2 className={"text-xl font-medium mb-3"}>Incomplete</h2>
                             <div className={"relative w-full bg-red-100"}>
                                 <Button
-                                    disabled={readyStudents.length === 0}
+                                    disabled={incompleteStudents.length === 0}
                                     className={"absolute right-3 -top-[50px] bg-green-200 text-green-600 text-sm font-medium px-4 h-8 rounded-2xl"}
                                     onClick={loadIncompleteStudents}>Load All
                                 </Button>
