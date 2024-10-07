@@ -37,7 +37,7 @@ class CModelGroup {
             console.error("Error getting groups data: " + error)
         }
     }
-    
+
     public async getChallengesByGroup(groupId: number, teacherEmail: string) {
         try {
             return await prismadb.group.findUnique({
@@ -429,8 +429,9 @@ class CModelGroup {
         return false
     }
 
-    public async getAllStudents() {
-        try {
+    public async getAllStudents(activated: boolean = false) {
+        if (activated) {
+            try {
             return prismadb.student.findMany({
                 include: {
                     group: {
@@ -443,6 +444,25 @@ class CModelGroup {
         } catch (error) {
             console.error(error)
         }
+        } else {
+            try {
+            return prismadb.student.findMany({
+                where: {
+                    activated: true
+                },
+                include: {
+                    group: {
+                        include: {
+                            school: true
+                        }
+                    }
+                }
+            })
+        } catch (error) {
+            console.error(error)
+        }
+        }
+
     }
 }
 

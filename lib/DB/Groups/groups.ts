@@ -140,6 +140,14 @@ class CGroup {
         }));
     }
 
+    public async getAllStudents(activated: boolean = false) {
+        const students = await ModelGroup.getAllStudents(activated);
+        if (!students) return [];
+        return students.map((student) => ({
+            ...student, name: `${student.name} ${student.surname}`,
+        }));
+    }
+
     public addNewStudent(name: string, surname: string, groupId: number) {
         return ModelGroup.addNewStudent(name, surname, groupId);
     }
