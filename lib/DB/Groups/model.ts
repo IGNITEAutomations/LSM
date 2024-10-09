@@ -430,7 +430,7 @@ class CModelGroup {
     }
 
     public async getAllStudents(activated: boolean = false) {
-        if (activated) {
+        if (!activated) {
             try {
             return prismadb.student.findMany({
                 include: {
