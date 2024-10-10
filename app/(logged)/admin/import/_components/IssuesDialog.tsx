@@ -73,15 +73,21 @@ export default function IssuesDialog({student, loadStudent, removeIssue}: {stude
                       <Table>
                           <THead empty={true} headers={header}/>
                           <TBody>
-                              {student.found.map((student, i) => (
+                              {student.found.map((foundStudent, i) => (
                                   <TRow key={i + "a"}>
-                                      <TCell>{student.email ?? "none"}</TCell>
-                                      <TCell>{student.name ?? "none"}</TCell>
-                                      <TCell>{student.surname ?? "none"}</TCell>
-                                      <TCell>{student.groupId ?? "none"}</TCell>
+                                      <TCell>{foundStudent.email ?? "none"}</TCell>
+                                      <TCell>{foundStudent.name ?? "none"}</TCell>
+                                      <TCell>{foundStudent.surname ?? "none"}</TCell>
+                                      <TCell>{foundStudent.groupId ?? "none"}</TCell>
                                       <TCell>
                                           <div className={"w-10"}>
-                                              <input type={"checkbox"} defaultChecked={false} onChange={(e) => handleCheck(e, student)}/>
+                                              <input type={"checkbox"} defaultChecked={false} onChange={(e) => handleCheck(e, {
+                                                  ...foundStudent,
+                                                  groupId: student.searched.groupId,
+                                                  role: student.searched.role,
+                                                  facebook: student.searched.facebook,
+                                                  school: student.searched.school
+                                              })}/>
                                           </div>
                                       </TCell>
                                   </TRow>
