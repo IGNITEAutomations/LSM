@@ -39,7 +39,7 @@ const options = [{
     label: "Mentions",
     href: "/admin/mentions",
     icon: <Medal className={"w-5 h-5"}/>
-}, {label: "Best of", href: "/admin/best_of", icon: <Crown className={"w-5 h-5"}/>}, {
+}, {label: "Best of", href: "/admin/top", icon: <Crown className={"w-5 h-5"}/>}, {
     label: "Evaluations",
     href: "/admin/evaluations",
     icon: <BookCheck className={"w-5 h-5"}/>

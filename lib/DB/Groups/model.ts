@@ -7,6 +7,9 @@ class CModelGroup {
             return prismadb.group.findMany({
                 include: {
                     students: true, school: true
+                },
+                orderBy: {
+                    id: "asc"
                 }
             })
         } catch (error) {
@@ -28,7 +31,9 @@ class CModelGroup {
                                 }
                             },
                             school: true,
-                        },
+                        }, orderBy: {
+                            schoolId: "asc"
+                        }
                     }
                 }
 
@@ -57,6 +62,8 @@ class CModelGroup {
                                     challenge: true
                                 }
                             }, Skills: true
+                        }, orderBy: {
+                            id: "asc"
                         }
                     }
                 }
@@ -89,6 +96,8 @@ class CModelGroup {
                                     skill: true
                                 }
                             }
+                        }, orderBy: {
+                            id: "asc"
                         }
                     }
                 }
@@ -104,6 +113,8 @@ class CModelGroup {
                 where: {
                     type: type.toString(),
                     activated: true
+                }, orderBy: {
+                    id: "asc"
                 }
             })
         } catch (error) {
@@ -116,6 +127,9 @@ class CModelGroup {
             return prismadb.challengesHeaders.findMany({
                 where: {
                     activated: true
+                },
+                orderBy: {
+                    id: "asc"
                 }
             })
         } catch (error) {
@@ -191,6 +205,8 @@ class CModelGroup {
                             activated: true
                         }
                     }
+                }, orderBy: {
+                    id: "asc"
                 }
             })
         } catch (error) {
@@ -244,7 +260,11 @@ class CModelGroup {
                 where: {
                     id: groupId
                 }, include: {
-                    students: true
+                    students: {
+                        orderBy: {
+                            id: "asc"
+                        }
+                    }
                 }
             })
             if (!students || !students.students) return []
@@ -343,124 +363,42 @@ class CModelGroup {
         }
     }
 
-    public async reupdateStudentsData(students: StudentDB[]) {
-        try {
-            for (const student of students) {
-                console.log("Saving: ")
-                console.log(student)
-
-                await prismadb.student.upsert({
-                    where: {email: student.email}, update: {
-                        name: student.name,
-                        surname: student.surname,
-                        password: student.password,
-                        activated: student.activated,
-                        groupId: student.groupId
-                    }, create: {
-                        name: student.name,
-                        email: student.email,
-                        surname: student.surname,
-                        password: student.password,
-                        activated: student.activated,
-                        groupId: student.groupId
-                    },
-                })
-            }
-
-            /*const upsertPromises = students.map(student =>
-                 prismadb.student.upsert({
-                  where: { email: student.email },
-                  update: {
-                      name: student.name,
-                      surname: student.surname,
-                      password: student.password,
-                      activated: student.activated,
-                      groupId: student.groupId
-                  },
-                  create: {
-                      name: student.name,
-                      email: student.email,
-                      surname: student.surname,
-                      password: student.password,
-                      activated: student.activated,
-                      groupId: student.groupId
-                  },
-                })
-              );
-            await Promise.all(upsertPromises);*/
-            return true
-        } catch (error) {
-            console.error(error)
-        }
-        return false
-    }
-
-    public async reupdateSchoolsData(schools: SchoolDB[]) {
-        try {
-            const upsertPromises = schools.map(school => prismadb.school.upsert({
-                where: {id: school.id}, update: {
-                    name: school.name
-                }, create: {
-                    id: school.id, name: school.name
-                },
-            }));
-            await Promise.all(upsertPromises);
-            return true
-        } catch (error) {
-            console.error(error)
-        }
-        return false
-    }
-
-    public async reupdateGroupsData(groups: GroupDB[]) {
-        try {
-            const upsertPromises = groups.map(group => prismadb.group.upsert({
-                where: {id: group.id}, update: {
-                    name: group.name
-                }, create: {
-                    id: group.id, name: group.name, schoolId: group.schoolId, day: group.day
-                },
-            }));
-            await Promise.all(upsertPromises);
-            return true
-        } catch (error) {
-            console.error(error)
-        }
-        return false
-    }
-
     public async getAllStudents(activated: boolean = false) {
         if (!activated) {
             try {
-            return prismadb.student.findMany({
-                include: {
-                    group: {
-                        include: {
-                            school: true
+                return prismadb.student.findMany({
+                    include: {
+                        group: {
+                            include: {
+                                school: true
+                            }
                         }
+                    }, orderBy: {
+                        id: "asc"
                     }
-                }
-            })
-        } catch (error) {
-            console.error(error)
-        }
+                })
+            } catch (error) {
+                console.error(error)
+            }
         } else {
             try {
-            return prismadb.student.findMany({
-                where: {
-                    activated: true
-                },
-                include: {
-                    group: {
-                        include: {
-                            school: true
+                return prismadb.student.findMany({
+                    where: {
+                        activated: true
+                    },
+                    include: {
+                        group: {
+                            include: {
+                                school: true
+                            }
                         }
+                    }, orderBy: {
+                        id: "asc"
                     }
-                }
-            })
-        } catch (error) {
-            console.error(error)
-        }
+                })
+            } catch (error) {
+                console.error(error)
+            }
         }
 
     }

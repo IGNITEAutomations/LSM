@@ -19,7 +19,7 @@ export default function Navigation({groupId}: { groupId: string }) {
         label: "STEAM skills",
         href: `/steam_skills${groupId ? '?id=' + groupId : ''}`
     }, {label: "Mentions", href: `/mentions${groupId ? '?id=' + groupId : ''}`},
-    {label: "Best of", href: `/best_of${groupId ? '?id=' + groupId : ''}`}], [groupId]);
+    {label: "Top", href: `/top${groupId ? '?id=' + groupId : ''}`}], [groupId]);
 
     const currentIndex = useMemo(() => {
         return options.findIndex(option => pageName === option.href.split('?')[0]);
