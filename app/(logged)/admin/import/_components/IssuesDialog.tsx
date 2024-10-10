@@ -61,7 +61,11 @@ export default function IssuesDialog({student, loadStudent, removeIssue}: {stude
                                   <TCell>{student.searched.groupId ?? "none"}</TCell>
                                   <TCell>
                                       <div className={"w-10"}>
-                                          <input type={"checkbox"} defaultChecked={false} onChange={(e) => handleCheck(e, student.searched)}/>
+                                          <input
+                                              type={"checkbox"}
+                                              defaultChecked={false}
+                                              checked={studentChecked?.email === student.searched.email}
+                                              onChange={(e) => handleCheck(e, student.searched)}/>
                                       </div>
                                   </TCell>
                               </TRow>
@@ -81,12 +85,16 @@ export default function IssuesDialog({student, loadStudent, removeIssue}: {stude
                                       <TCell>{foundStudent.groupId ?? "none"}</TCell>
                                       <TCell>
                                           <div className={"w-10"}>
-                                              <input type={"checkbox"} defaultChecked={false} onChange={(e) => handleCheck(e, {
-                                                  ...foundStudent,
-                                                  groupId: student.searched.groupId,
-                                                  role: student.searched.role,
-                                                  facebook: student.searched.facebook,
-                                                  school: student.searched.school
+                                              <input
+                                                  type={"checkbox"}
+                                                  defaultChecked={false}
+                                                  checked={studentChecked?.email === foundStudent.email}
+                                                  onChange={(e) => handleCheck(e, {
+                                                      ...foundStudent,
+                                                      groupId: student.searched.groupId,
+                                                      role: student.searched.role,
+                                                      facebook: student.searched.facebook,
+                                                      school: student.searched.school
                                               })}/>
                                           </div>
                                       </TCell>
