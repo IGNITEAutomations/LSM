@@ -197,7 +197,7 @@ class CGroup {
         const studentsFromDB = (await ModelGroup.getAllStudents())?.map((student) => {
             const {group, ...data} = student;
             return {
-                ...data, role: group.name, school: group.school.name,
+                ...data, role: group.name, school: group.school.name, schoolId: group.school.id
             };
         }) || [];
 
@@ -208,7 +208,7 @@ class CGroup {
 
             for (const group of groupsCSV) {
                 const filteredStudentsCSV = studentsCSV.filter((student) => student.groupId === group.id);
-                const filteredStudentsBD = studentsFromDB.filter(student => student.groupId === group.id)
+                const filteredStudentsBD = studentsFromDB.filter(student => student.schoolId === group.schoolId)
 
                 if (filteredStudentsCSV.length > 0) {
                     const nameComparator = new NameComparator();
