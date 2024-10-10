@@ -68,7 +68,7 @@ export default class NameComparator {
             .toLowerCase() // Convert to lowercase.
             .replace(/[^a-z\s]/g, "") // Remove non-alphabetical characters.
             .replace(/\s+/g, " ") // Replace multiple spaces with a single space.
-            .trim(); // Trim leading and trailing spaces.
+            .trim(); // Trim leading and trailing spaces
     }
 
     private areSimilar(name1: string, name2: string) {
