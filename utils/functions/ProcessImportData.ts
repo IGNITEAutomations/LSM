@@ -20,7 +20,6 @@ export default class NameComparator {
     constructor(threshold: number = 0.93) {
         this.threshold = threshold;
     }
-
     public getSimilarData(list1: StudentList[], list2: StudentList[]): [StudentList[], {
         student: StudentList;
         nextGroupId: number
@@ -30,11 +29,11 @@ export default class NameComparator {
         const similarStudents: { searched: StudentList; found: StudentList[] }[] = [];
 
         const normalizedList1 = list1.map((student) => ({
-            ...student, normalizedName: NameComparator.normalizeName(`${student.name} ${student.surname}`),
+            ...student, normalizedName: NameComparator.normalizeName(`${student.name} ${student.surname.split(" ")[0]}`),
         }));
 
         const normalizedList2 = list2.map((student) => ({
-            ...student, normalizedName: NameComparator.normalizeName(`${student.name} ${student.surname}`),
+            ...student, normalizedName: NameComparator.normalizeName(`${student.name} ${student.surname.split(" ")[0]}`),
         }));
 
         for (const student1 of normalizedList1) {
@@ -58,7 +57,6 @@ export default class NameComparator {
                 newStudents.push(student1);
             }
         }
-
         return [newStudents, reStudents, similarStudents];
     }
 
@@ -76,7 +74,4 @@ export default class NameComparator {
     private areSimilar(name1: string, name2: string) {
         return distance(name1, name2) >= this.threshold
     }
-
-
-
 }
