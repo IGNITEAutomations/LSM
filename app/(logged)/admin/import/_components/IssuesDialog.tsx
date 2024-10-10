@@ -91,6 +91,7 @@ export default function IssuesDialog({student, loadStudent, removeIssue}: {stude
                                                   checked={studentChecked?.email === foundStudent.email}
                                                   onChange={(e) => handleCheck(e, {
                                                       ...foundStudent,
+                                                      activated: true,
                                                       groupId: student.searched.groupId,
                                                       role: student.searched.role,
                                                       facebook: student.searched.facebook,
