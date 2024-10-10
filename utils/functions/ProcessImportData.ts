@@ -50,7 +50,7 @@ export default class NameComparator {
                         }
                     }
                     foundSimilar = true;
-                    //break;
+                    break;
                 }
             }
             if (!foundSimilar) {
