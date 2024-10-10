@@ -41,7 +41,7 @@ export default class NameComparator {
             for (const student2 of normalizedList2) {
                 if (this.areSimilar(student1.normalizedName!, student2.normalizedName!)) {
                     if (student1.normalizedName === student2.normalizedName) {
-                        reStudents.push({student: {...student2, activated: student1.activated}, nextGroupId: student1.groupId});
+                        reStudents.push({student: {...student2, activated: student1.activated, role: student1.role}, nextGroupId: student1.groupId});
                         foundSimilar = true;
                         break;
                     } else {
