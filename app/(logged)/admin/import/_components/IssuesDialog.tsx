@@ -14,7 +14,7 @@ import {Button} from "@/components/ui/button";
 import {StudentItem} from "@/app/(logged)/admin/import/_components/IssuesTab";
 
 export default function IssuesDialog({student, loadStudent, removeIssue}: {student: StudentItem, loadStudent: (student: StudentList) => void, removeIssue: (studentId: number) => void}) {
-    const header = ["Email", "Name", "Surname", "Group Id"];
+    const header = ["Email", "Name", "Surname", "Group Id", "Select"];
     const [studentChecked, setStudentChecked] = useState<StudentList | null>(null)
 
 
@@ -52,7 +52,7 @@ export default function IssuesDialog({student, loadStudent, removeIssue}: {stude
                   <h4 className={"text-sm font-semibold text-gray-700 relative top-3 left-3 bg-white px-2 w-fit"}>Searched</h4>
                   <div className={"border border-gray-200 rounded-xl p-2 mb-3"}>
                       <Table>
-                          <THead empty={true} headers={[...header, "Select"]}/>
+                          <THead empty={true} headers={header}/>
                           <TBody>
                               <TRow>
                                   <TCell>{student.searched.email ?? "none"}</TCell>
@@ -79,7 +79,11 @@ export default function IssuesDialog({student, loadStudent, removeIssue}: {stude
                                       <TCell>{student.name ?? "none"}</TCell>
                                       <TCell>{student.surname ?? "none"}</TCell>
                                       <TCell>{student.groupId ?? "none"}</TCell>
-                                      <TCell><div className={"w-10"}/></TCell>
+                                      <TCell>
+                                          <div className={"w-10"}>
+                                              <input type={"checkbox"} defaultChecked={false} onChange={(e) => handleCheck(e, student)}/>
+                                          </div>
+                                      </TCell>
                                   </TRow>
                               ))}
                           </TBody>

@@ -1,16 +1,5 @@
 import {StudentList} from "@/utils/functions/ProcessImportData";
 import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";
-import {
-    Dialog, DialogClose,
-    DialogContent,
-    DialogDescription, DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog";
-import {SquareArrowOutUpRight} from "lucide-react";
-import {ChangeEvent, useEffect, useState} from "react";
-import {Button} from "@/components/ui/button";
 import IssuesDialog from "@/app/(logged)/admin/import/_components/IssuesDialog";
 
 export type StudentItem = {

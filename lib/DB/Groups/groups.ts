@@ -56,9 +56,11 @@ class CGroup {
             const skillsList = Skills.map(({skill}) => ({
                 id: skill.id, value: skill.name,
             }));
+
+            const numOfSkills = this.numOfSkills(type)
             const paddedSkills = skillsList
-                .concat(Array(3).fill({id: "", value: ""}))
-                .slice(0, 3);
+                .concat(Array(numOfSkills).fill({id: "", value: ""}))
+                .slice(0, numOfSkills);
             return {
                 student: {id, displayName: `${name} ${surname}`}, skills: paddedSkills,
             };
@@ -303,6 +305,21 @@ class CGroup {
             numStudents: group.students.length,
             action: false,
         };
+    }
+
+    private numOfSkills(type: SkillsTypes) {
+        switch (type){
+            case SkillsTypes.SteamSkill:
+                return 3
+            case SkillsTypes.SoftSkill:
+                return 3
+            case SkillsTypes.BestOf:
+                return 1
+            case SkillsTypes.Mention:
+                return 2
+        }
+
+
     }
 }
 

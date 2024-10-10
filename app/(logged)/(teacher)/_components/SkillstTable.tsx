@@ -15,17 +15,29 @@ export default function SkillsTable({headers, matrix, options, onChange}: Skills
     return (<Table>
             <THead headers={headers}/>
             <TBody>
-                {matrix.map((row, rowIndex) => (<TRow key={rowIndex}>
+                {matrix.map((row, rowIndex) => (
+                    <TRow key={rowIndex}>
                         <TCell>
                             <p className="w-full pl-2 text-left">{row.student.displayName}</p>
                         </TCell>
-                        {row.skills.map((skill, colIndex) => (<TCell key={colIndex}>
+                        {row.skills.map((skill, colIndex) => (
+                            <TCell key={colIndex}>
                                 <ComboBox
                                     options={options}
                                     defaultValue={skill.id}
                                     onChange={(id, value) => onChange(rowIndex, colIndex, id, value)}
                                 />
-                            </TCell>))}
+                            </TCell>))
+                        }
+                        {
+                            (row.skills.length < 3) ? (
+                                [...Array(3 - row.skills.length)].map((_,i) => (
+                                    <TCell key={"cell" + i}>
+                                        <div className={"w-[250px]"}/>
+                                    </TCell>
+                                ))
+                            ): null
+                        }
                     </TRow>))}
             </TBody>
         </Table>);

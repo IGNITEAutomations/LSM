@@ -10,7 +10,7 @@ import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator"
 import {useSearchParams} from "next/navigation";
 import {useBestOf} from "@/hooks/SkillsProvider/BestOf";
 
-const NUM_COLS = 3
+const NUM_COLS = 1
 
 export default function SoftSkillsPage() {
     const groups = useGroups();
@@ -30,17 +30,17 @@ export default function SoftSkillsPage() {
         queue.add(queueItem)
     }, [skills]);
 
-    const headers = useMemo(() => [...Array(NUM_COLS)].map((_, i) => `Best of ${i + 1}`), []);
+    const headers = useMemo(() => [...Array(NUM_COLS)].map((_, i) => `Top ${i + 1}`), []);
 
     return (
         <main className="flex flex-col max-h-[650px]">
             <SavedIndicator/>
             <Navigation groupId={groupId}/>
-            <h1>Best of</h1>
+            <h1>Top</h1>
             <h2>{groups.getGroupName(groupId)}</h2>
             <section className="mt-8 flex-1 overflow-y-auto">
                 {!skills.loaded ? (
-                    <TableSkeleton headerName={"Challenge"} nCols={4} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
+                    <TableSkeleton headerName={"Top"} nCols={1} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
                     <p className="text-red-500">
                         No students assigned to this group have been found.
                     </p>) : (<SkillsTable

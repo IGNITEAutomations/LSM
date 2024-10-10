@@ -10,7 +10,7 @@ import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";
 import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
 import {useSearchParams} from "next/navigation";
 
-const NUM_COLS = 3
+const NUM_COLS = 2
 
 export default function MentionsSkillsPage() {
     const groups = useGroups();
@@ -40,7 +40,7 @@ export default function MentionsSkillsPage() {
             <h2>{groups.getGroupName(groupId)}</h2>
             <section className="mt-8 flex-1 overflow-y-auto">
                 {!skills.loaded ? (
-                    <TableSkeleton headerName={"Challenge"} nCols={4} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
+                    <TableSkeleton headerName={"Challenge"} nCols={2} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
                     <p className="text-red-500">
                         No students have been assigned to this group.
                     </p>) : (<SkillsTable
