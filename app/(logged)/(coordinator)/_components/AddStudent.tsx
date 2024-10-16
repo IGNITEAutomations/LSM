@@ -23,7 +23,7 @@ export function AddStudent({groupId}: { groupId: string }) {
             return;
         }
         setDisable(true);
-        await doPost("/api/groups/students/upload/add", {name, surname, groupId: parseInt(groupId)})
+        await doPost("/api/groups/students/post/add", {name, surname, groupId: parseInt(groupId)})
         setDisable(false);
     }, [name, surname, groupId]);
 

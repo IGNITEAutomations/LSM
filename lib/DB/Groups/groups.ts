@@ -151,6 +151,7 @@ class CGroup {
     }
 
     public addNewStudent(name: string, surname: string, groupId: number) {
+        console.log(`Name: ${name}, Surname: ${surname}, ID: ${groupId}`)
         return ModelGroup.addNewStudent(name, surname, groupId);
     }
 
