@@ -3,19 +3,23 @@
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import FirebaseClient from "@/lib/Firebase/Client/AuthClient";
-import {useRouter} from 'next/navigation'
+import {useRouter, useSearchParams} from 'next/navigation'
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 import {useState} from "react";
 
 export default function Login() {
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [loginEnabled, setLoginEnabled] = useState<boolean>(true)
+
 
     function signIn() {
         setLoginEnabled(false)
         FirebaseClient.signIn().then((response) => {
-            if (response.success)
-                router.push("/desktop")
+            if (response.success) {
+                const groupId = searchParams.get("groupId")
+                router.push(`/desktop${groupId ? "?groupId=" + groupId : ""}`)
+            }
             else{
                 FirebaseClient.signOut().then()
                 setNotification(response.error, NotificationColor.ERROR)

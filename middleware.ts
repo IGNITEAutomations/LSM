@@ -7,10 +7,11 @@ export async function middleware(request: NextRequest) {
 
     const isLogged = cookies().has('__session');
 
-    const {pathname} = request.nextUrl;
+    const {pathname, searchParams} = request.nextUrl;
 
     if (!isLogged && !pathname.includes('/login')) {
-        return NextResponse.redirect(new URL('/login', request.url));
+        const groupId = searchParams.get("groupId")
+        return NextResponse.redirect(new URL(`/login${groupId ? "?groupId=" + groupId : ""}`, request.url));
     }
 
     if (isLogged) {
