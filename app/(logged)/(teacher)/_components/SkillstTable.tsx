@@ -12,10 +12,6 @@ type SkillsTableProps = {
 };
 
 export default function SkillsTable({headers, matrix, options, onChange}: SkillsTableProps) {
-    console.log("Options")
-    console.log(options)
-    console.log("Skills matrix")
-    console.log(matrix)
     return (<Table>
             <THead headers={headers}/>
             <TBody>
