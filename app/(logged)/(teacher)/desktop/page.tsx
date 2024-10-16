@@ -37,7 +37,7 @@ export default function Desktop() {
         <h1>Mis grupos</h1>
         <h2>Gestiona tus grupos y visualiza las últimas anotaciones.</h2>
       </div>
-      <div className="flex justify-end">
+      <div className="absolute left-0 -mx-20 px-10 h-5 w-full flex justify-end">
         <AddGroupBtn />
       </div>
       <DesktopTable />
