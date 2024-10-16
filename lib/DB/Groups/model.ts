@@ -1,5 +1,6 @@
 import prismadb from "@/prisma/prismadb";
 import {GroupDB, SchoolDB, SkillsTypes, StudentDB} from "@/utils/types/types";
+import generateRandomPassword from "@/utils/functions/createRandomPassword";
 
 class CModelGroup {
     public async getGroups() {
@@ -279,7 +280,7 @@ class CModelGroup {
         try {
             return prismadb.student.create({
                 data: {
-                    name: name, surname: surname, password: "IgniteSP", activated: true, groupId: groupId, email: ""
+                    name: name, surname: surname, password: generateRandomPassword(), activated: true, groupId: groupId, email: ""
                 }
             })
         } catch (error) {
