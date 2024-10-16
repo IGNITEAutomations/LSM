@@ -36,12 +36,6 @@ export default class NameComparator {
             ...student, normalizedName: NameComparator.normalizeName(`${student.name} ${student.surname.split(" ")[0]}`),
         }));
 
-        console.log("------- GROUP ID", list1[0].groupId, "--------")
-        console.log("List1")
-        console.log(list1)
-        console.log("List2")
-        console.log(list2)
-
         for (const student1 of normalizedList1) {
             let foundSimilar = false;
             let exit = false
@@ -66,12 +60,6 @@ export default class NameComparator {
                 newStudents.push(student1);
             }
         }
-        console.log("New Students")
-        console.log(newStudents)
-        console.log("Repeat students")
-        console.log(reStudents)
-        console.log("Similar students")
-        console.log(similarStudents)
         return [newStudents, reStudents, similarStudents];
     }
 
