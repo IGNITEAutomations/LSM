@@ -1,23 +1,46 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import AddGroupBtn from "@/app/(logged)/(teacher)/desktop/components/AddGroupBtn";
-import React from "react";
 import DesktopTable from "@/app/(logged)/(teacher)/desktop/components/DesktopTable";
-import {useGroups} from "@/hooks/GroupsProvider";
+import { useGroups } from "@/hooks/GroupsProvider";
+import { NotificationColor, setNotification } from "@/lib/Notification/ClientNotification";
 
 export default function Desktop() {
-    return (
-        <section className="flex flex-col max-h-s gap-5 flex-1">
-            <div className="flex flex-col gap-2">
-                <h1>My groups</h1>
-                <h2>Manage your groups and view the last annotations.</h2>
-            </div>
-            <div className="absolute left-0 -mx-20 px-10 h-5 w-full flex justify-end">
-                <AddGroupBtn />
-            </div>
-            <div>
-                <DesktopTable />
-            </div>
-        </section>
-    );
+  const searchParams = useSearchParams();
+  const groupId = searchParams.get("groupId");
+  const groups = useGroups();
+
+  useEffect(() => {
+    if (!groupId || !groups.loaded) return;
+
+    if (groups.getGroupName(groupId)) return;
+
+    const assignGroup = async () => {
+      try {
+        const response = await groups.assignNewGroup(groupId);
+        if (response) {
+          setNotification("Nuevo grupo asignado 👍", NotificationColor.SUCCESS);
+        }
+      } catch (error) {
+        setNotification("Error al asignar el grupo", NotificationColor.ERROR);
+      }
+    };
+
+    assignGroup();
+  }, [groupId, groups.loaded]);
+
+  return (
+    <section className="flex flex-col flex-1 gap-5">
+      <div className="flex flex-col gap-2">
+        <h1>Mis grupos</h1>
+        <h2>Gestiona tus grupos y visualiza las últimas anotaciones.</h2>
+      </div>
+      <div className="flex justify-end">
+        <AddGroupBtn />
+      </div>
+      <DesktopTable />
+    </section>
+  );
 }

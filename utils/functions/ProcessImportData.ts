@@ -38,12 +38,13 @@ export default class NameComparator {
 
         for (const student1 of normalizedList1) {
             let foundSimilar = false;
+            let exit = false
             for (const student2 of normalizedList2) {
                 if (this.areSimilar(student1.normalizedName!, student2.normalizedName!)) {
                     if (student1.normalizedName === student2.normalizedName) {
                         reStudents.push({student: {...student2, activated: student1.activated, role: student1.role}, nextGroupId: student1.groupId});
                         foundSimilar = true;
-                        break;
+                        exit = true;
                     } else {
                         if ( similarStudents.length && similarStudents[similarStudents.length - 1].searched.normalizedName === student1.normalizedName) {
                             similarStudents[similarStudents.length - 1].found.push(student2)
@@ -53,6 +54,7 @@ export default class NameComparator {
                     }
                     foundSimilar = true;
                 }
+                if (exit) break
             }
             if (!foundSimilar) {
                 newStudents.push(student1);
