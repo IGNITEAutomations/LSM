@@ -36,14 +36,21 @@ export default class NameComparator {
             ...student, normalizedName: NameComparator.normalizeName(`${student.name} ${student.surname.split(" ")[0]}`),
         }));
 
+        console.log("------- GROUP ID", list1[0].groupId, "--------")
+        console.log("List1")
+        console.log(list1)
+        console.log("List2")
+        console.log(list2)
+
         for (const student1 of normalizedList1) {
             let foundSimilar = false;
+            let exit = false
             for (const student2 of normalizedList2) {
                 if (this.areSimilar(student1.normalizedName!, student2.normalizedName!)) {
                     if (student1.normalizedName === student2.normalizedName) {
                         reStudents.push({student: {...student2, activated: student1.activated, role: student1.role}, nextGroupId: student1.groupId});
                         foundSimilar = true;
-                        break;
+                        exit = true;
                     } else {
                         if ( similarStudents.length && similarStudents[similarStudents.length - 1].searched.normalizedName === student1.normalizedName) {
                             similarStudents[similarStudents.length - 1].found.push(student2)
@@ -53,11 +60,18 @@ export default class NameComparator {
                     }
                     foundSimilar = true;
                 }
+                if (exit) break
             }
             if (!foundSimilar) {
                 newStudents.push(student1);
             }
         }
+        console.log("New Students")
+        console.log(newStudents)
+        console.log("Repeat students")
+        console.log(reStudents)
+        console.log("Similar students")
+        console.log(similarStudents)
         return [newStudents, reStudents, similarStudents];
     }
 
