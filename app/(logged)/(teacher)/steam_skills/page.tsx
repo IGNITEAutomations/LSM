@@ -18,7 +18,7 @@ export default function SteamSkillsPage() {
     const groupId = useSearchParams().get("id") ?? ""
 
     const handleChange = useCallback((row: number, col: number, id: string, value: string) => {
-        skills.setSkillValue(row, col, value)
+        skills.setSkillValue(row, col, id, value)
         const queueItem: QueueItem = {
             type: QueueTypes.SKILLS,
             data: {
