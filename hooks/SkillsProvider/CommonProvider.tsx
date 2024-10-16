@@ -18,7 +18,7 @@ export type SkillMatrix = {
 type SkillsContextType = {
     skillsOptions: Option[];
     skillsMatrix: SkillsDataRow[];
-    setSkillValue: (row: number, col: number, value: string) => void;
+    setSkillValue: (row: number, col: number, id: string, value: string) => void;
     loaded: boolean,
     restart: () => void
 };
@@ -51,6 +51,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
             setLoaded(true)
         }, []);
 
+
         useEffect(() => {
             if (groupId) {
                 setSkillsData({options: [], matrix: []})
@@ -69,10 +70,11 @@ export function createSkillGenericContext(type: SkillsTypes) {
             await init(groupId)
         }, [init, groupId])
 
-        const setSkillValue = useCallback((row: number, col: number, value: string) => {
+        const setSkillValue = useCallback((row: number, col: number, id: string, value: string) => {
             setSkillsData(prevState => {
                 const updatedMatrix = [...prevState.matrix];
                 updatedMatrix[row].skills[col].value  = value;
+                updatedMatrix[row].skills[col].id  = id;
                 return { ...prevState, matrix: updatedMatrix };
             });
         }, []);
