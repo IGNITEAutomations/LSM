@@ -8,8 +8,6 @@ type StudentTable = StudentList & {
 
 const tableHeaders = ["Email", "Password", "Name", "Surname", "Role", "Active", "Group Id"];
 export default function PreviewTable({data}: {data: StudentTable[]}) {
-    console.log("Preview table")
-    console.log(data)
     return (
         <Table>
         <THead empty={true} headers={tableHeaders}/>
