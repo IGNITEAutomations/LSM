@@ -1,4 +1,3 @@
-import {FC} from "react";
 import {SkillsDataRow} from "@/hooks/SkillsProvider/CommonProvider";
 import {Option} from "@/utils/types/types";
 import {Table, TBody, TCell, THead, TRow} from "@/app/(logged)/_components/Table";

@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     if (!student)
         throw new Error("some data is missing")
 
-    const user = await FirebaseServer.getCurrentUser();
+    const user = await FirebaseServer.currentUser();
     if (!user) {
         throw new Error("unauthenticated request")
     }

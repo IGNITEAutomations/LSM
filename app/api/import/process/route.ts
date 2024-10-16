@@ -4,7 +4,7 @@ import Groups from "@/lib/DB/Groups/groups";
 
 export async function POST(request: NextRequest) {
     try{
-        const user = await FirebaseServer.getCurrentUser()
+        const user = await FirebaseServer.currentUser()
         const importData = (await request.json()) as  string[][]
 
         if (!user || !user.uid)

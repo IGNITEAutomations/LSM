@@ -5,7 +5,7 @@ import {LoggedUserType} from "@/app/api/profile/schema";
 
 export async function GET() {
     try {
-        const firebaseUser = await FirebaseServer.getCurrentUser()
+        const firebaseUser = await FirebaseServer.currentUser()
         if (!firebaseUser)
             throw new Error("getting user credentials")
 

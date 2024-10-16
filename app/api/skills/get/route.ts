@@ -5,7 +5,7 @@ import {SkillsTypes} from "@/utils/types/types";
 
 export async function GET(request: NextRequest) {
     try{
-        const user = await FirebaseServer.getCurrentUser()
+        const user = await FirebaseServer.currentUser()
         const groupId = request.nextUrl.searchParams.get("id")
         const type = parseInt(request.nextUrl.searchParams.get("type") ?? "-1")
 

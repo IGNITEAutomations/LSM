@@ -1,11 +1,15 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {cookies} from 'next/headers';
+import {UserSession} from "@/lib/Session/UserSession";
+import CookieManager from "@/lib/Cookies/CookieManager";
+import {UserRoles} from "@/lib/User/utils/users_roles";
 
 export async function middleware(request: NextRequest) {
+    const userSession = new UserSession()
+    await userSession.init(CookieManager.get(UserSession.cookieName()) ?? undefined)
+    const isLogged = userSession.isLogged()
+    const role = userSession.getRole()
 
-    const {headers} = request;
-
-    const isLogged = cookies().has('__session');
+    console.log("isLogged:", isLogged, "Role:", role)
 
     const {pathname, searchParams} = request.nextUrl;
 
@@ -15,11 +19,24 @@ export async function middleware(request: NextRequest) {
     }
 
     if (isLogged) {
-        if (pathname.includes('/login') || pathname === '/') {
+        console.log("path:", pathname)
+        if (pathname.includes('/login')) {
             return NextResponse.redirect(new URL('/desktop', request.url));
         }
 
-        if (pathname === '/admin') {
+        if (role != UserRoles.Teacher && pathname == "/") {
+            return NextResponse.redirect(new URL('/desktop', request.url));
+        }
+
+        if (role != UserRoles.Admin && pathname.includes('/admin')) {
+            return NextResponse.redirect(new URL('/desktop', request.url));
+        }
+
+        if (role === UserRoles.Admin && pathname === '/admin') {
+            return NextResponse.redirect(new URL('/admin/import', request.url));
+        }
+
+        if (role === UserRoles.Admin && pathname == "/") {
             return NextResponse.redirect(new URL('/admin/import', request.url));
         }
     }

@@ -4,7 +4,7 @@ import Groups from "@/lib/DB/Groups/groups";
 
 export async function GET(request: NextRequest) {
     try{
-        const user = await FirebaseServer.getCurrentUser()
+        const user = await FirebaseServer.currentUser()
         const groupId = request.nextUrl.searchParams.get("id")
         if (!user)
             throw new Error("User not found")

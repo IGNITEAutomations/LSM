@@ -74,7 +74,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
             setSkillsData(prevState => {
                 const updatedMatrix = [...prevState.matrix];
                 updatedMatrix[row].skills[col].value  = value;
-                updatedMatrix[row].skills[col].id  = id;
+                updatedMatrix[row].skills[col].id  = value ? id : "";
                 return { ...prevState, matrix: updatedMatrix };
             });
         }, []);

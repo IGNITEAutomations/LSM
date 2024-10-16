@@ -1,29 +1,78 @@
 import {App, cert, getApps, initializeApp} from "firebase-admin/app";
 import {Auth, getAuth, UserRecord} from "firebase-admin/auth";
-import {cookies} from "next/headers";
+import {UserSession} from "@/lib/Session/UserSession";
+import {UserRoles} from "@/lib/User/utils/users_roles";
 
 class AuthServer {
 
-    private auth: Auth
+    private auth: Auth;
+    private sessionManager = new UserSession();
 
     constructor() {
-        const config = {
-            credential: cert({
-                projectId: process.env.FIREBASE_PROJECT_ID,
-                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.FIREBASE_PRIVATE_KEY
-            })
-        };
-        const app: App = getApps().find(app => app.name === "firebase-admin-app") || initializeApp(config, "firebase-admin-app");
-        this.auth = getAuth(app)
+        const existingApp = getApps().find(app => app.name === "firebase-admin-app");
+
+        if (!existingApp) {
+            initializeApp({
+                credential: cert({
+                    projectId: process.env.FIREBASE_PROJECT_ID,
+                    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+                    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+                }),
+            }, "firebase-admin-app");
+        }
+
+        this.auth = getAuth(getApps().find(app => app.name === "firebase-admin-app") as App);
     }
 
-    private async getSession(): Promise<string | undefined> {
+    public async user(token: string): Promise<UserRecord | undefined> {
+        if (!token) {
+            console.error('Token is undefined or empty');
+            return;
+        }
+
         try {
-            return  cookies().get("__session")?.value;
+            const {uid} = await this.auth.verifyIdToken(token);
+            return await this.auth.getUser(uid);
         } catch (error) {
-            console.error("Failed to retrieve session:", error);
-            return undefined;
+            console.error("Error getting user:", error);
+            return undefined
+        }
+    }
+
+    public async currentUser(token?: string): Promise<UserRecord | undefined> {
+        await this.sessionManager.init();
+
+        token = token ?? this.sessionManager.session();
+        if (!token) {
+            console.error('No token provided for currentUser');
+            return;
+        }
+
+        if (!(await this.isUserAuthenticated(token))) return;
+
+        try {
+            const {uid} = await this.auth.verifySessionCookie(token);
+            return await this.auth.getUser(uid);
+        } catch (error) {
+            console.error('Failed to process current user', error);
+        }
+    }
+
+    public async createSessionCookie(idToken: string, role: UserRoles) {
+        await this.sessionManager.init()
+        await this.sessionManager.setUser({
+            role: role,
+            session: await this.auth.createSessionCookie(idToken, {expiresIn: (60 * 60 * 24 * 12 * 1000)})
+        })
+    }
+
+    public async signOut(): Promise<void> {
+        try {
+            await this.sessionManager.init();
+            await this.revokeAllSessions(this.sessionManager.session());
+            this.sessionManager.delete()
+        } catch (error) {
+            console.error("Failed to sign out:", error);
         }
     }
 
@@ -31,71 +80,24 @@ class AuthServer {
         if (!session) return false
 
         try {
-            return Boolean(await this.auth.verifySessionCookie(session, true));
+            await this.auth.verifySessionCookie(session, true);
+            return true;
         } catch (error) {
-             console.error("Authentication check failed:", error);
+            console.error("Authentication check failed:", error);
             return false;
         }
     }
 
-    private async revokeAllSessions(session: string): Promise<undefined> {
-        const decodedIdToken = await this.auth.verifySessionCookie(session);
-        await this.auth.revokeRefreshTokens(decodedIdToken.sub);
-    }
-
-    public async getUser(token: string): Promise<UserRecord | undefined> {
+    private async revokeAllSessions(session: string): Promise<void> {
         try {
-            const decodedToken = await this.auth.verifyIdToken(token)
-            return this.auth.getUser(decodedToken.uid)
+            const {sub} = await this.auth.verifySessionCookie(session);
+            await this.auth.revokeRefreshTokens(sub);
         } catch (error) {
-            console.error("Error getting user: ")
-            return undefined
-        }
-    }
-
-    public async getCurrentUser(token?: string): Promise<UserRecord | undefined> {
-        token = token ?? await this.getSession()
-        if (!(await this.isUserAuthenticated(token!))) return undefined
-
-        try {
-            const decodedIdToken = await this.auth.verifySessionCookie(token!)
-            return this.auth.getUser(decodedIdToken.uid)
-        } catch (error) {
-            console.error("Failed to process current user:", error);
-            return undefined;
-        }
-    }
-
-    public async createSessionCookie(idToken: string): Promise<true | undefined> {
-        try {
-            const expiresIn = 60 * 60 * 24 * 12 * 1000; // 12 days
-            const sessionCookie = await this.auth.createSessionCookie(idToken, {expiresIn});
-            cookies().set("__session", sessionCookie, {
-                maxAge: expiresIn,
-                httpOnly: true,
-                secure: true,
-             });
-            return true
-        } catch (error) {
-            console.error("Failed to create session cookie:", error);
-            return undefined
-        }
-    }
-
-    public async signOut(): Promise<undefined> {
-        if (!cookies().has("__session"))
-            return undefined
-
-        try {
-             const session = await this.getSession();
-             cookies().delete("__session");
-             await this.revokeAllSessions(session!);
-        } catch (error) {
-            console.error("Failed to sign out:", error);
-            return undefined
+            console.error('Failed to revoke all sessions', error);
         }
     }
 }
 
+
 const FirebaseServer = new AuthServer()
-export default  FirebaseServer
+export default FirebaseServer

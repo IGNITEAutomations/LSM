@@ -16,7 +16,7 @@ export default function StudentsTable({groupId}: {groupId: string}) {
 
     const handleActivateStatusStudent = useCallback(async (id: number, value: boolean) => {
         setDisable(true);
-        const response = await doPost("/api/groups/students/upload/active", {id, value}, false)
+        const response = await doPost("/api/groups/students/post/active", {id, value}, false)
         if (response.success) {
             setStudents((prevState) => prevState.map((student) => student.id === id ? {
                 ...student, activated: value
@@ -53,7 +53,9 @@ export default function StudentsTable({groupId}: {groupId: string}) {
         return (<TableSkeleton headers={["Name", "Email", "Password", "Activated", "Action"]} nRows={3}/>);
     }
 
-    return (<Table>
+    return (
+        <section className={"flex grow max-h-[480px]"}>
+            <Table>
         <THead empty={true} headers={headers}/>
         <TBody>
             {students.map((student) => (<TRow key={student.id}>
@@ -73,5 +75,7 @@ export default function StudentsTable({groupId}: {groupId: string}) {
                 </TCell>
             </TRow>))}
         </TBody>
-    </Table>);
+    </Table>
+        </section>
+        );
 }

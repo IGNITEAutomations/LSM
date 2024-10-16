@@ -9,7 +9,6 @@ import {useState} from "react";
 
 export default function Login() {
     const router = useRouter()
-    const searchParams = useSearchParams()
     const [loginEnabled, setLoginEnabled] = useState<boolean>(true)
 
 
@@ -17,8 +16,7 @@ export default function Login() {
         setLoginEnabled(false)
         FirebaseClient.signIn().then((response) => {
             if (response.success) {
-                const groupId = searchParams.get("groupId")
-                router.push(`/desktop${groupId ? "?groupId=" + groupId : ""}`)
+                router.push(`/`)
             }
             else{
                 FirebaseClient.signOut().then()

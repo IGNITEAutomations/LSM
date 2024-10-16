@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
             throw new Error("operation type not found")
         }
 
-        const user = await FirebaseServer.getCurrentUser();
+        const user = await FirebaseServer.currentUser();
         if (!user) {
             throw new Error("unauthenticated request")
         }

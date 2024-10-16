@@ -4,8 +4,9 @@ import Groups from "@/lib/DB/Groups/groups";
 
 export async function POST(request: NextRequest) {
     try {
+
         const groupId = parseInt((await request.json()).groupId ?? "-1")
-        const user = await  FirebaseServer.getCurrentUser()
+        const user = await  FirebaseServer.currentUser()
 
         if (!user)
             throw new Error("User not found")

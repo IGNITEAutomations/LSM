@@ -5,7 +5,7 @@ import {StudentList} from "@/utils/functions/ProcessImportData";
 
 export async function POST(request: NextRequest) {
     try {
-        const user = await FirebaseServer.getCurrentUser()
+        const user = await FirebaseServer.currentUser()
         if (!user || !user.uid)
             return NextResponse.json({success: false, error: "User not found"});
 
