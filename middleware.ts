@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     const sessionCookie = request.cookies.get(SESSION.cookieName)?.value
 
     const isLogged = await SESSION.get("isLogged", sessionCookie)
-    const role = await SESSION.get("role", sessionCookie)
+    const role = parseInt(await SESSION.get("role", sessionCookie))
 
     console.log("Is logged:", isLogged, "; Role:", role)
 
@@ -22,16 +22,24 @@ export async function middleware(request: NextRequest) {
     }
 
     if (isLogged) {
-        if (pathname.includes('/login') || pathname === '/') {
+        if (role === UserRoles.Admin && pathname.includes('/login')) {
+            return NextResponse.redirect(new URL('/admin/import', request.url));
+        }
+
+        if (role !== UserRoles.Admin && pathname.includes('/login')) {
             return NextResponse.redirect(new URL('/desktop', request.url));
         }
 
-        if (pathname === '/admin') {
+        if (role !== UserRoles.Admin && pathname.includes('/admin')) {
+            return NextResponse.redirect(new URL('/desktop', request.url));
+        }
+
+        if (role === UserRoles.Admin && pathname.includes('/admin')) {
             return NextResponse.redirect(new URL('/admin/import', request.url));
         }
     }
 }
 
 export const config = {
-    matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/', '/login/:path*', '/challenges/:path*', '/desktop/:path*', '/mentions/:path*', '/soft_skills/:path*', '/steam_skills/:path*',]
+    matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/', '/admin/:path*', '/login/:path*', '/challenges/:path*', '/desktop/:path*', '/mentions/:path*', '/soft_skills/:path*', '/steam_skills/:path*',]
 };
