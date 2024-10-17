@@ -40,19 +40,20 @@ class AuthServer {
         }
     }
 
-    public async currentUser(token?: string): Promise<UserRecord | undefined> {
+    public async currentUser(): Promise<UserRecord | undefined> {
         await this.sessionManager.init();
 
-        token = token ?? this.sessionManager.session();
-        if (!token) {
+        const sessionCookie = this.sessionManager.session();
+        if (!sessionCookie) {
             console.error('No token provided for currentUser');
             return;
         }
 
-        if (!(await this.isUserAuthenticated(token))) return;
-
         try {
-            const {uid} = await this.auth.verifySessionCookie(token);
+            const uid = await this.isUserAuthenticated(sessionCookie)
+            if (!uid) {
+                throw new Error("user is not authenticated")
+            }
             return await this.auth.getUser(uid);
         } catch (error) {
             console.error('Failed to process current user', error);
@@ -60,8 +61,8 @@ class AuthServer {
     }
 
     public async createSessionCookie(idToken: string, role: UserRoles) {
-        console.log("Creating session cookie")
-        console.log("idToken:", idToken != "", "Role:", role)
+        console.error("Creating session cookie")
+        console.error("idToken:", idToken != "", "Role:", role)
         await this.sessionManager.init()
         await this.sessionManager.setUser({
             role: role,
@@ -79,12 +80,12 @@ class AuthServer {
         }
     }
 
-    private async isUserAuthenticated(session: string): Promise<boolean> {
+    private async isUserAuthenticated(session: string): Promise<string | false> {
         if (!session) return false
 
         try {
-            await this.auth.verifySessionCookie(session, true);
-            return true;
+            const {uid} = await this.auth.verifySessionCookie(session, true);
+            return uid;
         } catch (error) {
             console.error("Authentication check failed:", error);
             return false;

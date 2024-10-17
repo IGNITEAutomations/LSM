@@ -1,6 +1,7 @@
 import {cookies} from "next/headers";
 import {NextRequest} from "next/server";
 import {UserSession} from "@/lib/Session/UserSession";
+import {req} from "agent-base";
 
 export const enum COOKIE_TYPE {
     SERVERLESS_CONTEXT,
@@ -35,6 +36,24 @@ export class CCookieManager {
                 return this.edge(name, request);
             default:
                 return this.serverless(name);
+        }
+    }
+
+    public deleteAllOnServer() {
+        try {
+                cookies().getAll().map(cookie => {
+                    cookies().delete(cookie.name)
+                })
+            } catch (error) {
+                throw new Error("Error deleting cookies")
+            }
+    }
+
+    public deleteAll(request: NextRequest) {
+        try {
+            request.cookies.clear()
+        } catch (error) {
+            throw new Error("It was not possible delete the cookie header")
         }
     }
 

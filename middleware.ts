@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
     const {pathname, searchParams} = request.nextUrl;
 
     if (!isLogged && !pathname.includes('/login')) {
+        CookieManager.deleteAll(request)
         const groupId = searchParams.get("groupId")
         return NextResponse.redirect(new URL(`/login${groupId ? "?groupId=" + groupId : ""}`, request.url));
     }

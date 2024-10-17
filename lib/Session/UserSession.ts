@@ -71,15 +71,16 @@ export class UserSession {
     }
 
     public async setUser(user: { role: UserRoles; session: string }) {
-        if (this._session !== user.session || this.role !== user.role) {
-            this._session = user.session;
-            this.role = user.role;
-            await this.updateCookie();
-        }
+        this._session = user.session;
+        this.role = user.role;
+        await this.updateCookie();
     }
 
     public delete() {
-        this.cookieManager.delete(UserSession._cookieName);
+        this.cookieManager.deleteAllOnServer();
+        this._session = ""
+        this.role = UserRoles.Teacher
+        this._isLogged = false
     }
 
     private async updateCookie(): Promise<void> {
