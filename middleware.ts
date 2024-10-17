@@ -1,11 +1,18 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {cookies} from 'next/headers';
+import SESSION from "@/lib/Session/Session";
+import {UserRoles} from "@/lib/User/utils/users_roles";
 
 export async function middleware(request: NextRequest) {
 
     const {headers} = request;
 
-    const isLogged = cookies().has('__session');
+    const sessionCookie = request.cookies.get(SESSION.cookieName)?.value
+
+    const isLogged = await SESSION.get("isLogged", sessionCookie)
+    const role = await SESSION.get("role", sessionCookie)
+
+    console.log("Is logged:", isLogged, "; Role:", role)
 
     const {pathname, searchParams} = request.nextUrl;
 

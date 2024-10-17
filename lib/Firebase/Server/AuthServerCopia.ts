@@ -1,7 +1,6 @@
 import {App, cert, getApps, initializeApp} from "firebase-admin/app";
 import {Auth, getAuth, UserRecord} from "firebase-admin/auth";
 import {cookies} from "next/headers";
-import SESSION from "@/lib/Session/Session";
 
 class AuthServer {
 
@@ -21,7 +20,7 @@ class AuthServer {
 
     private async getSession(): Promise<string | undefined> {
         try {
-            return  SESSION.get("session") //cookies().get("__session")?.value;
+            return  cookies().get("__session")?.value;
         } catch (error) {
             console.error("Failed to retrieve session:", error);
             return undefined;
@@ -32,8 +31,7 @@ class AuthServer {
         if (!session) return false
 
         try {
-            await this.auth.verifySessionCookie(session, true);
-            return true
+            return Boolean(await this.auth.verifySessionCookie(session, true));
         } catch (error) {
              console.error("Authentication check failed:", error);
             return false;
@@ -71,17 +69,12 @@ class AuthServer {
     public async createSessionCookie(idToken: string): Promise<true | undefined> {
         try {
             const expiresIn = 60 * 60 * 24 * 12 * 1000; // 12 days
-            const value = await this.auth.createSessionCookie(idToken, {expiresIn})
-            console.log("Creation the sesssion cookie: ok")
-            await SESSION.set("session", value)
-
-            /*const expiresIn = 60 * 60 * 24 * 12 * 1000; // 12 days
             const sessionCookie = await this.auth.createSessionCookie(idToken, {expiresIn});
             cookies().set("__session", sessionCookie, {
                 maxAge: expiresIn,
                 httpOnly: true,
                 secure: true,
-             });*/
+             });
             return true
         } catch (error) {
             console.error("Failed to create session cookie:", error);
@@ -90,10 +83,12 @@ class AuthServer {
     }
 
     public async signOut(): Promise<undefined> {
+        if (!cookies().has("__session"))
+            return undefined
+
         try {
-            console.log("Cookie deleted")
              const session = await this.getSession();
-            SESSION.clearAll()
+             cookies().delete("__session");
              await this.revokeAllSessions(session!);
         } catch (error) {
             console.error("Failed to sign out:", error);

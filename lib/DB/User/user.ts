@@ -10,11 +10,15 @@ class CUser {
         else if (!user.uid)
             await ModelUser.updateUid(email, uid)
 
-        return true
+        return user
     }
 
     public async user(teacherEmail: string) {
-        return await ModelUser.findByUserId(teacherEmail)
+        return await ModelUser.findByEmail(teacherEmail)
+    }
+
+     public async userById(uid: string) {
+        return await ModelUser.findByUserId(uid)
     }
 }
 
