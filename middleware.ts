@@ -1,15 +1,21 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {UserSession} from "@/lib/Session/UserSession";
-import CookieManager from "@/lib/Cookies/CookieManager";
+import CookieManager, {COOKIE_TYPE} from "@/lib/Cookies/CookieManager";
 import {UserRoles} from "@/lib/User/utils/users_roles";
 
 export async function middleware(request: NextRequest) {
+
+    const cookie = request.cookies.get(UserSession.cookieName())
+    console.log("cookie: ", cookie != undefined)
+
     const userSession = new UserSession()
-    await userSession.init(CookieManager.get(UserSession.cookieName()) ?? undefined)
+    const cookieName = UserSession.cookieName()
+    const token = CookieManager.get(UserSession.cookieName(), COOKIE_TYPE.EDGE_CONTEXT, request)
+    await userSession.init(token ?? undefined)
     const isLogged = userSession.isLogged()
     const role = userSession.getRole()
 
-    console.log("isLogged:", isLogged, "Role:", role)
+    console.log("isLogged:", isLogged, "; Token:", token != "", "; Cookie name:", cookieName, "; Role:", role)
 
     const {pathname, searchParams} = request.nextUrl;
 

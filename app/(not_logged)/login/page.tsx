@@ -11,11 +11,11 @@ export default function Login() {
     const router = useRouter()
     const [loginEnabled, setLoginEnabled] = useState<boolean>(true)
 
-
     function signIn() {
         setLoginEnabled(false)
         FirebaseClient.signIn().then((response) => {
             if (response.success) {
+                alert("Going to app")
                 router.push(`/`)
             }
             else{

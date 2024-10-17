@@ -85,7 +85,8 @@ export class UserSession {
     private async updateCookie(): Promise<void> {
         if (!this.role || !this.session) {
             this.delete();
-            return;
+            console.error("Some session field is empty")
+            return
         }
         await this.setCookie();
     }
@@ -116,6 +117,7 @@ export class UserSession {
             const token: string = await this.sessionToken.generateToken(data);
 
             const maxAgeInSeconds = this.getMaxAgeInSeconds();
+            console.log("Live:", maxAgeInSeconds)
 
             this.cookieManager.save(UserSession._cookieName, token, maxAgeInSeconds);
         } catch (error) {

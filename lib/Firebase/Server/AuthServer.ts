@@ -2,6 +2,7 @@ import {App, cert, getApps, initializeApp} from "firebase-admin/app";
 import {Auth, getAuth, UserRecord} from "firebase-admin/auth";
 import {UserSession} from "@/lib/Session/UserSession";
 import {UserRoles} from "@/lib/User/utils/users_roles";
+import {id} from "postcss-selector-parser";
 
 class AuthServer {
 
@@ -59,6 +60,8 @@ class AuthServer {
     }
 
     public async createSessionCookie(idToken: string, role: UserRoles) {
+        console.log("Creating session cookie")
+        console.log("idToken:", idToken != "", "Role:", role)
         await this.sessionManager.init()
         await this.sessionManager.setUser({
             role: role,

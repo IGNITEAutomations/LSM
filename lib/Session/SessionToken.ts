@@ -23,6 +23,8 @@ export default class SessionToken<T extends JWTPayload = JWToken> {
     }
 
     public async generateToken(payload: T): Promise<string> {
+        console.log("Generating JWT token")
+        console.log("Payload: ok")
         return new SignJWT(payload)
             .setProtectedHeader({alg: SessionToken.ALGORITHM})
             .setIssuedAt()

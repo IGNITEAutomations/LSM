@@ -1,5 +1,6 @@
 import {cookies} from "next/headers";
 import {NextRequest} from "next/server";
+import {UserSession} from "@/lib/Session/UserSession";
 
 export const enum COOKIE_TYPE {
     SERVERLESS_CONTEXT,
@@ -8,6 +9,7 @@ export const enum COOKIE_TYPE {
 
 export class CCookieManager {
     public save(name: string, token: string, maxAge: number): void {
+        console.log("Saving cookie")
         try {
             cookies().set(name, token, {
                 maxAge,
@@ -26,6 +28,7 @@ export class CCookieManager {
             case COOKIE_TYPE.SERVERLESS_CONTEXT:
                 return this.serverless(name);
             case COOKIE_TYPE.EDGE_CONTEXT:
+                console.log("Cookie inside edge condition:", request?.cookies.get(UserSession.cookieName()) != undefined)
                 if (!request) {
                     throw new Error('El objeto request es requerido para el contexto EDGE');
                 }
@@ -45,6 +48,7 @@ export class CCookieManager {
 
     private getCookieValue(source: any, name: string): string | null {
         const cookie = source.get(name);
+        console.log("Final cookie value:", cookie?.value)
         return cookie?.value || null;
     }
 
@@ -53,6 +57,9 @@ export class CCookieManager {
     }
 
     private edge(name: string, request: NextRequest): string | null {
+        console.log("Request cookie:", name)
+        console.log("Cookie inside edge function:", request?.cookies.get(UserSession.cookieName()) != undefined)
+        console.log("Cookie inside edge function2:", request?.cookies.get(name) != undefined)
         return this.getCookieValue(request.cookies, name);
     }
 }
