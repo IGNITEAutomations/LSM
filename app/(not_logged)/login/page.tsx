@@ -15,7 +15,6 @@ export default function Login() {
         setLoginEnabled(false)
         FirebaseClient.signIn().then((response) => {
             if (response.success) {
-                alert("Going to app")
                 router.push(`/`)
             }
             else{
