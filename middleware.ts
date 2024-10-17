@@ -1,5 +1,4 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {cookies} from 'next/headers';
 import SESSION from "@/lib/Session/Session";
 import {UserRoles} from "@/lib/User/utils/users_roles";
 

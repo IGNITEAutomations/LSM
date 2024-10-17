@@ -11,13 +11,13 @@ export default class Token implements IToken{
         this.key = new TextEncoder().encode(key);
     }
 
-    public async encrypt(payload: object, expireTime: number = 86400): Promise<string> {
+    public async encrypt(payload: object, expireTime: number = (12 * 86400)): Promise<string> {
         try {
             return await new SignJWT(payload as JWTPayload)
                 .setProtectedHeader({ alg: 'HS256' })
                 //.setJti(JSON.stringify(payload))
                 .setIssuedAt()
-                .setExpirationTime('2h')
+                .setExpirationTime(Date.now() + expireTime)
                 .sign(this.key);
 
         } catch (error) {

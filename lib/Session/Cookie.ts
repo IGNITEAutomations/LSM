@@ -2,23 +2,11 @@ import ICookie from "@/lib/Session/interficies/ICookie";
 import {cookies} from "next/headers";
 import {NextRequest} from "next/server";
 
-type TCookie =  {
-    [key: string]: {
-        value: string,
-        expireTime: number
-    }
-}
-
-export const enum COOKIE_TYPE {
-    SERVERLESS,
-    EDGE
-}
 class Cookie implements ICookie {
 
     public get(name: string, request?: NextRequest): string | null {
         if (this.isRunningOnEdge()) {
-            if (request)
-                return this.edge(name, request);
+            if (request) return this.edge(name, request);
             return null
         } else {
             return this.serverless(name);
@@ -27,11 +15,7 @@ class Cookie implements ICookie {
 
     public save(key: string, value: string, maxAge: number): void {
         cookies().set(key, value, {
-            maxAge,
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            path: "/",
+            maxAge, httpOnly: true, secure: true, sameSite: "strict", path: "/",
         });
     }
 
@@ -39,7 +23,7 @@ class Cookie implements ICookie {
         cookies().delete(name)
     }
 
-     private serverless(name: string): string | null {
+    private serverless(name: string): string | null {
         const cookie = cookies().get(name);
         return cookie?.value || null;
     }

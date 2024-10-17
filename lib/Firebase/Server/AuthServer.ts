@@ -1,6 +1,5 @@
 import {App, cert, getApps, initializeApp} from "firebase-admin/app";
 import {Auth, getAuth, UserRecord} from "firebase-admin/auth";
-import {cookies} from "next/headers";
 import SESSION from "@/lib/Session/Session";
 
 class AuthServer {
@@ -17,32 +16,6 @@ class AuthServer {
         };
         const app: App = getApps().find(app => app.name === "firebase-admin-app") || initializeApp(config, "firebase-admin-app");
         this.auth = getAuth(app)
-    }
-
-    private async getSession(): Promise<string | undefined> {
-        try {
-            return  SESSION.get("session") //cookies().get("__session")?.value;
-        } catch (error) {
-            console.error("Failed to retrieve session:", error);
-            return undefined;
-        }
-    }
-
-    private async isUserAuthenticated(session: string): Promise<boolean> {
-        if (!session) return false
-
-        try {
-            await this.auth.verifySessionCookie(session, true);
-            return true
-        } catch (error) {
-             console.error("Authentication check failed:", error);
-            return false;
-        }
-    }
-
-    private async revokeAllSessions(session: string): Promise<undefined> {
-        const decodedIdToken = await this.auth.verifySessionCookie(session);
-        await this.auth.revokeRefreshTokens(decodedIdToken.sub);
     }
 
     public async getUser(token: string): Promise<UserRecord | undefined> {
@@ -75,13 +48,6 @@ class AuthServer {
             console.log("Creation the sesssion cookie: ok")
             await SESSION.set("session", value)
 
-            /*const expiresIn = 60 * 60 * 24 * 12 * 1000; // 12 days
-            const sessionCookie = await this.auth.createSessionCookie(idToken, {expiresIn});
-            cookies().set("__session", sessionCookie, {
-                maxAge: expiresIn,
-                httpOnly: true,
-                secure: true,
-             });*/
             return true
         } catch (error) {
             console.error("Failed to create session cookie:", error);
@@ -91,16 +57,41 @@ class AuthServer {
 
     public async signOut(): Promise<undefined> {
         try {
-            console.log("Cookie deleted")
-             const session = await this.getSession();
+            const session = await this.getSession();
             SESSION.clearAll()
-             await this.revokeAllSessions(session!);
+            await this.revokeAllSessions(session!);
         } catch (error) {
             console.error("Failed to sign out:", error);
             return undefined
         }
     }
+
+    private async getSession(): Promise<string | undefined> {
+        try {
+            return SESSION.get("session") //cookies().get("__session")?.value;
+        } catch (error) {
+            console.error("Failed to retrieve session:", error);
+            return undefined;
+        }
+    }
+
+    private async isUserAuthenticated(session: string): Promise<boolean> {
+        if (!session) return false
+
+        try {
+            await this.auth.verifySessionCookie(session, true);
+            return true
+        } catch (error) {
+            console.error("Authentication check failed:", error);
+            return false;
+        }
+    }
+
+    private async revokeAllSessions(session: string): Promise<undefined> {
+        const decodedIdToken = await this.auth.verifySessionCookie(session);
+        await this.auth.revokeRefreshTokens(decodedIdToken.sub);
+    }
 }
 
 const FirebaseServer = new AuthServer()
-export default  FirebaseServer
+export default FirebaseServer

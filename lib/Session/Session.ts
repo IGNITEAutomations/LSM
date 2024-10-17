@@ -4,7 +4,6 @@ import ICookie from "@/lib/Session/interficies/ICookie";
 import Token from "@/lib/Session/Token";
 import COOKIE from "@/lib/Session/Cookie";
 
-
 type UserSessionPayload = {
     [clave: string]: any;
 }
@@ -17,7 +16,7 @@ class Session implements ISession {
 
     private data: UserSessionPayload = {}
 
-    constructor(tokenManager: IToken, cookieHandler: ICookie, options?: {expireTime?: number, cookieName?: string}) {
+    constructor(tokenManager: IToken, cookieHandler: ICookie, options?: { expireTime?: number, cookieName?: string }) {
         this.tokenHandler = tokenManager;
         this.cookieHandler = cookieHandler;
         this._cookieName = options?.cookieName || "__session_prueba";
@@ -34,7 +33,7 @@ class Session implements ISession {
 
     public async get(key: string, session?: string): Promise<string> {
         await this.init(session)
-       return this.data[key] ?? ""
+        return this.data[key] ?? ""
     }
 
     public async set(key: string, value: any): Promise<void> {
@@ -68,7 +67,7 @@ class Session implements ISession {
     }
 
     private async loadSessionData(session: string): Promise<void> {
-        const cookieData =  await this.decodeCookieSession(session);
+        const cookieData = await this.decodeCookieSession(session);
         if (cookieData) {
             this.data = cookieData
         }
