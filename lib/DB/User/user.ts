@@ -14,7 +14,11 @@ class CUser {
     }
 
     public async user(teacherEmail: string) {
-        return await ModelUser.findByUserId(teacherEmail)
+        return await ModelUser.findByUserEmail(teacherEmail)
+    }
+
+    public async userByUid(uid: string) {
+        return await ModelUser.findByUserUID(uid)
     }
 }
 

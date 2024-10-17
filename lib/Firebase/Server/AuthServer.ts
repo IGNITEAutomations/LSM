@@ -84,7 +84,7 @@ class AuthServer {
         if (!session) return false
 
         try {
-            const {uid} = await this.auth.verifySessionCookie(session, false);
+            const {uid} = await this.auth.verifySessionCookie(session, true);
             return uid;
         } catch (error) {
             console.error("Authentication check failed:", error);
