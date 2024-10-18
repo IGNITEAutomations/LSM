@@ -16,7 +16,7 @@ export default function StudentsTable({groupId}: {groupId: string}) {
 
     const handleActivateStatusStudent = useCallback(async (id: number, value: boolean) => {
         setDisable(true);
-        const response = await doPost("/api/groups/students/upload/active", {id, value}, false)
+        const response = await doPost("/api/groups/students/post/active", {id, value}, false)
         if (response.success) {
             setStudents((prevState) => prevState.map((student) => student.id === id ? {
                 ...student, activated: value

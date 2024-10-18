@@ -280,7 +280,12 @@ class CModelGroup {
         try {
             return prismadb.student.create({
                 data: {
-                    name: name, surname: surname, password: generateRandomPassword(), activated: true, groupId: groupId, email: ""
+                    name: name,
+                    surname: surname,
+                    password: generateRandomPassword(),
+                    activated: true,
+                    groupId: groupId,
+                    email: name+surname+groupId
                 }
             })
         } catch (error) {
