@@ -1,4 +1,4 @@
-export default interface IToken {
+export default interface IToken<T> {
     encrypt(payload: object, expireTime?: number): Promise<string>;
-    decode(token: string): Promise<object>
+    decode(token: string): Promise<T>
 }

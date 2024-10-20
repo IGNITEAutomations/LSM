@@ -1,7 +1,7 @@
 import {SignJWT, jwtVerify, JWTPayload} from 'jose'
 import IToken from "@/lib/Session/interficies/IToken";
 
-export default class Token implements IToken{
+export default class Token<T> implements IToken<T>{
     private readonly key: Uint8Array;
 
     constructor(key: string) {
@@ -15,7 +15,6 @@ export default class Token implements IToken{
         try {
             return await new SignJWT(payload as JWTPayload)
                 .setProtectedHeader({ alg: 'HS256' })
-                //.setJti(JSON.stringify(payload))
                 .setIssuedAt()
                 .setExpirationTime(Date.now() + expireTime)
                 .sign(this.key);
@@ -26,10 +25,10 @@ export default class Token implements IToken{
         }
     }
 
-    public async decode(token: string): Promise<object> {
+    public async decode(token: string): Promise<T> {
         try {
             const {payload} = await jwtVerify(token, this.key)
-            return payload as object;
+            return payload as T;
 
         } catch (error) {
             console.error(error);

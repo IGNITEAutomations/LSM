@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server';
-import SESSION from "@/lib/Session/Session";
 import {UserRoles} from "@/lib/User/utils/users_roles";
+import SESSION from "@/lib/Session/Session";
 
 export async function middleware(request: NextRequest) {
 
@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     const sessionCookie = request.cookies.get(SESSION.cookieName)?.value
 
     const isLogged = await SESSION.get("isLogged", sessionCookie)
-    const role = parseInt(await SESSION.get("role", sessionCookie))
+    const role = await SESSION.get("role", sessionCookie) as number
 
     console.log("Is logged:", isLogged, "; Role:", role)
 
@@ -21,6 +21,14 @@ export async function middleware(request: NextRequest) {
     }
 
     if (isLogged) {
+
+        console.log(pathname === "/")
+        console.log()
+
+        if (role !== UserRoles.Admin && pathname == "/") {
+            return NextResponse.redirect(new URL('/desktop', request.url));
+        }
+
         if (role === UserRoles.Admin && pathname.includes('/login')) {
             return NextResponse.redirect(new URL('/admin/import', request.url));
         }
