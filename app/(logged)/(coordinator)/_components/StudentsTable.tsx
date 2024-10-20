@@ -53,7 +53,9 @@ export default function StudentsTable({groupId}: {groupId: string}) {
         return (<TableSkeleton headers={["Name", "Email", "Password", "Activated", "Action"]} nRows={3}/>);
     }
 
-    return (<Table>
+    return (
+        <section className={"max-h-[60vh]"}>
+            <Table>
         <THead empty={true} headers={headers}/>
         <TBody>
             {students.map((student) => (<TRow key={student.id}>
@@ -73,5 +75,7 @@ export default function StudentsTable({groupId}: {groupId: string}) {
                 </TCell>
             </TRow>))}
         </TBody>
-    </Table>);
+    </Table>
+        </section>
+        );
 }
