@@ -54,7 +54,7 @@ export default function StudentsTable({groupId}: {groupId: string}) {
     }
 
     return (
-        <section className={"max-h-[620px]"}>
+        <section className={"max-h-[60vh]"}>
             <Table>
         <THead empty={true} headers={headers}/>
         <TBody>
