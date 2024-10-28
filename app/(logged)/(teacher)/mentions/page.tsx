@@ -17,14 +17,16 @@ export default function MentionsSkillsPage() {
     const skills = useMentions();
     const groupId = useSearchParams().get("id") ?? ""
 
-    const handleChange = useCallback((row: number, col: number, id: string, value: string) => {
+    const handleChange = useCallback((row: number, col: number, id: string, value: string, prevValue?: string) => {
+        const reWrite = skills.skillsMatrix[row].skills[col].value
         skills.setSkillValue(row, col, id, value)
         const queueItem: QueueItem = {
             type: QueueTypes.MENTIONS,
             data: {
                 studentId: skills.skillsMatrix[row].student.id,
                 evaluationId: id,
-                value: value
+                value: value,
+                prevValue:  reWrite != "" ? prevValue : undefined
             }
         }
         queue.add(queueItem)

@@ -1,4 +1,4 @@
-import {setNotification} from "@/lib/Notification/ClientNotification";
+import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 
 const ELAPSE_TIME = 10000
 export enum QueueTypes {
@@ -12,6 +12,7 @@ export type QueueDataItem = {
     studentId: number;
     evaluationId: string;
     value: string | boolean;
+    prevValue?: string;
 };
 
 export type QueueItem = {
@@ -110,7 +111,7 @@ class CQueue {
 
         } catch (error) {
             console.error("Error posting items:", error);
-            setNotification("Internal error: events could not be executed")
+            setNotification("Internal error: events could not be executed", NotificationColor.ERROR)
         }
     }
 

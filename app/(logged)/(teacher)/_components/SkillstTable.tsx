@@ -8,7 +8,7 @@ type SkillsTableProps = {
     headers: string[];
     matrix: SkillsDataRow[];
     options: Option[];
-    onChange: (row: number, col: number, id: string, value: string) => void;
+    onChange: (row: number, col: number, id: string, value: string, prevValue: string) => void;
 };
 
 export default function SkillsTable({headers, matrix, options, onChange}: SkillsTableProps) {
@@ -25,7 +25,7 @@ export default function SkillsTable({headers, matrix, options, onChange}: Skills
                                 <ComboBox
                                     options={options}
                                     defaultValue={skill.id}
-                                    onChange={(id, value) => onChange(rowIndex, colIndex, id, value)}
+                                    onChange={(id, value, prevValue) => onChange(rowIndex, colIndex, id, value, prevValue)}
                                 />
                             </TCell>))
                         }
