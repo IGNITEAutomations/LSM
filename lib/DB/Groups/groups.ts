@@ -70,27 +70,39 @@ class CGroup {
     }
 
     public async updateStudentsSkills(data: QueueDataItem[]): Promise<boolean> {
-        const skillUpdates = new Map<string, { studentId: number; skillId: string; value: boolean }>();
+        const skillUpdates = new Map<string, { studentId: number; skillId: string; value: boolean, prevValue?: string }>();
 
         data.forEach((item) => {
             const elementKey = `${item.studentId}-${item.evaluationId}`;
             skillUpdates.set(elementKey, {
-                studentId: item.studentId, skillId: item.evaluationId, value: item.value as boolean,
+                studentId: item.studentId, skillId: item.evaluationId, value: item.value as boolean, prevValue: item.prevValue,
             });
         });
 
         const insertsSkills: { studentId: number; skillId: string }[] = [];
         const deleteSkills: { studentId: number; skillId: string }[] = [];
 
-        skillUpdates.forEach(({studentId, skillId, value}) => {
-            if (value) {
+        skillUpdates.forEach(({studentId, skillId, value, prevValue}) => {
+            if (prevValue === undefined) {
+                if (value ) {
+                    insertsSkills.push({studentId, skillId});
+                } else {
+                    deleteSkills.push({studentId, skillId});
+                }
+            } else if (value) {
                 insertsSkills.push({studentId, skillId});
-            } else {
+                deleteSkills.push({studentId, skillId:prevValue});
+            } else if (!value) {
                 deleteSkills.push({studentId, skillId});
+            }
+            else {
+                throw new Error("Error while creating the skills lists to remove and add.")
             }
         });
 
-        const [insertResult, deleteResult] = await Promise.all([ModelGroup.insertStudentSkills(insertsSkills), ModelGroup.deleteStudentSkills(deleteSkills),]);
+        const [insertResult, deleteResult] = await Promise.all([
+            ModelGroup.insertStudentSkills(insertsSkills), ModelGroup.deleteStudentSkills(deleteSkills)
+        ]);
         return insertResult && deleteResult;
     }
 
