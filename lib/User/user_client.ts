@@ -1,24 +1,15 @@
 import {UserRoles} from "@/lib/User/utils/users_roles";
 import {NotificationColor, setNotification} from "@/lib/Notification/ClientNotification";
 
-const USER_CLIENT_COOKIE_NAME: string= "user"
 class CUserClient {
 
-    private _displayName: string;
-    private _avatar: string;
-    private _role: UserRoles;
-    private _email: string;
-    private _token: string;
+    private _displayName: string = "";
+    private _avatar: string = "";
+    private _role: UserRoles = UserRoles.Teacher;
+    private _email: string = "";
+    private _token: string = "";
 
-    constructor() {
-        this._displayName = ""
-        this._avatar = ""
-        this._role = UserRoles.Teacher
-        this._email = ""
-        this._token = ""
-    }
-
-    public getUser() {
+    public user() {
         return {
             displayName: this._displayName,
             avatar: this._avatar,
@@ -43,7 +34,6 @@ class CUserClient {
 
                 return true
             } else {
-                //setNotification("Error: Failed to load user credentials", NotificationColor.ERROR)
                 console.error(parsedResponse.error)
             }
         } catch (error) {
@@ -51,17 +41,6 @@ class CUserClient {
             setNotification("Error: internal error", NotificationColor.ERROR)
         }
         return false
-    }
-
-    public initTest(role: UserRoles | undefined = UserRoles.Teacher) {
-        this._avatar = "https://lh3.googleusercontent.com/a/ACg8ocLkpRYBSzWRTMqCEmsgdTMpw9jEp9u5pP2ron4ZTdN4S7lI7Jsl=s96-c"
-        this._displayName = "Iker Borrallo"
-        this._role = role;
-        this._email = "ikerborr@gmail.com";
-    }
-
-    public isTeacher(): boolean {
-        return this._role === UserRoles.Teacher
     }
 }
 

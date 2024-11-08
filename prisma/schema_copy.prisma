@@ -67,8 +67,6 @@ model Evaluation {
   stage     Int
   note      String
   studentId Int
-
-  @@unique([studentId, stage])
 }
 
 model Challenges {

@@ -9,6 +9,7 @@ import {ChallengesProvider} from "@/hooks/ChallengesProvider";
 import {Suspense} from "react";
 import TableSkeleton from "@/app/(logged)/loading";
 import {BestOfProvider} from "@/hooks/SkillsProvider/BestOf";
+import {ReportingProvider} from "@/hooks/ReportingProvider";
 
 export default function RootLayout({children}: Readonly<{
     children: React.ReactNode
@@ -28,7 +29,9 @@ export default function RootLayout({children}: Readonly<{
                                         <GroupsProvider>
                                             <MentionsProvider>
                                                 <BestOfProvider>
-                                                    {children}
+                                                    <ReportingProvider>
+                                                        {children}
+                                                    </ReportingProvider>
                                                 </BestOfProvider>
                                             </MentionsProvider>
                                         </GroupsProvider>

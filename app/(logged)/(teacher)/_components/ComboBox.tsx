@@ -5,7 +5,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Button} from "@/components/ui/button";
 import {Check, ChevronsUpDown} from "lucide-react";
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command";
-import {cn} from "@/lib/utils";
+import {cn} from "@/utils/functions/utils";
 import {Option} from "@/utils/types/types";
 
 type ComboBoxProps = {
