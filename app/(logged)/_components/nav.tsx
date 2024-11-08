@@ -2,24 +2,42 @@
 
 import {ArrowLeft, Settings2} from "lucide-react";
 import Link from "next/link";
-import ToggleGroup from "@/components/ui/toggle-group";
-import {usePathname, useRouter} from "next/navigation";
+import {usePathname} from "next/navigation";
 import {useMemo} from "react";
 import {useUser} from "@/hooks/UserProvider";
 import {UserRoles} from "@/lib/User/utils/users_roles";
+import {RadioGroupCustom, RadioGroupCustomItem} from "@/components/ui/radio-group-custom";
 
 export default function Navigation({groupId}: { groupId: string }) {
     const pageName = usePathname();
     const user = useUser()
 
-    const options = useMemo(() => [{
-        label: "Challenges",
-        href: `/challenges${groupId ? '?id=' + groupId : ''}`
-    }, {label: "Soft skills", href: `/soft_skills${groupId ? '?id=' + groupId : ''}`}, {
-        label: "STEAM skills",
-        href: `/steam_skills${groupId ? '?id=' + groupId : ''}`
-    }, {label: "Mentions", href: `/mentions${groupId ? '?id=' + groupId : ''}`},
-    {label: "Top", href: `/top${groupId ? '?id=' + groupId : ''}`}], [groupId]);
+    const options = useMemo(() => [
+        {
+            label: "Challenges",
+            href: `/challenges${groupId ? '?id=' + groupId : ''}`
+        },
+        {
+            label: "Soft skills",
+            href: `/soft_skills${groupId ? '?id=' + groupId : ''}`
+        },
+        {
+            label: "STEAM skills",
+            href: `/steam_skills${groupId ? '?id=' + groupId : ''}`
+        },
+        {
+            label: "Mentions",
+            href: `/mentions${groupId ? '?id=' + groupId : ''}`
+        },
+        {
+            label: "Top",
+            href: `/top${groupId ? '?id=' + groupId : ''}`
+        },
+        {
+            label: "Reporting",
+            href: `/reporting${groupId ? '?id=' + groupId : ''}`
+        }
+        ], [groupId]);
 
     const currentIndex = useMemo(() => {
         return options.findIndex(option => pageName === option.href.split('?')[0]);
@@ -31,7 +49,13 @@ export default function Navigation({groupId}: { groupId: string }) {
             <ArrowLeft className="w-8 h-8 p-1.5 text-white"/>
         </Link>
         <div className="px-5 w-full flex justify-center">
-            <ToggleGroup options={options} def={currentIndex === -1 ? 0 : currentIndex}/>
+            <RadioGroupCustom>
+                {options.map((option, i) => (
+                    <RadioGroupCustomItem key={"nav"+i} href={option.href} active={currentIndex === i}>
+                        {option.label}
+                    </RadioGroupCustomItem>
+                ))}
+            </RadioGroupCustom>
         </div>
         <div>
             {user.role === UserRoles.Coordinator ?

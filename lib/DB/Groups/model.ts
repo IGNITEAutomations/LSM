@@ -408,7 +408,43 @@ class CModelGroup {
         }
 
     }
+
+  public async addNote(id: number, stage: number, note: string) {
+      try {
+        await prismadb.$executeRaw`
+          INSERT INTO "Evaluation" ("studentId", "stage", "note")
+          VALUES (${id}, ${stage}, ${note})
+          ON CONFLICT ("studentId", "stage")
+          DO UPDATE SET "note" = ${note};
+        `;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    public async notesFromGroup(groupId: number, stage: number) {
+        try {
+            return prismadb.student.findMany({
+                where: {
+                    groupId: groupId
+                },
+                include: {
+                    Evaluations: {
+                        where: {
+                            stage: stage
+                        }
+                    }
+                }
+            })
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+
 }
+
+
 
 const ModelGroup = new CModelGroup()
 export default ModelGroup

@@ -40,7 +40,7 @@ export const UserProvider: FC<UserProviderProps> = ({children}) => {
             const ok = await UserClient.init()
             if (!ok) throw new Error("The session could not be started")
 
-            setUser(UserClient.getUser())
+            setUser(UserClient.user())
             setLoaded(true)
         } catch (error) {
             console.error("Failed to fetch user getHistory:", error);

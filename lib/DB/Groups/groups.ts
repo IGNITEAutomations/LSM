@@ -250,6 +250,14 @@ class CGroup {
         await ModelGroup.deleteData();
     }
 
+    public async addNote(id: number, stage: number, note: string) {
+        return ModelGroup.addNote(id, stage, note)
+    }
+
+    public async notesFromGroup(groupId: number, stage: number) {
+        return ModelGroup.notesFromGroup(groupId, stage)
+    }
+
     private processImportData(studentsMatrix: string[][]) {
         const students: StudentList[] = [];
         const schoolsMap = new Map<number, SchoolDB>();
