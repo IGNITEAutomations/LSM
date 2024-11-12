@@ -426,7 +426,8 @@ class CModelGroup {
         try {
             return prismadb.student.findMany({
                 where: {
-                    groupId: groupId
+                    groupId: groupId,
+                    activated: true
                 },
                 include: {
                     Evaluations: {
