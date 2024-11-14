@@ -19,7 +19,7 @@ class CModelResume {
                 SELECT teacher.id
                 FROM "Teacher" teacher
                 JOIN "_GroupToTeacher" gtt ON gtt."A" = g.id
-                WHERE teacher.id = gtt."B" AND teacher.role != 1
+                WHERE teacher.id = gtt."B" AND teacher.role = 0
                 LIMIT 1
             )
         LEFT JOIN
@@ -57,7 +57,7 @@ class CModelResume {
                 SELECT teacher.id
                 FROM "Teacher" teacher
                 JOIN "_GroupToTeacher" gtt ON gtt."A" = g.id
-                WHERE teacher.id = gtt."B" AND teacher.role != 1
+                WHERE teacher.id = gtt."B" AND teacher.role = 0
                 LIMIT 1
             )
         LEFT JOIN
@@ -96,7 +96,7 @@ class CModelResume {
                 SELECT teacher.id
                 FROM "Teacher" teacher
                 JOIN "_GroupToTeacher" gtt ON gtt."A" = g.id
-                WHERE teacher.id = gtt."B" AND teacher.role != 1
+                WHERE teacher.id = gtt."B" AND teacher.role = 0
                 LIMIT 1
             )
         LEFT JOIN
@@ -135,7 +135,7 @@ class CModelResume {
                 SELECT teacher.id
                 FROM "Teacher" teacher
                 JOIN "_GroupToTeacher" gtt ON gtt."A" = g.id
-                WHERE teacher.id = gtt."B" AND teacher.role != 1
+                WHERE teacher.id = gtt."B" AND teacher.role = 0
                 LIMIT 1
             )
         LEFT JOIN
@@ -174,7 +174,7 @@ class CModelResume {
                 SELECT teacher.id
                 FROM "Teacher" teacher
                 JOIN "_GroupToTeacher" gtt ON gtt."A" = g.id
-                WHERE teacher.id = gtt."B" AND teacher.role != 1
+                WHERE teacher.id = gtt."B" AND teacher.role = 0
                 LIMIT 1
             )
         LEFT JOIN
