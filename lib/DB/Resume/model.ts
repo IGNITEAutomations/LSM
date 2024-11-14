@@ -125,45 +125,6 @@ class CModelResume {
             s.name AS "School Name",
             t_non_coordinator."displayName" AS "Teacher Name",
             t_coordinator."displayName" AS "Coordinator Name",
-            'Mention' AS error
-        FROM
-            "Group" g
-        JOIN
-            "School" s ON g."schoolId" = s.id
-        LEFT JOIN
-            "Teacher" t_non_coordinator ON t_non_coordinator.id = (
-                SELECT teacher.id
-                FROM "Teacher" teacher
-                JOIN "_GroupToTeacher" gtt ON gtt."A" = g.id
-                WHERE teacher.id = gtt."B" AND teacher.role = 0
-                LIMIT 1
-            )
-        LEFT JOIN
-            "Teacher" t_coordinator ON t_coordinator.id = (
-                SELECT teacher.id
-                FROM "Teacher" teacher
-                JOIN "_GroupToTeacher" gtt ON gtt."A" = g.id
-                WHERE teacher.id = gtt."B" AND teacher.role = 1
-                LIMIT 1
-            )
-        JOIN
-            "Student" st ON st."groupId" = g.id AND st.activated = TRUE
-        LEFT JOIN
-            "Skills" sk_mention ON sk_mention."studentId" = st.id
-            AND sk_mention."skillId" IN (SELECT id FROM "SkillsHeaders" WHERE CAST(type AS INTEGER) = 2)
-        WHERE
-            sk_mention."studentId" IS NULL
-        GROUP BY
-            g.id, g.name, s.name, t_non_coordinator."displayName", t_coordinator."displayName"
-        
-        UNION ALL
-        
-        SELECT
-            g.id AS "Group ID",
-            g.name AS "Group Name",
-            s.name AS "School Name",
-            t_non_coordinator."displayName" AS "Teacher Name",
-            t_coordinator."displayName" AS "Coordinator Name",
             'Evaluation' AS error
         FROM
             "Group" g
