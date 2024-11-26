@@ -58,7 +58,7 @@ export default function Navigation({groupId}: { groupId: string }) {
             </RadioGroupCustom>
         </div>
         <div>
-            {user.role === UserRoles.Coordinator ?
+            {(user.role === UserRoles.Coordinator || user.role === UserRoles.Admin) ?
                 <div className={"flex"}>
                     <Link href={`/manager?id=${groupId}&p=0`} className={"bg-[#C0C0C0] hover:bg-gray-400 text-white text-xs rounded-xl p-0 w-8 h-8 flex justify-center items-center"} title={"Student manager"}>
                         <Settings2 className={"h-5 w-5"}/>
