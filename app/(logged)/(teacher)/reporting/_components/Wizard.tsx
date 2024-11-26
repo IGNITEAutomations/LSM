@@ -68,7 +68,8 @@ export default function Wizard({id, name}: { id: number; name: string }) {
     const currentStep = steps[activeStep];
     const isNextDisabled = activeStep >= steps.length || currentStep?.required && !formData[currentStep.id];
 
-    return (<Box sx={{width: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1}}>
+    return (
+        <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1}}>
             <Stepper activeStep={activeStep} alternativeLabel>
                 {steps.map((step) => (<Step key={step.title}>
                         <StepLabel>{step.title}</StepLabel>
