@@ -38,7 +38,7 @@ class AuthClient {
     private async handleAuthApi(endpoint: string, idToken: string): Promise<APIResponse<string>> {
         try {
             const response: Response = await fetch(endpoint, {
-                method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({idToken})
+                method: "POST", cache: "no-cache",headers: {"Content-Type": "application/json"}, body: JSON.stringify({idToken})
             });
 
             const resBody: APIResponse<string> = await response.json();
@@ -75,7 +75,7 @@ class AuthClient {
 
     public async signOut(): Promise<APIResponse<string>> {
         try {
-            const response = await fetch("/api/auth/logout")
+            const response = await fetch("/api/auth/logout", {cache: "no-cache"})
             return response.json()
         } catch (error) {
             console.error("Sign-in error:", error);

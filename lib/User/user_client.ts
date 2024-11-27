@@ -21,7 +21,7 @@ class CUserClient {
 
     public async init() {
         try {
-            const response = await fetch("/api/profile")
+            const response = await fetch("/api/profile", {cache: "no-cache"})
             const parsedResponse = await response.json()
             if (parsedResponse.success) {
                 const user = JSON.parse(parsedResponse.data)

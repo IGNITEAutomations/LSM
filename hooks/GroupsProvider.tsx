@@ -66,7 +66,7 @@ export const GroupsProvider: FC<GroupsProviderProps> = ({children}) => {
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const response = await fetch("/api/groups");
+                const response = await fetch("/api/groups", {cache: "no-cache"});
                 if (!response.ok) throw new Error("Failed to fetch groups");
 
                 const data = await response.json();

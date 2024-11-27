@@ -5,6 +5,7 @@ export default async function doPost(endpoint: string, data: any, notification: 
             const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
+                cache: "no-cache",
                 body: JSON.stringify(data),
             });
 
@@ -25,7 +26,7 @@ export default async function doPost(endpoint: string, data: any, notification: 
 
 export async function doGet(endPoint: string, notification: boolean = true): Promise<{success: true, data: any}|{success: false, error: string}> {
     try {
-        const response = await fetch(endPoint)
+        const response = await fetch(endPoint, {cache: "no-cache"})
         if (!response.ok) {
             throw new Error(response.statusText)
         }
