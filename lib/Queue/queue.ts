@@ -94,6 +94,7 @@ class CQueue {
         try {
             const response = await fetch("/api/event/post", {
                 method: "POST",
+                cache: "no-cache",
                 body: JSON.stringify({type: items[0].type, data: items.map(item => item.data)} as QueueRequest),
                 headers: {
                     "Content-Type": "application/json"

@@ -37,7 +37,7 @@ export const ChallengesProvider: FC<ChallengesProviderProps> = ({ children }) =>
 
     const init = useCallback(async (groupId: string) => {
         try {
-            const response = await fetch(`/api/challenges/get?id=${groupId}`);
+            const response = await fetch(`/api/challenges/get?id=${groupId}`, {cache: "no-cache"});
             if (!response.ok) throw new Error("Failed to fetch challenges data");
 
             const data = await response.json();

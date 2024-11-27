@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button";
 export default function StudentsPage() {
     async function downloadCSV() {
       try {
-        const response = await fetch('/api/resume');
+        const response = await fetch('/api/resume', {cache: "no-cache"});
 
         if (!response.ok) {
           throw new Error('Error creating CSV');

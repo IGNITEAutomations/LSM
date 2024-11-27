@@ -29,7 +29,7 @@ export default function StudentsTable({groupId}: {groupId: string}) {
 
     const fetchStudents = useCallback(async () => {
         try {
-            const response = await fetch(`/api/groups/students/get?id=${groupId}`);
+            const response = await fetch(`/api/groups/students/get?id=${groupId}`, {cache: "no-cache"});
             if (!response.ok) throw new Error("Connection error");
 
             const data = await response.json();

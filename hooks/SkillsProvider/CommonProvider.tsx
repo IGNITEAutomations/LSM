@@ -39,7 +39,7 @@ export function createSkillGenericContext(type: SkillsTypes) {
 
         const init = useCallback(async (groupId: string) => {
             try {
-                const response = await fetch(`/api/skills/get?id=${groupId}&type=${type.toString()}`);
+                const response = await fetch(`/api/skills/get?id=${groupId}&type=${type.toString()}`, {cache: "no-cache"});
                 if (!response.ok) throw new Error("Failed to fetch challenges data");
 
                 const data = await response.json();
