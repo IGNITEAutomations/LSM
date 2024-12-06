@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
         console.warn("User exist successful")
         console.warn("Email:", user.email)
         console.warn("Data: ", JSON.stringify(data))
+        console.warn("Group id:", groupId, "; int:", parseInt(groupId))
 
         return NextResponse.json({success: true, data: data})
 

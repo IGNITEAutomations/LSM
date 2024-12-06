@@ -24,6 +24,7 @@ class CGroup {
         const [challenges, challengesHeaders] = await Promise.all([ModelGroup.getChallengesByGroup(groupID, teacherEmail), ModelGroup.getChallengesHeaders(),]);
 
         if (!challenges?.students || !challengesHeaders) {
+            console.warn("BBDD return null")
             return {headers: [], matrix: []};
         }
 
