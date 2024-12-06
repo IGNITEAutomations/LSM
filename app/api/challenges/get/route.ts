@@ -12,7 +12,13 @@ export async function GET(request: NextRequest) {
         if (!groupId)
             throw new Error("GroupId is empty")
 
-        return NextResponse.json({success: true, data: await Groups.getChallenges(parseInt(groupId), user.email!)})
+        const data = await Groups.getChallenges(parseInt(groupId), user.email!)
+
+        console.warn("User exist successful")
+        console.warn("Email:", user.email)
+        console.warn("Data: ", JSON.stringify(data))
+
+        return NextResponse.json({success: true, data: data})
 
     } catch(error) {
         console.error(error)
