@@ -20,7 +20,7 @@ class AuthServer {
 
     private async getSession(): Promise<string | undefined> {
         try {
-            return  cookies().get("__session")?.value;
+            return  cookies().get("__session_lms")?.value;
         } catch (error) {
             console.error("Failed to retrieve session:", error);
             return undefined;
@@ -55,7 +55,10 @@ class AuthServer {
 
     public async getCurrentUser(token?: string): Promise<UserRecord | undefined> {
         token = token ?? await this.getSession()
-        if (!(await this.isUserAuthenticated(token!))) return undefined
+        if (!(await this.isUserAuthenticated(token!))) {
+            console.error("Unauthenticated token:", token)
+            return undefined
+        }
 
         try {
             const decodedIdToken = await this.auth.verifySessionCookie(token!)
@@ -70,7 +73,7 @@ class AuthServer {
         try {
             const expiresIn = 60 * 60 * 24 * 12 * 1000; // 12 days
             const sessionCookie = await this.auth.createSessionCookie(idToken, {expiresIn});
-            cookies().set("__session", sessionCookie, {
+            cookies().set("__session_lms", sessionCookie, {
                 maxAge: expiresIn,
                 httpOnly: true,
                 secure: true,
@@ -83,12 +86,12 @@ class AuthServer {
     }
 
     public async signOut(): Promise<undefined> {
-        if (!cookies().has("__session"))
+        if (!cookies().has("__session_lms"))
             return undefined
 
         try {
              const session = await this.getSession();
-             cookies().delete("__session");
+             cookies().delete("__session_lms");
              await this.revokeAllSessions(session!);
         } catch (error) {
             console.error("Failed to sign out:", error);

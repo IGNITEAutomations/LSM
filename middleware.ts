@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
 
     const {headers} = request;
 
-    const isLogged = cookies().has('__session');
+    const isLogged = cookies().has('__session_lms');
 
     const {pathname, searchParams} = request.nextUrl;
 
