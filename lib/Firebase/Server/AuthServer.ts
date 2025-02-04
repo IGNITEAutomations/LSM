@@ -22,8 +22,9 @@ class AuthServer {
     private auth: Auth
 
     constructor() {
-        const app: App = getApps().find(app => app.name === "firebase-admin-app") || initializeApp(FirebaseAuthConfig(), "firebase-admin-app");
-        this.auth = getAuth(app)
+        const app = getApps().find((app) => app.name === "firebase-admin-app") ||
+		initializeApp(FirebaseAuthConfig(), "firebase-admin-app")
+		this.auth = getAuth(app);
     }
 
     private async getSession(): Promise<string | undefined> {
