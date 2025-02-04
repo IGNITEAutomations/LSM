@@ -1,20 +1,28 @@
-import {App, cert, getApps, initializeApp} from "firebase-admin/app";
+import {App, cert, getApps, initializeApp, ServiceAccount} from "firebase-admin/app";
 import {Auth, getAuth, UserRecord} from "firebase-admin/auth";
 import {cookies} from "next/headers";
+
+function FirebaseAuthConfig() {
+	if (process.env.NEXT_PUBLIC_ENVIRONMENT === "local") {
+		return {
+			project_id: process.env.GCLOUD_PROJECT
+		}
+	}
+	return {
+		credential: cert({
+			project_id: process.env.FIREBASE_PROJECT_ID,
+			private_key: process.env.FIREBASE_PRIVATE_KEY,
+			client_email: process.env.FIREBASE_CLIENT_EMAIL,
+		} as ServiceAccount)
+	}
+};
 
 class AuthServer {
 
     private auth: Auth
 
     constructor() {
-        const config = {
-            credential: cert({
-                projectId: process.env.FIREBASE_PROJECT_ID,
-                clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.FIREBASE_PRIVATE_KEY
-            })
-        };
-        const app: App = getApps().find(app => app.name === "firebase-admin-app") || initializeApp(config, "firebase-admin-app");
+        const app: App = getApps().find(app => app.name === "firebase-admin-app") || initializeApp(FirebaseAuthConfig(), "firebase-admin-app");
         this.auth = getAuth(app)
     }
 

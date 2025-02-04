@@ -1,0 +1,14 @@
+services:
+  postgres:
+    build:
+      context: ./docker/postgres
+    container_name: postgres-refactor-container
+    ports:
+      - "5435:5432"
+  firebase:
+    build:
+      context: ./docker/firebase
+    container_name: firebase-emulator-refactor-container
+    ports:
+      - "8080:8080"
+      - "9099:9099"
