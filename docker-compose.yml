@@ -2,13 +2,13 @@ services:
   postgres:
     build:
       context: ./docker/postgres
-    container_name: postgres-refactor-container
+    container_name: postgres-lsm-container
     ports:
       - "5435:5432"
   firebase:
     build:
       context: ./docker/firebase
-    container_name: firebase-emulator-refactor-container
+    container_name: firebase-emulator-lsm-container
     ports:
       - "8080:8080"
       - "9099:9099"

@@ -1,5 +1,5 @@
-import {App, cert, getApps, initializeApp, ServiceAccount} from "firebase-admin/app";
-import {Auth, getAuth, UserRecord} from "firebase-admin/auth";
+import { Auth, getAuth, UserRecord } from "firebase-admin/auth";
+import {cert, getApps, initializeApp, ServiceAccount} from "firebase-admin/app";
 import {cookies} from "next/headers";
 
 function FirebaseAuthConfig() {

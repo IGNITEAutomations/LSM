@@ -1,247 +1,70 @@
--- CreateTable
-CREATE TABLE "Common_input" (
-    "id" SERIAL NOT NULL,
-    "pais" TEXT NOT NULL,
-    "idioma" TEXT NOT NULL,
-    "curso" TEXT NOT NULL,
-    "area" TEXT NOT NULL,
-    "dua" TEXT NOT NULL,
-    "imagen" TEXT,
+/* TEACHERS */
+INSERT INTO public."Teacher" (uid, token, "displayName", name, email, role) VALUES ('7O0i8oqmdpUuFQQUIPaZSkuwk3p2', null, 'Iker Borrallo', 'Iker', 'ikerborr@gmail.com', 1);
+INSERT INTO public."Teacher" (uid, token, "displayName", name, email, role) VALUES (null, null, 'Jordi Carrasco', 'Jordi', 'igniteseriousplay@gmail.com', 1);
 
-    CONSTRAINT "Common_input_pkey" PRIMARY KEY ("id")
-);
+/* SCHOOLS */
+INSERT INTO public."School" (name) VALUES ('Fedac Horta');
+INSERT INTO public."School" (name) VALUES ('Fedac Amilcar');
+INSERT INTO public."School" (name) VALUES ('Fedac Sant Andreu');
 
--- CreateTable
-CREATE TABLE "Project" (
-    "id" SERIAL NOT NULL,
-    "num_sesiones" INTEGER NOT NULL,
-    "duracion_sesion" TEXT NOT NULL,
-    "contenidos_clave" TEXT NOT NULL,
-    "contenidos" TEXT,
-    "objetivos_clave" TEXT NOT NULL,
-    "titulo" TEXT NOT NULL,
-    "desarrollo" TEXT NOT NULL,
-    "objetivos_aprendizaje" TEXT NOT NULL,
-    "metodologia" TEXT NOT NULL,
-    "dua" TEXT NOT NULL,
-    "recursos" TEXT NOT NULL,
-    "tabla" TEXT,
-    "common_inputId" INTEGER NOT NULL,
-    "createdById" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "modifiedAt" TIMESTAMP(3) NOT NULL,
+/* CLASS */
+INSERT INTO public."Class" (name, "schoolId", day) VALUES ('Coding PRIM', 1, 'Monday');
+INSERT INTO public."Class" (name, "schoolId", day) VALUES ('3D&VR ESO', 2, 'Wednesday');
+INSERT INTO public."Class" (name, "schoolId", day) VALUES ('Robotics INF', 3, 'Friday');
+INSERT INTO public."Class" (name, "schoolId", day) VALUES ('3D&VR PRIM', 1, 'Tuesday');
+INSERT INTO public."Class" (name, "schoolId", day) VALUES ('Coding ESO', 2, 'Thursday');
 
-    CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
-);
+/* STUDENT */
+INSERT INTO public."Student" (name, surname, email, password, activated, "classId") VALUES ('Blanca', 'Nieves', '4@ignitesp.net', 'IgniteSP', true, 2);
+INSERT INTO public."Student" (name, surname, email, password, activated, "classId") VALUES ('Lola', 'Mento', '2@ignitesp.net', 'IgniteSP', true, 2);
+INSERT INTO public."Student" (name, surname, email, password, activated, "classId") VALUES ('Marc', 'Opolo', '1@ignitesp.net', 'IgniteSP', true, 2);
+INSERT INTO public."Student" (name, surname, email, password, activated, "classId") VALUES ('Armando', 'Jaleo', '3@ignitesp.net', 'IgniteSP', true, 2);
 
--- CreateTable
-CREATE TABLE "Session" (
-    "id" SERIAL NOT NULL,
-    "index" INTEGER,
-    "duracion_sesion" TEXT,
-    "contenido_clave" TEXT,
-    "contenidos" TEXT,
-    "objetivos_aprendizaje" TEXT,
-    "titulo" TEXT NOT NULL,
-    "objetivos" TEXT NOT NULL,
-    "recursos" TEXT NOT NULL,
-    "agrupamiento" TEXT NOT NULL,
-    "descripcion" TEXT NOT NULL,
-    "palabras_clave" TEXT NOT NULL,
-    "preguntas" TEXT NOT NULL,
-    "actividades" TEXT NOT NULL,
-    "estrategia" TEXT NOT NULL,
-    "dua" TEXT NOT NULL,
-    "videos" TEXT[],
-    "tabla" TEXT,
-    "enunciados" TEXT,
-    "soluciones" TEXT,
-    "common_inputId" INTEGER,
-    "createdById" TEXT,
-    "proyectoId" INTEGER,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "modifiedAt" TIMESTAMP(3) NOT NULL,
-    "extraField" TEXT,
+/* CLASS TO TEACHER */
+INSERT INTO public."_ClassToTeacher" ("A", "B") VALUES (2, 1);
+INSERT INTO public."_ClassToTeacher" ("A", "B") VALUES (3, 1);
+INSERT INTO public."_ClassToTeacher" ("A", "B") VALUES (4, 1);
 
-    CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
-);
+/* CHALLENGES HEADERS */
+INSERT INTO public."ChallengesHeaders" (id, name) VALUES ('1234', 'Challenge 1');
+INSERT INTO public."ChallengesHeaders" (id, name) VALUES ('1235', 'Challenge 2');
+INSERT INTO public."ChallengesHeaders" (id, name) VALUES ('1236', 'Challenge 3');
+INSERT INTO public."ChallengesHeaders" (id, name) VALUES ('1237', 'Challenge 4');
 
--- CreateTable
-CREATE TABLE "Quizz" (
-    "id" SERIAL NOT NULL,
-    "pais" TEXT,
-    "area" TEXT NOT NULL,
-    "curso" TEXT NOT NULL,
-    "tipo" TEXT NOT NULL,
-    "dificultad" INTEGER NOT NULL,
-    "numero_preguntas" INTEGER NOT NULL,
-    "numero_respuestas" INTEGER NOT NULL,
-    "titulo" TEXT NOT NULL,
-    "contenidos_clave" TEXT NOT NULL,
-    "contenidos" TEXT,
-    "descripcion" TEXT NOT NULL,
-    "enunciados" TEXT NOT NULL,
-    "soluciones" TEXT NOT NULL,
-    "dua" TEXT NOT NULL,
-    "imagen" TEXT,
-    "createdById" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "modifiedAt" TIMESTAMP(3) NOT NULL,
+/* CHALLENGES */
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (3, '1237');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (2, '1235');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (4, '1234');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (1, '1234');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (2, '1234');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (4, '1237');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (1, '1235');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (1, '1237');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (2, '1236');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (3, '1236');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (3, '1235');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (4, '1236');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (4, '1235');
+INSERT INTO public."Challenges" ("studentId", "challengeId") VALUES (2, '1237');
 
-    CONSTRAINT "Quizz_pkey" PRIMARY KEY ("id")
-);
+/* SKILLS HEADERS */
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('1234', 'Communication Level 1', '0');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('1235', 'Communication Level 2', '0');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('1345', 'Creativity Level 1', '0');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('1346', 'Creativity Level 2', '0');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('1456', 'Problem-solving Level 1', '0');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('1457', 'Problem-solving Level 2', '0');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('4321', 'Customization Level 1', '1');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('4322', 'Customization Level 2', '1');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('5432', 'Critical Thinking Level 1', '1');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('5433', 'Critical Thinking Level 2', '1');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('6543', 'Abstract Thinking Level 1', '1');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('6544', 'Abstract Thinking Level 2', '1');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('9876', 'Hiper Realistic', '2');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('9877', 'Best Prototype', '2');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('9878', 'Best Geek', '3');
+INSERT INTO public."SkillsHeaders" (id, name, type) VALUES ('9879', 'Code Innovator', '3');
 
--- CreateTable
-CREATE TABLE "Rubric" (
-    "id" SERIAL NOT NULL,
-    "pais" TEXT,
-    "tematica" TEXT NOT NULL,
-    "competencias_clave" TEXT NOT NULL,
-    "area_cespecifica_cevaluacion" TEXT NOT NULL,
-    "contenidos" TEXT,
-    "contenidos_clave" TEXT NOT NULL,
-    "titulo" TEXT NOT NULL,
-    "descripcion" TEXT NOT NULL,
-    "tabla" TEXT NOT NULL,
-    "curso" TEXT NOT NULL,
-    "area" TEXT NOT NULL,
-    "dua" TEXT NOT NULL,
-    "imagen" TEXT,
-    "createdById" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "modifiedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Rubric_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Learning_situation" (
-    "id" SERIAL NOT NULL,
-    "producto_final" TEXT NOT NULL,
-    "area_cespecifica_cevaluacion" TEXT NOT NULL,
-    "competencias_clave" TEXT NOT NULL,
-    "contenidos" TEXT,
-    "descriptores_operativos" TEXT NOT NULL,
-    "saberes_basicos" TEXT NOT NULL,
-    "descripcion_in" TEXT NOT NULL,
-    "objetivos" TEXT NOT NULL,
-    "titulo" TEXT NOT NULL,
-    "recursos" TEXT NOT NULL,
-    "agrupamiento" TEXT NOT NULL,
-    "descripcion_out" TEXT NOT NULL,
-    "justificacion" TEXT NOT NULL,
-    "actividades" TEXT NOT NULL,
-    "estrategia" TEXT NOT NULL,
-    "dua" TEXT NOT NULL,
-    "tabla" TEXT NOT NULL,
-    "videos" TEXT[],
-    "enunciados" TEXT,
-    "soluciones" TEXT,
-    "common_inputId" INTEGER NOT NULL,
-    "createdById" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "modifiedAt" TIMESTAMP(3) NOT NULL,
-    "extraField" TEXT,
-
-    CONSTRAINT "Learning_situation_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Chatbot" (
-    "id" SERIAL NOT NULL,
-    "title" TEXT NOT NULL,
-    "messages" JSONB[],
-    "provider" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "last_openedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "teacherId" TEXT NOT NULL,
-
-    CONSTRAINT "Chatbot_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "School" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "num_licenses" INTEGER NOT NULL,
-    "active" BOOLEAN NOT NULL,
-    "admin_mail" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
-    "city" TEXT,
-    "country" TEXT,
-    "magic" BOOLEAN NOT NULL,
-    "image" TEXT,
-    "creatiedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "last_connectionAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "School_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Teacher" (
-    "uid" TEXT NOT NULL,
-    "displayName" TEXT NOT NULL,
-    "active" BOOLEAN NOT NULL,
-    "mail" TEXT NOT NULL,
-    "role" TEXT NOT NULL,
-    "city" TEXT,
-    "country" TEXT,
-    "magic" TEXT NOT NULL,
-    "avatar" TEXT NOT NULL,
-    "provider" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "last_connectionAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "total_contents" INTEGER NOT NULL,
-    "stripeId" TEXT,
-    "schoolId" INTEGER,
-    "state" TEXT,
-
-    CONSTRAINT "Teacher_pkey" PRIMARY KEY ("uid")
-);
-
--- CreateIndex
-CREATE UNIQUE INDEX "Project_common_inputId_key" ON "Project"("common_inputId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Session_common_inputId_key" ON "Session"("common_inputId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Learning_situation_common_inputId_key" ON "Learning_situation"("common_inputId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Teacher_stripeId_key" ON "Teacher"("stripeId");
-
--- AddForeignKey
-ALTER TABLE "Project" ADD CONSTRAINT "Project_common_inputId_fkey" FOREIGN KEY ("common_inputId") REFERENCES "Common_input"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Project" ADD CONSTRAINT "Project_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Teacher"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_common_inputId_fkey" FOREIGN KEY ("common_inputId") REFERENCES "Common_input"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Teacher"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_proyectoId_fkey" FOREIGN KEY ("proyectoId") REFERENCES "Project"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Quizz" ADD CONSTRAINT "Quizz_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Teacher"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Rubric" ADD CONSTRAINT "Rubric_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Teacher"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Learning_situation" ADD CONSTRAINT "Learning_situation_common_inputId_fkey" FOREIGN KEY ("common_inputId") REFERENCES "Common_input"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Learning_situation" ADD CONSTRAINT "Learning_situation_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "Teacher"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Chatbot" ADD CONSTRAINT "Chatbot_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "Teacher"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Teacher" ADD CONSTRAINT "Teacher_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "School"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
-
+/* SKILLS */
+INSERT INTO public."Skills" ("studentId", "skillId") VALUES (4, '1234');
+INSERT INTO public."Skills" ("studentId", "skillId") VALUES (2, '1235');

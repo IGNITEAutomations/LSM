@@ -1,27 +1,24 @@
-import {getAuth, GoogleAuthProvider, signInWithPopup, UserCredential, Auth, connectAuthEmulator} from "firebase/auth";
-import {firebaseConfig} from "@/lib/Firebase/Client/Config";
+import {
+	Auth,
+	GoogleAuthProvider,
+	signInWithPopup,
+	UserCredential,
+} from "@firebase/auth";
 import {userDataType} from "@/lib/Firebase/Client/utils/UserDataType";
 import {APIResponse} from "@/utils/APIResponse";
-import {FirebaseApp, getApps, initializeApp} from "firebase/app";
+import {FirebaseAuthConfig} from "@/lib/Firebase/Client/Config";
 
 class AuthClient {
 
     private auth: Auth;
 
     constructor() {
-        const firebaseApp: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-        this.auth = getAuth(firebaseApp);
-
-        if (process.env.NEXT_PUBLIC_ENVIRONMENT === "local") {
-			connectAuthEmulator(this.auth,'http://127.0.0.1:9099');
-		}
+        this.auth = FirebaseAuthConfig.auth;
     }
 
     private async getCredentials(): Promise<UserCredential | null> {
-        const provider: GoogleAuthProvider = new GoogleAuthProvider();
-        provider.setCustomParameters({
-            prompt: 'select_account'
-        })
+        const provider = new GoogleAuthProvider();
+		provider.setCustomParameters({ prompt: "select_account" });
         try {
             return await signInWithPopup(this.auth, provider);
         } catch (error) {
