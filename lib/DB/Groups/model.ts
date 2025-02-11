@@ -78,7 +78,8 @@ class CModelGroup {
         try {
             return prismadb.group.findUnique({
                 where: {
-                    id: groupId, teachers: {
+                    id: groupId,
+                    teachers: {
                         some: {
                             email: teacherEmail
                         }
