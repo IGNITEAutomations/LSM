@@ -332,7 +332,7 @@ class CGroup {
     private numOfSkills(type: SkillsTypes) {
         switch (type){
             case SkillsTypes.SteamSkill:
-                return 5
+                return 6
             case SkillsTypes.SoftSkill:
                 return 5
             case SkillsTypes.BestOf:

@@ -1,0 +1,29 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5435,
+            "driver": "PostgreSQL",
+            "name": "lsm_database",
+            "database": "prisma",
+            "username": "postgres",
+            "password": "copilot"
+        },
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "previewLimit": 50,
+            "server": "ep-noisy-sun-a2pb0w9b-pooler.eu-central-1.aws.neon.tech",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "lsm_database_production",
+            "database": "verceldb",
+            "username": "default",
+            "password": "qHE2SUgmehx9"
+        }
+    ]
+}

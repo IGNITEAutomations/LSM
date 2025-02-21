@@ -10,7 +10,7 @@ import SkillsTable from "@/app/(logged)/(teacher)/_components/SkillstTable";
 import SavedIndicator from "@/app/(logged)/(teacher)/_components/SavedIndicator";
 import {useSearchParams} from "next/navigation";
 
-const NUM_COLS = 5
+const NUM_COLS = 6
 
 export default function SteamSkillsPage() {
     const groups = useGroups();
@@ -42,7 +42,7 @@ export default function SteamSkillsPage() {
             <h2>{groups.getGroupName(groupId)}</h2>
             <section className="mt-8 flex-1 overflow-y-auto">
                 {!skills.loaded ? (
-                    <TableSkeleton headerName={"Challenge"} nCols={5} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
+                    <TableSkeleton headerName={"Challenge"} nCols={6} nRows={3}/>) : skills.skillsMatrix.length === 0 ? (
                     <p className="text-red-500">
                         No students assigned to this group have been found.
                     </p>) : (<SkillsTable

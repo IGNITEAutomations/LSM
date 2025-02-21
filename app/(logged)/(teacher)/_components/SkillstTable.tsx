@@ -32,8 +32,8 @@ export default function SkillsTable({headers, matrix, options, onChange}: Skills
                             </TCell>))
                         }
                         {
-                            (row.skills.length < 5) ? (
-                                [...Array(5 - row.skills.length)].map((_,i) => (
+                            (row.skills.length < 6) ? (
+                                [...Array(6 - row.skills.length)].map((_,i) => (
                                     <TCell key={"cell" + i}>
                                         <div className={"w-[250px]"}/>
                                     </TCell>

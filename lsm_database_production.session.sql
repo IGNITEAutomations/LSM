@@ -1,0 +1,1 @@
+select * FROM "Teacher" limit 10
